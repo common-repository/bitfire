@@ -1,0 +1,1755 @@
+<script src="https://unpkg.com/phenomenon@1.3.0/dist/phenomenon.iife.js" type="text/javascript"></script>
+<script type="text/javascript">
+const OPT_PHI = 'phi'
+const OPT_THETA = 'theta'
+const OPT_DOTS = 'mapSamples'
+const OPT_MAP_BRIGHTNESS = 'mapBrightness'
+const OPT_BASE_COLOR = 'baseColor'
+const OPT_MARKER_COLOR = 'markerColor'
+const OPT_GLOW_COLOR = 'glowColor'
+const OPT_MARKERS = 'markers'
+const OPT_DIFFUSE = 'diffuse'
+const OPT_DPR = 'devicePixelRatio'
+const OPT_DARK = 'dark'
+const OPT_OFFSET = 'offset'
+const OPT_SCALE = 'scale'
+const OPT_OPACITY = 'opacity'
+const OPT_MAP_BASE_BRIGHTNESS = 'mapBaseBrightness'
+const GLSLX_SOURCE_MAIN2 = "precision highp float;uniform vec2 t,x;uniform vec3 R,S,y;uniform vec4 z[64];uniform float A,B,l,C,D,E,F,G,H,I;uniform sampler2D J;float K=1./l;mat3 L(float a,float b){float c=cos(a),d=cos(b),e=sin(a),f=sin(b);return mat3(d,f*e,-f*c,0.,c,e,f,d*-e,d*c);}vec3 w(vec3 c,out float v){c=c.xzy;float p=max(2.,floor(log2(2.236068*l*3.141593*(1.-c.z*c.z))*.72021));vec2 g=floor(pow(1.618034,p)/2.236068*vec2(1.,1.618034)+.5),d=fract((g+1.)*.618034)*6.283185-3.883222,e=-2.*g,f=vec2(atan(c.y,c.x),c.z-1.),q=floor(vec2(e.y*f.x-d.y*(f.y*l+1.),-e.x*f.x+d.x*(f.y*l+1.))/(d.x*e.y-e.x*d.y));float n=3.141593;vec3 r;for(float h=0.;h<4.;h+=1.){vec2 s=vec2(mod(h,2.),floor(h*.5));float j=dot(g,q+s);if(j>l)continue;float a=j,b=0.;if(a>=524288.)a-=524288.,b+=.803894;if(a>=262144.)a-=262144.,b+=.901947;if(a>=131072.)a-=131072.,b+=.950973;if(a>=65536.)a-=65536.,b+=.475487;if(a>=32768.)a-=32768.,b+=.737743;if(a>=16384.)a-=16384.,b+=.868872;if(a>=8192.)a-=8192.,b+=.934436;if(a>=4096.)a-=4096.,b+=.467218;if(a>=2048.)a-=2048.,b+=.733609;if(a>=1024.)a-=1024.,b+=.866804;if(a>=512.)a-=512.,b+=.433402;if(a>=256.)a-=256.,b+=.216701;if(a>=128.)a-=128.,b+=.108351;if(a>=64.)a-=64.,b+=.554175;if(a>=32.)a-=32.,b+=.777088;if(a>=16.)a-=16.,b+=.888544;if(a>=8.)a-=8.,b+=.944272;if(a>=4.)a-=4.,b+=.472136;if(a>=2.)a-=2.,b+=.236068;if(a>=1.)a-=1.,b+=.618034;float k=fract(b)*6.283185,i=1.-2.*j*K,m=sqrt(1.-i*i);vec3 o=vec3(cos(k)*m,sin(k)*m,i);float u=length(c-o);if(u<n)n=u,r=o;}v=n;return r.xzy;}void main(){vec2 b=(gl_FragCoord.xy/t*2.-1.)/C-x*vec2(1.,-1.)/t;b.x*=t.x/t.y;float c=dot(b,b);vec4 M=vec4(0.);float m=0.;if(c<=.64){for(int d=0;d<2;d++){vec4 e=vec4(0.);float a;vec3 u=vec3(0.,0.,1.),f=normalize(vec3(b,sqrt(.64-c)));f.z*=d>0?-1.:1.,u.z*=d>0?-1.:1.;vec3 g=f*L(B,A),h=w(g,a);float n=asin(h.y),i=acos(-h.x/cos(n));i=h.z<0.?-i:i;float N=max(texture2D(J,vec2(i*.5/3.141593,-(n/3.141593+.5))).x,I),O=smoothstep(8e-3,0.,a),j=dot(f,u),v=pow(j,F)*E,o=N*O*v,T=mix((1.-o)*pow(j,.4),o,G)+.1;e+=vec4(R*T,1.);int U=int(D);float p=0.;for(int k=0;k<64;k++){if(k>=U)break;vec4 q=z[k];vec3 r=q.xyz,P=r-g;float s=q.w;if(dot(P,P)>s*s*4.)continue;vec3 V=w(r,a);a=length(V-g),a<s?p+=smoothstep(s*.5,0.,a):0.;}p=min(1.,p*v),e.xyz=mix(e.xyz,S,p),e.xyz+=pow(1.-j,4.)*y,M+=e*(1.+(d>0?-H:H))/2.;}m=pow(dot(normalize(vec3(-b,sqrt(1.-c))),vec3(0.,0.,1.)),4.)*smoothstep(0.,1.,.2/(c-.64));}else{float Q=sqrt(.2/(c-.64));m=smoothstep(.5,1.,Q/(Q+1.));}gl_FragColor=M+vec4(m*y,m);}";
+
+const BOT_VALID_RESTRICTED = 0;
+const BOT_VALID_SEND = 1;
+const BOT_VALID_JS = 2;
+const BOT_VALID_FINGERPRINT = 3;
+const BOT_VALID_NET = 4;
+const BOT_VALID_OPEN = 5;
+const BOT_VALID_IP = 6;
+const BOT_VALID_AGENT = 7;
+const BOT_VALID_INVALID = 13;
+
+
+
+const GLSLX_SOURCE_MAIN = `
+precision highp float;
+uniform vec2 uResolution;
+uniform vec2 offset;
+uniform float phi;
+uniform float theta;
+uniform float dots;
+uniform float scale;
+uniform vec3 baseColor;
+//uniform vec3 markerColor;
+uniform vec3 markerColor[64];
+uniform vec3 glowColor;
+uniform vec4 markers[64];
+uniform float markersNum;
+uniform float dotsBrightness;
+uniform float diffuse;
+uniform float dark;
+uniform float opacity;
+uniform float mapBaseBrightness;
+
+uniform sampler2D uTexture;
+
+// const float sqrt5 = sqrt(5.);
+// const float PI = acos(-1.);
+// const float HALF_PI = PI * .5;
+// const float kTau = PI*2.;
+// const float kPhi = (1.+sqrt5)/2.;
+// const float byLogPhiPlusOne = log2(kPhi + 1.);
+// const float twoPiOnPhi = kTau/kPhi;
+// const float phiMinusOne = kPhi-1.;
+// const float r = .8;
+// const float by2P32 = 1./4294967296.;
+
+const float sqrt5 = 2.23606797749979;
+const float PI = 3.141592653589793;
+const float HALF_PI = 1.5707963267948966;
+const float kTau = 6.283185307179586;
+const float kPhi = 1.618033988749895;
+const float byLogPhiPlusOne = 0.7202100452062783;
+const float twoPiOnPhi = 3.8832220774509327;
+const float phiMinusOne = .618033988749895;
+const float r = .8;
+const float by2P32 = 2.3283064365386963e-10;
+
+float byDots = 1./dots;
+
+mat3 rotate(float theta, float phi) {
+  float cx = cos(theta);
+  float cy = cos(phi);
+  float sx = sin(theta);
+  float sy = sin(phi);
+
+  return mat3(
+    cy, sy * sx, -sy * cx,
+    0., cx, sx,
+    sy, cy * -sx, cy * cx
+  );
+}
+
+vec3 nearestFibonacciLattice(vec3 p, out float m) {
+  p = p.xzy;
+
+  float k = max(2., floor(log2(sqrt5 * dots * PI * (1. - p.z * p.z)) * byLogPhiPlusOne));
+
+  vec2 f = floor(pow(kPhi,k)/sqrt5*vec2(1.,kPhi)+.5);
+  vec2 br1 = fract((f+1.) * phiMinusOne)*kTau - twoPiOnPhi;
+  vec2 br2 = -2.*f;
+  vec2 sp = vec2(atan(p.y, p.x), p.z-1.);
+  // mat2 invb = mat2(br2.y,-br2.x,-br1.y,br1.x);
+  // vec2 c = floor(invb * sp / (br1.x*br2.y-br2.x*br1.y));
+  vec2 c = floor(vec2(br2.y * sp.x - br1.y * (sp.y * dots + 1.), -br2.x * sp.x + br1.x * (sp.y * dots + 1.)) / (br1.x*br2.y-br2.x*br1.y));
+  
+  float mindist = PI;
+  vec3 minip;
+  for (float s = 0.; s < 4.; s+=1.) {
+    vec2 o = vec2(mod(s, 2.), floor(s*.5));
+    float idx = dot(f, c + o);
+    if (idx > dots) continue;
+
+    // float v = idx / kPhi;
+    // float theta = fract(v) * kTau;
+
+    // int iFracV = int(idx) * 2654435769; // signed be like nearest-to-zero fmod; 2^32/phi
+    // float fracV = float(iFracV) * by2P32;
+    // float theta = fracV * kTau;
+
+    // https://github.com/shuding/cobe/issues/16
+    
+    float tidx = idx;
+    float fracV = 0.;
+
+    // see codegen
+
+    if(tidx >= 524288.) { tidx-=524288.; fracV += 0.8038937048986554; }
+    if(tidx >= 262144.) { tidx-=262144.; fracV += 0.9019468524493277; }
+    if(tidx >= 131072.) { tidx-=131072.; fracV += 0.9509734262246639; }
+    if(tidx >= 65536.) { tidx-=65536.; fracV += 0.4754867131123319; }
+    if(tidx >= 32768.) { tidx-=32768.; fracV += 0.737743356556166; }
+    if(tidx >= 16384.) { tidx-=16384.; fracV += 0.868871678278083; }
+    if(tidx >= 8192.) { tidx-=8192.; fracV += 0.9344358391390415; }
+    if(tidx >= 4096.) { tidx-=4096.; fracV += 0.46721791956952075; }
+    if(tidx >= 2048.) { tidx-=2048.; fracV += 0.7336089597847604; }
+    if(tidx >= 1024.) { tidx-=1024.; fracV += 0.8668044798923802; }
+    if(tidx >= 512.) { tidx-=512.; fracV += 0.4334022399461901; }
+    if(tidx >= 256.) { tidx-=256.; fracV += 0.21670111997309505; }
+    if(tidx >= 128.) { tidx-=128.; fracV += 0.10835055998654752; }
+    if(tidx >= 64.) { tidx-=64.; fracV += 0.5541752799932738; }
+    if(tidx >= 32.) { tidx-=32.; fracV += 0.7770876399966369; }
+    if(tidx >= 16.) { tidx-=16.; fracV += 0.8885438199983184; }
+    if(tidx >= 8.) { tidx-=8.; fracV += 0.9442719099991592; }
+    if(tidx >= 4.) { tidx-=4.; fracV += 0.4721359549995796; }
+    if(tidx >= 2.) { tidx-=2.; fracV += 0.2360679774997898; }
+    if(tidx >= 1.) { tidx-=1.; fracV += 0.6180339887498949; }
+
+    float theta = fract(fracV) * kTau;
+
+    float cosphi = 1. - 2. * idx * byDots;
+    float sinphi = sqrt(1. - cosphi * cosphi);
+    vec3 sample = vec3(cos(theta) * sinphi, sin(theta) * sinphi, cosphi);
+
+    float dist = length(p - sample);
+
+    if (dist < mindist) {
+      mindist = dist;
+      minip = sample;
+    }
+  }
+
+  m = mindist;
+
+  return minip.xzy;
+}
+
+void main() {
+  vec2 uv = ((gl_FragCoord.xy / uResolution) * 2. - 1.) / scale - offset * vec2(1., -1.) / uResolution;
+  uv.x *= uResolution.x / uResolution.y;
+
+  float l = dot(uv, uv);
+  vec4 color = vec4(0.);
+  float glowFactor = 0.;
+
+  if (l <= r * r) {
+    for (int side = 0; side <= 1; side++) {
+      vec4 layer = vec4(0.);
+      float dis;
+
+      vec3 light = vec3(0.,0.,1.);
+      vec3 p = normalize(vec3(uv, sqrt(r*r - l)));
+
+      p.z *= side > 0 ? -1. : 1.;
+      light.z *= side > 0 ? -1. : 1.;
+
+      vec3 rP = p * rotate(theta, phi);
+
+      float diff = -kTau * dots / kPhi;
+
+      vec3 gP = nearestFibonacciLattice(rP, dis);
+
+      float gPhi = asin(gP.y);
+      float gTheta = acos(-gP.x / cos(gPhi));
+      if (gP.z < 0.) gTheta = -gTheta;
+
+      float mapColor = max(texture2D(uTexture, vec2(((gTheta * .5) / PI), -(gPhi / PI + .5))).x, mapBaseBrightness);
+      float v = smoothstep(.008, .0, dis);
+      
+      float dotNL = dot(p, light);
+      float lighting = pow(dotNL,diffuse)*dotsBrightness;
+      float sample = mapColor*v * lighting;
+      float colorFactor = mix((1. - sample) * pow(dotNL,.4), sample, dark) + .1;
+      layer += vec4(baseColor * colorFactor, 1.);
+
+      int num = int(markersNum);
+      float markerLight = 0.;
+      int m_idx = 1;
+      vec3 mc;
+      for (int m = 0; m < 64; m++) {
+        if (m >= num) break;
+        vec4 marker = markers[m];
+        vec3 c = marker.xyz;
+        vec3 l = c - rP;
+        float size = 0.07;//marker.w;
+        if (dot(l,l) > size * size * 4.) continue;
+        vec3 mP = nearestFibonacciLattice(c, dis);
+        dis = length(mP - rP);
+        if (dis < size) {
+            markerLight += smoothstep(size*.5,0.,dis);
+            mc = markerColor[m];
+            m_idx = m;
+        }
+      }
+      markerLight = min(1., markerLight * lighting);
+      layer.xyz = mix(layer.xyz, mc, markerLight);
+      layer.xyz += pow(1. - dotNL, 4.) * glowColor;
+
+      color += layer * (1. + (side > 0 ? -opacity : opacity)) / 2.;
+    }
+
+    glowFactor = pow(dot(normalize(vec3(-uv, sqrt(1.- l))), vec3(0.,0.,1.)), 4.) * smoothstep(0.,1.,.2/(l-r*r));
+  } else {
+    float outD = sqrt(.2/(l - r * r));
+    glowFactor = smoothstep(0.5,1., outD / (outD + 1.));
+  }
+
+  gl_FragColor = color + vec4(glowFactor * glowColor, glowFactor);
+}
+`.trim();
+
+//uniform vec3 glowColor;
+//uniform sampler2D uTexture;
+
+
+
+const GLSLX_NAME_DOTS = "dots"
+const GLSLX_NAME_U_RESOLUTION = "uResolution"
+const GLSLX_NAME_OFFSET = "offset"
+const GLSLX_NAME_GLOW_COLOR = "glowColor"
+const GLSLX_NAME_PHI = "phi"
+const GLSLX_NAME_THETA = "theta"
+const GLSLX_NAME_SCALE = "scale"
+const GLSLX_NAME_MARKERS = "markers"
+const GLSLX_NAME_MARKERS_NUM = "markersNum"
+const GLSLX_NAME_DOTS_BRIGHTNESS = "dotsBrightness"
+const GLSLX_NAME_DIFFUSE = "diffuse"
+const GLSLX_NAME_DARK = "dark"
+const GLSLX_NAME_OPACITY = "opacity"
+const GLSLX_NAME_MAP_BASE_BRIGHTNESS = "mapBaseBrightness"
+const GLSLX_NAME_U_TEXTURE = "uTexture"
+const GLSLX_NAME_BASE_COLOR = "baseColor"
+const GLSLX_NAME_MARKER_COLOR = "markerColor"
+
+</script>
+
+
+
+
+<style>
+
+    #primary-signature-container { /*height: 2.5rem;*/ }
+    #primary-ip { height:1rem;width:10rem;display:inline-block;text-overflow:ellipsis; overflow: hidden; white-space: nowrap; }
+    #primary-signature { word-break: break-all; }
+    /* IMPORTED STYLES */
+    #request_list { min-height:45vh; max-height:55vh; overflow-y: scroll; display: block; }
+    #primary-browser { max-height: 1.2rem; max-width: 13rem; display: inline-block; text-overflow: ellipsis; white-space: nowrap; overflow: hidden; }
+    thead.bitheader, #request_list tr { display: table; width: 100%; table-layout: fixed; }
+    /*
+    th { position: sticky; top: 0; box-shadow: 0 2px 2px -1px rgba(0, 0, 0, 0.4); }
+    */
+    td.label { width: 5rem; color: #909099; }
+    td.ico, th.ico { width: 9rem; color: #999; }
+    td.blocked, th.blocked { width: 9rem; }
+    td.url { text-overflow: ellipsis; }
+    td.source, th.source { width: 20rem; white-space: nowrap; padding-right: 5px; }
+    td.multibtn, th.multibtn { width: 4rem; }
+    td.labes, span.labes { width:6rem;min-width: 6rem; }
+    td.labet, span.labet { width:4rem;min-width: 4rem; }
+    span.label, span.labet, span.labes { display: inline-block; font-weight: 900; color: #909099; }
+    span.datas { width: 8rem; }
+    span.datam { width: 11rem; }
+    span.datal { width: 18rem; }
+    span.datam, span.dataf, span.datas, span.datal { display: inline-block; color: #909099; }
+    .fe-filter { position: relative; top: 2px; }
+    /*
+    .fe-alert-triangle, .fe-check { position: relative; top: 2px; }
+    */
+    .fe-x-square, .fe-check { position: relative; top: 1px; }
+    .underline { text-decoration: underline; }
+    .br_icon, #primary-icon { image-rendering: pixelated; }
+    .filter { background-color: #333; color: #FFF; }
+    .ml-0 { margin-left: 0; }
+    .m45 { margin: 0 1rem 1rem 1.5rem; height: 6rem; }
+    .ip { display: inline-block; width: 8rem; overflow: hidden; text-overflow: ellipsis;}
+    .pl-2 { padding-left: 1rem; text-overflow: ellipsis; }
+    .tab1 { width: auto; }
+    .tab1 tr, .tab1 td { height: 1rem; }
+    .method { font-weight: 900; width: 4rem; display: inline-block; }
+    .bold { font-weight: 900; color: #909099; }
+    .card { max-width: 100%; }
+    .f_right { float: right; }
+    .form-check .form-switch { width: 80px; margin-left: -80px; }
+    .spinner-border { margin-left: -110px; }
+    .pointer { cursor: pointer; }
+    .card-body { padding: 0.5rem !important; }
+    .center { text-align: center; }
+    .left { float: left; }
+    .zn1 { z-index: -1;}
+    #bf_flash {
+      width:100vw;
+      height:100vh;
+      animation: 0.15s ease-out 0.05s 1 forwards flash;
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      z-index:9999;
+    }
+    @keyframes flash { 
+      0% { background-color: rgba(255, 255, 255, 0.9); }
+      100% { background-color: rgba(255, 255, 255, 0); }
+    }
+    image.type { fill: #e63757; }
+    a.nav-link { color: #2c7be5 !important;}
+    a.nav-link:hover { text-decoration: underline; }
+
+    svg { fill: #977; }
+    .blue { fill: #30b7e5; color: #30b7e5; }
+    svg.green { fill: #21d97e; }
+    svg.yellow { fill: #f6c343; }
+    svg.red { fill: #e63757; }
+    img.red { filter: invert(27%) sepia(51%) saturate(2878%) hue-rotate(346deg) brightness(104%) contrast(97%); }
+    img.grey_blue { filter: invert(82%) sepia(15%) saturate(597%) hue-rotate(184deg) brightness(89%) contrast(86%); }
+    img.orange { filter: invert(83%) sepia(34%) saturate(523%) hue-rotate(336deg) brightness(98%) contrast(92%); }
+    img.white { filter: invert(99%) sepia(7%) saturate(889%) hue-rotate(165deg) brightness(114%) contrast(100%); }
+
+    h6 { text-transform: uppercase; line-height: 1.5;color: rgb(149, 170, 201); font-family: "Cerebri Sans", sans-serif; font-weight: 400; }
+    .header-body { padding: 24px 0; }
+    .oh { overflow: auto; }
+    .wrap { white-space: break-spaces; line-break: anywhere; }
+    .nowrap { white-space: nowrap; }
+    
+    .hidden { display: none; }
+    
+    .country { float: right; display: block; }
+
+    .btn-sm {
+    padding: 0.1rem .5rem !important;
+    font-size: .4rem !important;
+    font-weight: bold;
+    }
+    .btn-group-tiny>.btn {
+    padding: .075rem .25rem;
+    font-size: .4rem;
+    line-height: 1.0;
+    border-radius: .25rem;
+    }
+    .dropdown-toggle { width: 65px; }
+    .nav-sm .nav-link { font-size: .6125rem; }
+
+    .navbar-vertical.navbar-expand-md .navbar-nav .nav .nav-link { padding-left: .5rem; padding-right: 0rem; }
+    .grow { flex-grow: 1; }
+    .success:checked { background-color: #00d97e; }
+    .warning:checked { background-color: #f6c343; }
+    .success, .success:checked { background-color: #00d97e; }
+    .form-switch { min-height: 1.5rem; padding-left: 1.5rem; }
+    .form-switch .form-check-input:checked { background-position: 100%; }
+    .form-check-input { cursor: pointer; }
+    input { overflow: visible; }
+    input[type=checkbox] { box-sizing: border-box; padding: 0; }
+    .form-check-input { position: absolute; vertical-align: top; background-color: #e3ebf6; background-repeat: no-repeat; background-size: contain; border: transparent; appearance: none;}
+    .form-check-input:checked[type=checkbox] {
+    background-image:url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3E%3Cpath fill='none' stroke='%23fff' stroke-linecap='round' stroke-linejoin='round' stroke-width='3' d='M6 10l3 3 6-6'/%3E%3C/svg%3E");
+    background-position: 100%;
+    }
+
+    .form-check-input[type=checkbox] {
+        background-image:url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='-4 -4 8 8'%3E%3Ccircle r='3' fill='%23fff'/%3E%3C/svg%3E");
+        background-position: 0%;
+        background-repeat: no-repeat; 
+        width: 3rem;
+        margin: 0;
+        margin-left: -3.5rem;
+        border-radius: 3rem;
+        transition: background-position .15s ease-in-out;
+        height: 1.5rem;
+    }
+
+    input[type=checkbox]:checked::before { content: ''; }
+
+    input[type=checkbox], input[type=radio] {
+        box-sizing: border-box;
+        padding: 0;
+    }
+    .form-check-input { cursor: pointer; vertical-align: top; background-size: contain; border: transparent; appearance: none; position: absolute; }
+
+    .cover.system { background-image: url('{{public}}img/system-low.jpg'); }
+    .cover.shield { background-image: url('{{public}}img/shield1.jpg'); }
+    .cover.robot { background-image: url('{{public}}img/robot-low.jpg'); }
+    .cover.server { background-image: url('{{public}}img/server-low.jpg'); }
+    .cover.server-red { background-image: url('{{public}}img/server-red.jpg'); }
+    .cover { 
+        width: 100%;
+        height: 100px; 
+        border-top-left-radius: 0.5rem;
+        border-top-right-radius: 0.5rem;
+        background-size: 100%;
+        background-repeat: no-repeat;
+        background-position: center;
+        opacity: 0.9;
+        position: absolute;
+        top:0;
+        left:0;
+        right:0;
+        overflow: hidden;
+    }
+    .header-icon { position: absolute; left:16px; top:12px; font-size: 48px; }
+    .card-title { margin-top: -1rem; border-bottom: 1px solid #DDD; padding-bottom: 1rem; }
+    .alt1,h2,h4 { color: #3b506c; }
+    .bg-light { background-color: #e9f1f4 !important; }
+    .bitrow { display: table; }
+    .fade-out {
+        opacity: 0;
+        animation: fout 0.2s
+    }
+    .fade-out {
+        opacity: 1;
+        animation: fin 0.2s
+    }
+    @keyframes fout {
+        from { opacity: 1; }
+        to { opacity: 0; }
+    }
+    @keyframes fin {
+        from { opacity: 0; }
+        to { opacity: 1; }
+    }
+    </style>
+    
+    <script type="text/javascript">
+        window.CONFIG_LIST = {};
+    </script>
+
+  <div class="main-content" style="margin-right:20px;">
+      
+    <table style="margin-top:.25rem" class="{{showfree_class}}">
+      <tr>
+        <td style="font-size:1rem;border:2px solid #F33;padding:.25rem 1rem;">
+          <h2 style="margin-bottom:.25rem;float:left;margin-right:2rem;">Note:</h2>
+          This free version of BitFire uses OFFLINE data analysis to flag and identify traffic patterns from log data.
+          To secure your site and block this traffic in real-time, please upgrade to realtime generative AI blocking.
+          <a href="https://bitfire.co/purchase" target="_blank" style="text-decoration: underline;">Upgrade to Real-Time blocking</a>
+        </td>
+      </tr>
+    </table>
+
+  <!-- CARDS -->
+  <div class="container-fluid" id="full_container">
+    <div class="row justify-content-center">
+      <div class="card">
+        <div class="row justify-content-left" style="flex-wrap:nowrap;background-color:#F0F1F4;">
+          <canvas class="left" id="cobe" style="--bs-gutter-x:0 ;width: 256px; height: 256px;" width="512" height="512"></canvas>
+            <table class="tab1 nowrap" style="margin-left:1.5rem;flex-grow:1;width:auto;flex-shrink:revert;display:flex;line-height:2rem;width:25%;overflow:hidden;">
+                <tr>
+                    <td class="labes">
+                      <label for="url-filter" title="Filter include just this URL" class="bold text-secondary">URL<i title="Filter include just this URL" class="fe fe-filter text-dark pointer" for="url-filter" id="url-filter"></i>:</label>
+                    </td>
+                    <td class="text-{{error-class}} nowrap" id="primary-url">{{error}}</td>
+                </tr>
+                <tr>
+                    <td class="bold labes">
+                      <label class="bold text-secondary">Referer:</label>
+                    </td>
+                    <td class="text-info nowrap" id="primary-ref">wordpress.bitfire.co</td>
+                </tr>
+                <tr>
+                    <td class="bold labes">
+                      <label for="agent-filter" title="Filter include just this Agent" class="bold text-secondary">Agent<i title="Filter include just this Agent" class="fe fe-filter text-dark pointer" for="agent-filter" id="agent-filter"></i>:</label>
+                    </td>
+                    <td class="text-secondary nowrap" id="primary-agent">Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/112.0.0.0 Safari/537.36</td>
+                </tr>
+                <tr>
+                    <td class="bold labes">
+                      <label class="bold text-secondary">Reason:</label>
+                    </td>
+                    <td class="text-secondary nowrap" id="primary-reason">Passed browser verification</td>
+                </tr>
+                <!--
+                <tr>
+                    <td colspan="2">
+                    <span class="labes">Browser:</span>
+                    <span class="datal text-secondary" id="primary-browser">Linux</span>
+                    </td>
+                </tr>
+              -->
+
+                <tr>
+                    <td colspan="2">
+                    <span class="labes">
+                      <label for="primary-response" class="bold text-secondary">HTTP Resp:</label>
+                    </span>
+                    <span class="datas">
+                      <span id="primary-response">200</span>
+                      <!--<button class="btn hidden btn-warning border-dark lift" title="Don't block this again" id="dont_block" style="font-size:.8rem;padding:0.2rem 0.4rem">Don&apos;t Block</button>-->
+                      <span class="hidden" id="primary-param"></span>
+                    </span>
+                    <span class="labes">
+                      <label for="primary-post" class="bold text-secondary">Post Size:</label>
+                    </span>
+                    <span class="datas" id="primary-post">0</span>
+                    <span class="labes">
+                      <label for="primary-sent" class="bold text-secondary">Resp Size:</label>
+                    </span>
+                    <span class="datas" id="primary-sent">0</span>
+
+                    <span class="labes">
+                      <label for="primary-rate" class="bold text-secondary">Req Rate:</label>
+                    </span>
+                    <span class="datas" id="primary-rate">0</span>
+                    </td>
+                </tr>
+                <!--
+                <tr>
+                    <td colspan="2">
+                    <span class="labes">IP:</span>
+                    <span class="datas text-primary" id="primary-ip">174.27.169.63</span>
+                    <span class="labes">Fingerprint:</span>
+                    <span class="datas text-secondary" id="primary-fingerprint">invalid</span>
+                    <span class="labes">Validation:</span>
+                    <span class="datas text-secondary" id="primary-validated">invalid</span>
+                    </td>/
+                </tr>
+              -->
+                <tr>
+                    <td colspan="2">
+                    <span class="labes">
+                      <label for="primary-time" class="bold text-secondary">Local Time:</label>
+                    </span>
+                    <span class="datas" id="primary-time"></span>
+                    <span class="labes">
+                      <label for="primary-location" class="bold text-secondary">Location:</label>
+                    </span>
+                    <span class="dataf nowrap" id="primary-location">Los Angels</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2">
+                      <hr style="margin:.25rem">
+              <form>
+              
+              <span class="labet">Page: </span>
+              <span class="fe fe-chevrons-left pointer btn btn-secondary" role="button" id="prev_button"></span>
+              <span class="text-muted atam center"><span id="start_num">0</span> - <span id="end_num">0</span> of ~<span id="total_num">0</span></span>
+              <span class="fe fe-chevrons-right pointer btn btn-secondary" role="button" id="next_button"></span>
+
+
+              <label for="start_time" style="margin-top:-1px"><span class="labes">Start Time: </span></label>
+              <input type="datetime-local" id="start_time" style="width:10rem;font-size:10px" value="{{start_time}}">
+
+              <label for="end_time" style="margin-top:-1px"><span class="labes">End Time: </span></label>
+              <input type="datetime-local" id="end_time" style="width:10rem;font-size:10px" value="{{end_time}}">
+
+
+              <!--<label for="per_page" style="margin-left:3rem"><span class="label">Per Page: </span></label>-->
+              <input style="width:4rem" type="hidden" id="per_page" value="64" disabled="disabled">
+
+              </form>
+
+                    </td>
+                </tr>
+
+            </table>
+            <div class="f_right" style="width:16rem;">
+              <img src="/wp-content/plugins/bitfire/public/browsers/unknown_bot.webp" width="80" height="80" id="primary-icon">
+              <br>
+              
+            <!-- 2 fix len for labels -->
+              <span class="text-secondary" id="primary-browser">Chrome/114</span>
+              <br>
+              <span class="labet text-secondary"><label title="Filter just this IP" for="ip-filter">IP</label><i for="ip-filter" title="Filter just this IP" class="text-dark fe fe-filter pointer" style="margin-top:2px" id="ip-filter"></i>:</span><span class="datat text-info" id="primary-ip" style="">174.27.169.63</span>
+              <br>
+              <span class="labet text-secondary"><label title="Filter just this browser Fingerprint ID" for="fingerprint-filter">Print<i for="fingerprint-filter" title="Filter just this Fingerprint ID" class="text-dark fe fe-filter pointer" id="fingerprint-filter"></i>:</label></span>
+              <span class="datat text-info" id="primary-fingerprint">0xc138a9</span>
+              <br>
+              <div id="primary-signature-container">
+              <span class="labet text-secondary"><label title="Filter just this browser Fingerprint ID" for="fingerprint-filter">Sig<i for="signature-filter" title="Filter just this Signature ID" class="text-dark fe fe-filter pointer" id="signature-filter"></i>:</label></span>
+              <span class="datat text-info" id="primary-signature">00ABCDEF</span>
+              </div>
+              <!--
+              <div id="primary-host-container">
+              <span class="labet text-secondary"><label title="Filter to just this Host" for="host-filter">Host<i for="host-filter" title="Filter just this Host Name" class="text-dark fe fe-filter pointer" id="host-filter"></i>:</label></span>
+              <span class="datat text-info" id="primary-host">localhost</span>
+              </div>
+              -->
+              <span class="labet text-secondary"><label title="Filter just this status" for="validated-filter">Status<i for="validated-filter" title="Filter just this status" class="text-dark fe fe-filter pointer" id="validated-filter"></i>:</label></span>
+              <span class="datat badge " id="primary-validated"></span>
+              <br>
+              <span class="labet text-secondary"><label title="Filter just this status" for="code-filter">Block <i for="code-filter" class="text-dark fe fe-filter pointer" id="code-filter"></i>:</label></span>
+              <span class="datat badge bg-warning" id="primary-code">0</span>
+            </div>
+
+                <!--
+                <div class="filter" id="bf_filter" style="display:none">
+                  <div class="m45 ml-0">
+                  <label class="text-secondary">Include Filters:</label><small class="text-muted">include any IP, URL or Agent text</small><br>
+                  <input type="text" id="include_filter">
+                  <button style="padding:.25rem .5rem" class="btn btn-primary">Add</button><br>
+                  <span class="badge bg-success-soft text-dark">chrome <i class="fe fe-x pointer"></i></span>
+                  </div>
+                  <div class="m45 ml-0">
+                  <label class="text-secondary">Exclude Filters:</label><small class="text-muted">exclude any IP, URL or Agent text</small><br>
+                  <input type="text" id="include_filter">
+                  <button style="padding:.25rem .5rem" class="btn btn-primary">Add</button><br>
+                  <span class="badge bg-danger-soft">127.0.0.1 <i class="fe fe-x pointer"></i></span>
+                  </div>
+                  <span class="btn btn-info-outline" id="bf_expand"><i class="fe fe-chevron-right text-white"></i></span>
+                  <span class="btn btn-info-outline"><i class="fe fe-pause text-primary"></i></span>
+                  <span class="text-secondary">Older</span> <span class="btn btn-info-outline pl-0"><i class="fe fe-rewind text-primary"></i></span>
+                  <span class="text-secondary">Newer</span> <span class="btn btn-info-outline pl-0"><i class="fe fe-fast-forward text-primary"></i></span>
+                  <span class="text-secondary right"> 256-318</span>
+                </div>
+              -->
+            </div>
+<script type="text/template" id="row_template">
+<tr id="row-<%-pos%>" data-reqid="<%-pos%>" onclick="clickRow('<%-pos%>')" onmouseover="showRow('<%-pos%>')" onmouseout="hideRow('<%-pos%>')" class="bitrow">
+    <td class="ico">
+      <!--
+        <img width="24" height="24" src="/wp-content/plugins/bitfire/public/browsers/<%-browser%>.webp" alt="?" data-alt="<%-favicon%>" class="br_icon" onerror="swap_img(this)">
+      -->
+        <img id="icon-<%-pos%>"" width="24" height="24" src="<%-src%>" alt="?" data-alt="<%-favicon%>" class="br_icon" onerror="swap_img(this)" data-browser="<%-browser%>">
+        <span class="small text-muted"><%-human_time%></span>
+    </td>
+    <td class="text-primary url"><span class="<%-method_class%> method"><%-method%></span><%-url%></td>
+    <td class="source"><span class="text-info ip"><%-ip%></span> <span class="pl-2 text-muted"><%-loc.country%>, <%-loc.city%></span></td>
+    <td class="bold blocked"><span class="badge <%-passclass%>"><span class="fe <%-icon%>"></span><%-pass%><span class="text-secondary">: <%-http_code%></span></span></span></td>
+    <td class="multibtn">
+        <div class="btn-group" role="group">
+        <button id="group1" data-bs-toggle="dropdown" type="button" class="pointer btn btn-outline-dark text-danger fe fe-more-vertical"></button>
+        <div class="dropdown-menu" aria-labelledby="group1" data-ip="<%-ip%>" data-ua="<%-ua%>">
+            <a class="dropdown-item bip" href="#" onclick="request_action(this, 'block_ip')"><span class="fe fe-x text-danger"></span> Block IP</a>
+            <a class="dropdown-item pip" href="#" onclick="request_action(this, 'pass_ip')"><span class="fe fe-check text-success"></span> Pass IP</a>
+            <a class="dropdown-item bua" href="#" onclick="request_action(this, 'no')"><span class="fe fe-x text-danger"></span> Block User-Agent</a>
+            <a class="dropdown-item pua" href="#" onclick="request_action(this, 'pass_ua')"><span class="fe fe-check text-success"></span> Pass User-Agent</a>
+            <a class="dropdown-item pua" href="https://www.abuseipdb.com/check/<%-ip%>" target="_blank"><span class="fe fe-external-link text-info"></span> Check IP Reputation</a>
+            <% if(block_code > 0 && block_code != 24008) { %>
+            <a class="dropdown-item pua" href="#" onclick="add_exception(this)" data-ex-url="<%-base_url%>" data-ex-code="<%-block_code%>" data-ex-value="" data-ex-ua="<%-ua%>"><span class="fe fe-slash text-danger"></span>Un-Block Request</a>
+            <% } %>
+        </div>
+        </div>
+    </td>
+</tr>
+</script>
+
+<div id="filter2">
+
+  <div class="left">
+    <label class="text-secondary"><strong>Include Filters:</strong></label>
+    <input type="text" id="include_filter" placeholder="ip, url or agent">
+    <button style="padding:0.2rem 0.4rem;margin-top:-3px" class="btn btn-primary" id="include_btn" title="Include Agent, URL or IP">
+      <i class="fe fe-plus"></i>
+    </button>
+    <span id="include_container"></span>
+  </div>
+
+  <div class="f_right">
+    <div id="exclude_container" class="left" style="margin:6px;"></div>
+    <div class="f_right">
+      <label class="text-secondary"><strong>Exclude Filters:</strong></label>
+      <input type="text" id="exclude_filter" placeholder="ip, url or agent">
+
+      <button style="padding:0.2rem 0.4rem;margin-top:-3px" class="btn btn-primary" id="exclude_btn" title="Exclude Agent, URL or IP">
+        <i class="fe fe-plus"></i>
+      </button>
+    </div>
+  </div>
+</div>
+
+
+            <table style="margin-top:2rem">
+                <thead class="text-secondary bitheader">
+                    <tr>
+                        <th class="ico">Browser</th>
+                        <th style="width:auto">URL</th>
+                        <th class="source">Source</th>
+                        <th class="blocked">Result</th>
+                        <th class="multibtn">Action</th>
+                    </tr>
+                </thead>
+                <tbody id="request_list" style="cursor:pointer">
+                </tbody>
+            </table>
+        </div>
+
+      </div>
+    </div>
+  </div>
+  <h3 class="text-center text-muted">Space-Bar to refresh data</h3>
+
+  <script type="text/javascript">
+    window.CLICKED = 0;
+    window.IS_FREE = {{is_free}};
+
+    function basename(path) {
+      return path.split('/').reverse()[0];
+    }
+
+    function swap_img(elm) {
+      if (elm.getAttribute("data-swap" == "1")) { swap_img.map[elm.src] = -1; return; }
+      if (!swap_img.map) { swap_img.map = {}; }
+      let alt =  elm.getAttribute("data-alt");
+
+      elm.setAttribute("data-swap", "1");
+      if (elm.src.indexOf("udger") == -1 && basename(alt) != basename(elm.src)) {
+        // console.log("swap !udger", elm.src, alt);
+        if (!alt) { return; }
+        if (swap_img.map[alt] == -1) { return; }
+        swap_img.map[elm.src] = elm.getAttribute("data-alt");
+        elm.src = alt;
+      } else {
+        //console.log("swap unknown");
+        elm.src = "/wp-content/plugins/bitfire/public/browsers/unknown_bot.webp";
+      }
+    }
+
+    function clickRow(pos) {
+        let elm = {};
+        for (let i=0; i<window.TRAFFIC.length; i++) {
+            elm = window.TRAFFIC[i];
+            if (elm.pos == pos) { elm = window.TRAFFIC[i]; break; }
+        }
+        // console.log("clicked: "+pos, elm);
+
+        if (window.CLICKED == 0) {
+            console.log("first click");
+            window.CLICKED = pos;
+            GBI("row-"+pos).classList.add("bg-light");
+        } else if (window.CLICKED == pos) {
+            console.log("unclick");
+            window.CLICKED = 0;
+            GBI("row-"+pos).classList.remove("bg-light");
+            phi_rot = 0.005;
+            display_row.last_pos = 0;
+        
+            unselect_all();
+        } else {
+            let elm = GBI("row-"+window.CLICKED);
+            if (elm) { elm.classList.remove("bg-light"); }
+
+            window.CLICKED = pos;
+            GBI("row-"+pos).classList.add("bg-light");
+        }
+        if (window.CLICKED > 0) {
+          phi_rot = 0.0;
+          phi = (-PI/2) + (-(elm.loc.lng) * (PI / 180));// - .58;
+
+          if (phi > PI*2) { phi -= PI*2;}
+          // console.log(elm.loc.lng, phi);
+
+          display_row(pos, true); 
+        }
+    }
+
+    function unselect_marker(pos) {
+        for (let i=0; i<window.MARKERS.length; i++) {
+            if (window.MARKERS[i].pos == pos) {
+                window.MARKERS[i].color = window.MARKERS[i].lastColor;
+                window.MARKERS[i].size = window.MARKERS[i].lastSize;
+                window.MARKER_UPDATED = true;
+                delete window.MARKERS[i].lastColor;
+                delete window.MARKERS[i].lastSize;
+                break;
+            }
+        }
+    }
+
+    function unselect_all() {
+        for (let i=0; i<window.MARKERS.length; i++) {
+            if (!window.MARKERS[i]) { continue; }
+            if (window.MARKERS[i].lastColor) {
+                window.MARKERS[i].color = window.MARKERS[i].lastColor;
+                delete window.MARKERS[i].lastColor;
+            }
+            if (window.MARKERS[i].lastSize) {
+                window.MARKERS[i].size = window.MARKERS[i].lastSize;
+                delete window.MARKERS[i].lastSize;
+            }
+        }
+        window.MARKER_UPDATED = true;
+    }
+
+    function select_marker(pos) {
+        let x = {};
+        for (let i=0; i<window.MARKERS.length; i++) {
+            if (!window.MARKERS[i]) { continue; }
+            if (window.MARKERS[i].pos == pos) {
+                x = window.MARKERS[i];
+                window.MARKERS.splice(i, 1);
+                break;
+            }
+        }
+        // don't double select and clear the previous color!
+        if (x.color != [.2, .8, 1]) {
+            x.lastColor = x.color;
+            x.lastSize = x.size;
+            x.color = [.2, .8, 1];
+            x.size = .15;
+            // console.log("found: "+pos, x);
+            window.MARKERS.push(x);
+            window.MARKER_UPDATED = true;
+        }
+    }
+
+
+
+    function display_row(pos, force) {
+        // don't update to the same data
+        if (pos == display_row.last_pos) {
+            // force selection for double click
+            if (force) {
+                unselect_all();
+                select_marker(pos);
+            }
+            // console.log("same update"); return;
+        }
+
+        let elm = {};
+        for (let i=0; i<window.TRAFFIC.length; i++) {
+            elm = window.TRAFFIC[i];
+            if (elm.pos == pos) { elm = window.TRAFFIC[i]; break; }
+        }
+
+        //console.log("searching for: "+pos, display_row.last_pos);
+        unselect_all();
+        select_marker(pos);
+        display_row.last_pos = pos;
+
+        let u2 = "url decode error";
+        let r2 = "referer decode error";
+        try { u2 = decodeURI(decodeURI(elm.url)); } catch (e) {}
+        try { r2 = decodeURI(decodeURI(elm.ref)); } catch (e) {}
+
+        GBI("primary-url").innerText = u2;
+        GBI("primary-ref").innerText = r2;
+        GBI("primary-agent").innerText = elm.ua;
+        GBI("primary-reason").innerText = elm.reason;
+        GBI("primary-response").innerText = elm.http_code;
+        //if (elm.block_code > 0) {
+        //GBI("primary-rr").innerText = elm.ctr404;
+        GBI("primary-param").innerText = elm.param;
+        GBI("primary-rate").innerText = elm.rr;
+        GBI("primary-post").innerText = elm.post_sz;
+        GBI("primary-sent").innerText = elm.resp_sz;
+        console.log(elm);
+
+        GBI("primary-code").innerText = elm.block_code;
+        //GBI("primary-os").innerText = elm.os;
+        GBI("primary-browser").innerText = elm.browser + "/" + elm.ver;
+        //GBI("primary-ver").innerText = elm.ver;
+        GBI("primary-ip").innerText = elm.ip;
+        let e = GBI("primary-fingerprint");
+
+        //e.innerText = ((elm.valid == 3) ? "PASS" : "Invalid") + " ("+parseInt(elm.fingerprint).toString(16)+")";
+        e.innerText = '0x' + parseInt(elm.fingerprint).toString(16);
+        let s = GBI("primary-signature");
+        s.innerText = elm.signature;
+        /*
+        let c1 = (elm.valid == 3) ? "text-success" : "text-warning";
+        e.classList.remove("text-success");
+        e.classList.remove("text-danger");
+        e.classList.add(c1);
+        */
+
+        let c1 = "bg-success";
+        let type = "View";
+        let icon = "fe-alert-triangle";
+        if (elm.valid == BOT_VALID_INVALID) {
+          type = "Blocked Restricted Action";
+          c1 = "bg-danger";
+        } else if (elm.valid == BOT_VALID_FINGERPRINT) {
+          type = "Fingerprint";
+          c1 = "bg-success-soft";
+          icon = "fe-check";
+        } else if (elm.valid == BOT_VALID_JS) {
+          type = "JavaScript Validated";
+          c1 = "bg-success-soft";
+          icon = "fe-check";
+        } else if (elm.valid == BOT_VALID_NET) {
+          type = "Domain Verified";
+          c1 = "bg-success-soft";
+          icon = "fe-check";
+        } else if (elm.valid == BOT_VALID_OPEN) {
+          type = "Open Bot";
+          c1 = "bg-success-soft";
+          icon = "fe-check";
+        } else if (elm.valid == BOT_VALID_AGENT) {
+          type = "Open Agent";
+          c1 = "bg-info-soft";
+          icon = "fe-check";
+        } else if (elm.valid == BOT_VALID_RESTRICTED) {
+          type = "Ok";
+          c1 = "bg-success-soft";
+          icon = "fe-check";
+        }
+        //console.log("valid", elm.valid);
+
+
+
+
+
+
+
+        /*
+        if (elm.valid == 5) {
+          type = "Open<br><a class='underline' title='Purchase Bot Authentication to protect your site from bots like this' target='_blank' href='https://bitfire.co/open_bot_authentication'>Add Authentication <i class='fe fe-external-link'></i></a>";
+          c1 = "bg-success";
+          GBI("primary-reason").innerHTML += 
+            " - Open (Not Authenticated) <a class='underline' title='' target='_blank' href='https://bitfire.co/open_bot_authentication'>Add Bot Authentication <i class='fe fe-external-link'></i></a>";
+        } else if (elm.valid == 4) {
+          type = "Network";
+        } else if (elm.valid == 3) {
+          type = "Fingerprint";
+        } else if (elm.valid == 2) {
+          c1 = "bg-danger";
+          type = "JavaScript";
+        } else if (elm.valid == 1) {
+          c1 = "bg-warning";
+          type = "Challenge";
+        } else if (elm.valid == 0) {
+          c1 = "bg-warning";
+          type = "Challenge";
+        }
+        */
+        if (elm.block_code > 0) {
+          type = "{{flag_type}}";
+          c1 = "bg-danger";
+          icon = "fe-x-square";
+        }
+
+        e = GBI("primary-validated");
+        e.innerHTML = "<i class='fe " + icon+ "'></i> " + type;
+        /*
+        if (!elm.valid) {
+          c1 = "text-danger";
+        }
+        */
+        e.classList.remove("bg-success");
+        e.classList.remove("bg-danger");
+        e.classList.remove("bg-warning");
+        e.classList.remove("bg-info-soft");
+        e.classList.remove("bg-success-soft");
+        e.classList.add(c1);
+
+
+        let r = (elm.loc) ? elm.loc.region : "- ";
+        let c = (elm.loc) ? elm.loc.city : "- ";
+        let cn = (elm.loc) ? elm.loc.country : "- ";
+        let d = new Date(elm.time * 1000);
+        GBI("primary-time").innerText = format_time(elm.time);
+        GBI("primary-location").innerText = r + ", " + c + ", " + cn;
+        let i = GBI("icon-"+pos);
+        GBI("primary-icon").src = i.src;
+    }
+    
+    function format_time(s) {
+        const dtFormat = new Intl.DateTimeFormat(getLang(), {
+            timeStyle: 'medium',
+            timeZone: '{{timezone}}',
+        });
+    
+        const d = new Date();
+        let s2 = s - (d.getTimezoneOffset() * 60);
+        const d2 = new Date(s2 * 1e3);
+        return dtFormat.format(d2);
+    }
+
+    function getLang() {
+        if (navigator.languages != undefined) {
+            return navigator.languages[0]; 
+        }
+        return navigator.language;
+    }
+
+    function showRow(pos) {
+        if (window.CLICKED != 0) { return; }
+        GBI("row-"+pos).classList.add("bg-light");
+
+        display_row(pos, false);
+    }
+
+
+    function hideRow(pos) {
+        if (window.CLICKED != 0) { return; }
+        GBI("row-"+pos).classList.remove("bg-light");
+    }
+
+    function in_array(str, arr) {
+      for (let i=0; i<arr.length; i++) {
+        if (str.includes(arr[i])) { return true; }
+      }
+      return false;
+    }
+
+    window.BITFIRE_NONCE = '{{api_code}}';
+    window.TRAFFIC = [];
+    window.PAGE_NUM = 0;
+
+
+    function display_result(value, color, icon, text) {
+      value.pass = text;
+      value.passclass = "bg-" + color;
+      value.icon = "fe-" + icon;
+      return value;
+    }
+
+function ord (string) {
+  //  discuss at: https://locutus.io/php/ord/
+  const str = string + ''
+  const code = str.charCodeAt(0)
+  if (code >= 0xD800 && code <= 0xDBFF) {
+    const hi = code
+    if (str.length === 1) {
+      return code
+    }
+    const low = str.charCodeAt(1)
+    return ((hi - 0xD800) * 0x400) + (low - 0xDC00) + 0x10000
+  }
+  if (code >= 0xDC00 && code <= 0xDFFF) {
+    return code
+  }
+  return code
+}
+
+
+    function update_request2() {
+
+      let batch_sz = GBI("per_page").value;
+      if (!batch_sz) { batch_sz = 64; }
+
+      let start = GBI("start_time").value;
+      let end = GBI("end_time").value;
+
+      if (!start && end && end.length > 0) {
+        //start = "1970-01-01T00:00";
+      }
+      console.log("start ", start, end);
+
+      let page = GBI("per_page").value;
+      let d = new Date();
+
+
+
+      //console.log("pre call");
+      BitFire_api_call('load_bot_data', {'start_time':start, 'offset':d.getTimezoneOffset(), 'end_time':end, 'page':window.PAGE_NUM, 'page_size':page, 'batch_sz':batch_sz, 'include':window.include, 'exclude':window.exclude}, function(x) {
+          if (!x || !x.data || !x.data.data) { return; }
+          let data = x.data.data;
+          window.TRAFFIC = data;
+          GBI("request_list").innerHTML = "";
+
+          let line_e = GBI("row_template");
+          let compiled = _.template(line_e.innerText);
+          let markup = "";
+          let markers = [];
+          let loc = {};
+
+          // display notice if no data was returned
+          if (data.length == 0) {
+            GBI("request_list").innerHTML = "<div class='text-center'>No data found</div>";
+          }
+
+          // store a log of all ip addresses that were eventually validated
+          let validated = [];
+          for (const [key, value] of Object.entries(data)) {
+              if (value.valid == BOT_VALID_JS) {
+                validated[value.ip] = 1;
+              }
+          }
+
+
+          for ([key, value] of Object.entries(data)) {
+              value.pass = "Unknown";
+              let u2 = "url decode error";
+              try { u2 = decodeURI(decodeURI(value.url)); } catch (e) { }
+              value.url = u2;
+
+              //const p_url = new URL(u2);
+              value.base_url = null;
+
+              console.log("valid", value.valid);
+              if (value.valid == BOT_VALID_JS) {
+                  value = display_result(value, "success-soft", "check", "JavaScript");
+              } else if (value.valid == BOT_VALID_NET) {
+                  value = display_result(value, "success-soft", "check", "Net Domain");
+              } else if (value.valid == BOT_VALID_IP) {
+                  value = display_result(value, "success-soft", "check", "Net IP");
+              } else if (value.valid == BOT_VALID_FINGERPRINT) {
+                  value = display_result(value, "success-soft", "check", "Fingerprint");
+              } else if (value.valid == BOT_VALID_OPEN) {
+                  value = display_result(value, "success-soft", "check", "Open");
+              } else if (value.valid == BOT_VALID_RESTRICTED) {
+                  value = display_result(value, "success-soft", "check", "Ok");
+              } else if (value.valid == BOT_VALID_INVALID) {
+                  value = display_result(value, "dark", "x-square", "{{flag_type}}");
+              }
+
+              /*
+               else if (value.valid == BOT_VALID_FINGERPRINT) {
+                  value = display_result(value, "success-soft", "check", "Fingerprint");
+              } else if (value.valid >= 5) {
+                  value = display_result(value, "success-soft", "check", "Open Bot");
+                  if (value.valid == 6) {
+                    value.pass = "OK IP";
+                  } else if (value.valid == 7) {
+                    value.pass = "OK Agent";
+                  } else if (value.valid == BOT_VALID_NO_DATA) {
+                    value.pass = "View";
+                  } else if (value.valid == BOT_VALID_NO_CHECK) {
+                    value.pass = "No Check";
+                  } else if (value.valid == BOT_VALID_NO_CHECK_XML) {
+                    value.pass = "No Check Ajax";
+                  } else if (value.valid == BOT_VALID_AJAX) {
+                    value.pass = "Verified Ajax";
+                  }
+              }
+              */
+              if (value.block_code > 0) {
+                if (value.block_code == 24008) {
+                  value = display_result(value, "warning", "check", "{{flag_type}}");
+                } else {
+                  value = display_result(value, "danger-soft", "x-square", "{{flag_type}}");
+                }
+              }
+              /*
+               else if (value.valid >= 2) {
+                  value.icon = "fe-check";
+              } else if (value.http_code == {{verify_http_code}}) {
+                  if (validated[value.ip] == 1) {
+                      value = display_result(value, "warning", "check", "Validating");
+                  } else {
+                      value = display_result(value, "warning", "alert-triangle", "Fake Browser");
+                  }
+              }
+              */
+              if (value.pass == "Unknown") {
+                  value = display_result(value, "success-soft", "check", "unknown " + value.valid);
+              }
+              
+              value.method_class = (value.method == "GET") ? "text-primary" : "text-secondary";
+              value.browser = value.browser.toLowerCase();
+
+              // hard coded fixes
+              /*
+              if (value.browser.includes("http")) {
+                  // console.log("http", value);
+                  value.src = "/wp-content/plugins/bitfire/public/browsers/unknown_bot.webp";
+              }
+              else 
+              if (value.ua.includes("hello world") || value.ua.includes("hello, world")) {
+                  // console.log("hello", value);
+                  value.src = "/wp-content/plugins/bitfire/public/browsers/mirai.webp";
+              }
+              // previously resolved icons
+              else if (swap_img.map && swap_img.map[value.browser]) {
+                  let v = swap_img.map[value.browser];
+                  // console.log("set src: ", v, value.browser);
+                  if (v != -1) {
+                      value.src = swap_img.map[value.browser];
+                  } else {
+                    value.src = "/wp-content/plugins/bitfire/public/browsers/unknown_bot.webp";
+                  }
+              }
+              */
+
+              // resolve new icons
+              if (!value.src) {
+                  // invalid browsers, show malware icon
+                  if (value.valid < 1) {
+                      if (in_array(value.browser, ["chrome", "firefox", "edge", "edg"])) {
+                        if (value.signature.length < 8 || !value.signature.includes("B") || value.signature.includes("=")) {   
+                          // we only have icons for edge, so rename edg to edge here...
+                          if (value.browser == "edg") { value.browser = "edge"; }
+                          let val = 0;
+                          for (let i=0; i<value.signature.length; i++) {
+                            val += ord(value.signature[i]) % 1024;
+                          }
+                          let rel = (val % 5)+1;
+                          value.browser = value.browser + "_malware" + rel;
+                        }
+                      }
+                  }
+                  value.src = "/wp-content/plugins/bitfire/public/browsers/"+value.browser+".webp";
+              }
+
+              markup += compiled(value);
+              let c = [0, 1, 0];
+              if (value.valid <= 1) {
+                  c = [.8, .8, .2];
+              }
+              if (value.block_code > 0) {
+                  c = [1, 0, 0];
+              }
+              let sz = 0.15;
+
+              // don't add markers for invalid locations
+              if (value.loc.lat != 0 && value.loc.lng != 0) {
+                  if (value.pos == window.CLICKED) {
+                      markers.push({location: [value.loc.lat, value.loc.lng], size: 0.25, color: [0, 0.8, 1], pos: value.pos, lastColor: c, lastSize: sz});
+                  } else {
+                      markers.push({location: [value.loc.lat, value.loc.lng], size: sz, color: c, pos: value.pos});
+                  }
+              }
+          }
+          window.MARKERS = markers;
+          window.MARKER_UPDATED = true;
+          GBI("request_list").innerHTML = markup;
+
+          bf_each_class_event("br_icon", "error", function(elm) {
+            elm.src="https://bitfire.co/assets/robot.svg"
+          });
+
+          let elm = GBI("row-"+window.CLICKED);
+          if (elm) { elm.classList.add("bg-light"); }
+
+          // console.log("DATA", x.data);
+          GBI("start_num").innerText = x.data.start;
+          GBI("end_num").innerText = x.data.end;
+          GBI("total_num").innerText = x.data.ctr;
+      });
+
+      //console.log("update 3!");
+    }
+
+
+
+    function update_requests() {
+        // don't update if page is not active
+        if (document.hidden) { return; }
+
+        //console.log("UPDATE", window.PAGE_NUM);
+        //console.log("clear");
+        //window.setTimeout(update_request2, 4000);
+        update_request2();
+        //console.log("update!");
+   }
+
+    function request_action(event, action_name) {
+      console.log("request_action", event, action_name);
+        const ip = event.parentElement.getAttribute("data-ip");
+        const ua = event.parentElement.getAttribute("data-ua");
+        console.log("clicked", ip, ua);
+        BitFire_api_call('bot_action', {'action': action_name, 'ua': ua, 'ip':ip}, function(x) {
+            console.log("bot_action", x);
+        });
+    }
+
+    function attach_control(class_name, action_name) {
+        let pip = document.getElementsByClassName(class_name);
+        console.log("attach_control", class_name, action_name, pip.length);
+        for (let i=0; i<pip.length; i++) {
+            pip[i].addEventListener("click", function() {
+              
+                const ip = this.parentElement.getAttribute("data-ip");
+                const ua = this.parentElement.getAttribute("data-ua");
+                console.log("clicked", ip, ua);
+                BitFire_api_call('bot_action', {'action': action_name, 'ua': ua, 'ip':ip}, function(x) {
+                    console.log("bot_action", x);
+                });
+            });
+        }
+    }
+
+
+
+</script>
+
+
+
+<script type="text/javascript">
+
+var phi = 0.0;
+var theta = 0.3;
+var phi_rot = 0.005;
+var canvas = GBI("cobe");
+
+
+const OPT_MAPPING = {
+  [OPT_PHI]: GLSLX_NAME_PHI,
+  [OPT_THETA]: GLSLX_NAME_THETA,
+  [OPT_DOTS]: GLSLX_NAME_DOTS,
+  [OPT_MAP_BRIGHTNESS]: GLSLX_NAME_DOTS_BRIGHTNESS,
+  [OPT_BASE_COLOR]: GLSLX_NAME_BASE_COLOR,
+  [OPT_MARKER_COLOR]: GLSLX_NAME_MARKER_COLOR,
+  [OPT_GLOW_COLOR]: GLSLX_NAME_GLOW_COLOR,
+  [OPT_DIFFUSE]: GLSLX_NAME_DIFFUSE,
+  [OPT_DARK]: GLSLX_NAME_DARK,
+  [OPT_OFFSET]: GLSLX_NAME_OFFSET,
+  [OPT_SCALE]: GLSLX_NAME_SCALE,
+  [OPT_OPACITY]: GLSLX_NAME_OPACITY,
+  [OPT_MAP_BASE_BRIGHTNESS]: GLSLX_NAME_MAP_BASE_BRIGHTNESS,
+}
+
+const { PI, sin, cos } = Math;
+
+const mapMarkers = (markers) => {
+    //console.log ("markers");
+    return [].concat(
+        ...markers.map((m) => {
+            if (!m.location) { return [0, 0, 0, 0]; }
+            let [a, b] = m.location
+            a = (a * PI) / 180
+            b = (b * PI) / 180 - PI
+            const cx = cos(a)
+            return [-cx * cos(b), sin(a), cx * sin(b), m.size]
+        }),
+        // Make sure to fill zeros
+        [0, 0, 0, 0]
+    )
+}
+
+const mapColors = (markers) => {
+  //console.log ("markers");
+  return [].concat(
+    ...markers.map((m) => {
+      let [a, b, c] = m.color;
+      return [a, b, c]
+    }),
+    // Make sure to fill zeros
+    [0, 0, 0]
+  )
+}
+
+var opts = {
+      devicePixelRatio: 1,
+      width: 256,
+      height: 256,
+      phi: 0,
+      theta: 0.3,
+      dark: 1,
+      diffuse: 1.2,
+      scale: 1.2,
+      mapSamples: 10000,
+      mapBrightness: 24,
+      baseColor: [0.2, 0.2, 0.2],
+      markerColor: [[1, 0.5, 1], [0.5, 1, 1]],
+      glowColor: [0.92, 0.92, 1],
+      offset: [0, 0],
+      opacity: 0.8,
+      markers: [
+        /*
+        { location: [38.1912, -89.9320], size: 0.1, color: [1, 0.5, 1] },
+        { location: [26.1912, -44.9320], size: 0.1, color: [0.5, 1, 1] },
+        { location: [-36.1912, 24.9320], size: 0.1, color: [1, 1, 0.5] }
+        */
+      ],
+      onRender: (state) => {
+        // Called on every animation frame.
+        // `state` will be an empty object, return updated params.
+        //console.log("RENDER", state);
+        phi += phi_rot;
+        if (phi > PI*2) { phi -= PI*2; }
+        state.phi = phi;
+        state.theta = theta;
+
+        // only update markers if markers were updated
+        if (window.MARKER_UPDATED) {
+          window.MARKER_UPDATED = false;
+          state[OPT_MARKERS] = window.MARKERS;
+        } else {
+          delete state[OPT_MARKERS];
+        }
+      }
+};
+
+function createUniform (type, name, fallback) {
+    return {
+      type,
+      value: typeof opts[name] === 'undefined' ? fallback : opts[name],
+    };
+}
+
+  // See https://github.com/shuding/cobe/pull/34.
+  const contextType = canvas.getContext('webgl')
+    ? 'webgl'
+    : 'experimental-webgl';
+
+  const p = new Phenomenon({
+    canvas,
+    contextType,
+    context: {
+      alpha: true,
+      stencil: false,
+      antialias: true,
+      depth: false,
+      preserveDrawingBuffer: false,
+      ...opts.context,
+    },
+    settings: {
+      [OPT_DPR]: opts[OPT_DPR] || 1,
+      onSetup: (gl) => {
+        const RGBFormat = gl.RGB;
+        const srcType = gl.UNSIGNED_BYTE;
+        const TEXTURE_2D = gl.TEXTURE_2D;
+
+        const texture = gl.createTexture();
+        gl.bindTexture(TEXTURE_2D, texture);
+        gl.texImage2D(
+          TEXTURE_2D,
+          0,
+          RGBFormat,
+          1,
+          1,
+          0,
+          RGBFormat,
+          srcType,
+          new Uint8Array([0, 0, 0, 0])
+        );
+
+        const image = new Image();
+        image.onload = () => {
+          gl.bindTexture(TEXTURE_2D, texture);
+          gl.texImage2D(TEXTURE_2D, 0, RGBFormat, RGBFormat, srcType, image);
+
+          gl.generateMipmap(TEXTURE_2D);
+
+          const program = gl.getParameter(gl.CURRENT_PROGRAM);
+          const textureLocation = gl.getUniformLocation(
+            program,
+            GLSLX_NAME_U_TEXTURE
+          );
+          gl.texParameteri(TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST);
+          gl.texParameteri(TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
+          gl.uniform1i(textureLocation, 0);
+        }
+        image.src = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAQAAAACAAQAAAADMzoqnAAAAAXNSR0IArs4c6QAABA5JREFUeNrV179uHEUAx/Hf3JpbF+E2VASBsmVKTBcpKJs3SMEDcDwBiVJAAewYEBUivIHT0uUBIt0YCovKD0CRjUC4QfHYh8hYXu+P25vZ2Zm9c66gMd/GJ/tz82d3bk8GN4SrByYF2366FNTACIAkivVAAazQdnf3MvAlbNUQfOPAdQDvSAimMWhwy4I2g4SU+Kp04ISLpPBAKLxPyic3O/CCi+Y7rUJbiodcpDOFY7CgxCEXmdYD2EYK2s5lApOx5pEDDYCUwM1XdJUwBV11QQMg59kePSCaPAASQMEL2hwo6TJFgxpg+TgC2ymXPbuvc40awr3D1QCFfbH9kcoqAOkZozpQo0aqAGQRKCog/+tjkgbNFEtg2FffBvBGlSxHoAaAa1u6X4PBAwDiR8FFsrQgeUhfJTSALaB9jy5NCybJPn1SVFiWk7ywN+KzhH1aKAuydhGkbEF4lWohLXDXavlyFgHY7LBnLRdlAP6BS5Cc8RfVDXbkwN/oIvmY+6obbNeBP0JwTuMGu9gTzy1Q4RS/cWpfzszeYwd+CAFrtBW/Hur0gLbJGlD+/OjVwe/drfBxkbbg63dndEDfiEBlAd7ac0BPe1D6Jd8dfbLH+RI0OzseFB5s01/M+gMdAeluLOCAuaUA9Lezo/vSgXoCX9rtEiXnp7Q1W/CNyWcd8DXoS6jH/YZ5vAJEWY2dXFQe2TUgaFaNejCzJ98g6HnlVrsE58sDcYqg+9XY75fPqdoh/kRQWiXKg8MWlJQxUFMPjqnyujhFBE7UxIMjyszk0QwQlFsezImsyvUYYYVED2pk6m0Tg8T04Fwjk2kdAwSACqlM6gRRt3vQYAFGX0Ah7Ebx1H+MDRI5ui0QldH4j7FGcm90XdxD2Jg1AOEAVAKhEFXSn4cKUELurIAKwJ3MArypPscQaLhJFICJ0ohjDySAdH8AhDtCiTuMycH8CXzhH9jUACAO5uMhoAwA5i+T6WAKmmAqnLy80wxHqIPFYpqCwxGaYLt4Dyievg5kEoVEUAhs6pqKgFtDQYOuaXypaWKQfIuwwoGSZgfLsu/XAtI8cGN+h7Cc1A5oLOMhwlIPXuhu48AIvsSBkvtV9wsJRKCyYLfq5lTrQMFd1a262oqBck9K1V0YjQg0iEYYgpS1A9GlXQV5cykwm4A7BzVsxQqo7E+zCegO7Ma7yKgsuOcfKbMBwLC8wvVNYDsANYalEpOAa6zpWjTeMKGwEwC1CiQewJc5EKfgy7GmRAZA4vUVGwE2dPM/g0xuAInE/yG5aZ8ISxWGfYigUVbdyBElTHh2uCwGdfCkOLGgQVBh3Ewp+/QK4CDlR5Ws/Zf7yhCf8pH7vinWAvoVCQ6zz0NX5V/6GkAVV+2/5qsJ/gU8bsxpM8IeAQAAAABJRU5ErkJggg==";
+        //console.log("setup", gl, image);
+      },
+    },
+  });
+
+  p.add('', {
+    vertex: `attribute vec3 aPosition;uniform mat4 uProjectionMatrix;uniform mat4 uModelMatrix;uniform mat4 uViewMatrix;void main(){gl_Position=uProjectionMatrix*uModelMatrix*uViewMatrix*vec4(aPosition,1.);}`,
+    fragment: GLSLX_SOURCE_MAIN,
+    uniforms: {
+      [GLSLX_NAME_U_RESOLUTION]: {
+        type: 'vec2',
+        value: [opts.width, opts.height],
+      },
+      [GLSLX_NAME_PHI]: createUniform('float', OPT_PHI),
+      [GLSLX_NAME_THETA]: createUniform('float', OPT_THETA),
+      [GLSLX_NAME_DOTS]: createUniform('float', OPT_DOTS),
+      [GLSLX_NAME_DOTS_BRIGHTNESS]: createUniform('float', OPT_MAP_BRIGHTNESS),
+      [GLSLX_NAME_MAP_BASE_BRIGHTNESS]: createUniform(
+        'float',
+        OPT_MAP_BASE_BRIGHTNESS
+      ),
+      [GLSLX_NAME_BASE_COLOR]: createUniform('vec3', OPT_BASE_COLOR),
+      //[GLSLX_NAME_MARKER_COLOR]: createUniform('vec3', OPT_MARKER_COLOR),
+      [GLSLX_NAME_MARKER_COLOR]: {
+        type: 'vec3', 
+        value: mapColors(opts[OPT_MARKERS]),
+      },
+      [GLSLX_NAME_DIFFUSE]: createUniform('float', OPT_DIFFUSE),
+      [GLSLX_NAME_GLOW_COLOR]: createUniform('vec3', OPT_GLOW_COLOR),
+      [GLSLX_NAME_DARK]: createUniform('float', OPT_DARK),
+      [GLSLX_NAME_MARKERS]: {
+        type: 'vec4',
+        value: mapMarkers(opts[OPT_MARKERS]),
+      },
+      [GLSLX_NAME_MARKERS_NUM]: {
+        type: 'float',
+        value: opts[OPT_MARKERS].length,
+      },
+      [GLSLX_NAME_OFFSET]: createUniform('vec2', OPT_OFFSET, [0, 0]),
+      [GLSLX_NAME_SCALE]: createUniform('float', OPT_SCALE, 1),
+      [GLSLX_NAME_OPACITY]: createUniform('float', OPT_OPACITY, 1),
+    },
+    mode: 4,
+    geometry: {
+      vertices: [
+        { x: -100, y: 100, z: 0 },
+        { x: -100, y: -100, z: 0 },
+        { x: 100, y: 100, z: 0 },
+        { x: 100, y: -100, z: 0 },
+        { x: -100, y: -100, z: 0 },
+        { x: 100, y: 100, z: 0 },
+      ],
+    },
+    shouldRender: true,
+    onRender: ({ uniforms }) => {
+      let state = {}
+      //console.log("render");
+      if (opts.onRender) {
+        state = opts.onRender(state) || state
+        for (let k in OPT_MAPPING) {
+          if (state[k] !== undefined) {
+            uniforms[OPT_MAPPING[k]].value = state[k];
+          }
+        }
+        if (state[OPT_MARKERS] !== undefined) {
+          uniforms[GLSLX_NAME_MARKERS].value = mapMarkers(state[OPT_MARKERS])
+          uniforms[GLSLX_NAME_MARKER_COLOR].value = mapColors(state[OPT_MARKERS])
+          uniforms[GLSLX_NAME_MARKERS_NUM].value = state[OPT_MARKERS].length
+        }
+        if (state.width && state.height) {
+          uniforms[GLSLX_NAME_U_RESOLUTION].value = [state.width, state.height]
+        }
+      } else { console.log("no render"); }
+    },
+  });
+
+
+  window.include = [];
+  window.exclude = [];
+
+  function make_filter(text, is_include) {
+    text = text.trim();
+    console.log("make_filter", text, is_include);
+
+    let class_name = is_include ? "bg-success-soft" : "bg-danger-soft";
+
+    // create the badge
+    let f = GBI("include_filter");
+    let elm = document.createElement("span");
+    elm.className = "badge " + class_name;
+    elm.style.marginLeft = "6px";
+    elm.innerText = text;
+    let i = document.createElement("i");
+    i.className = "fe fe-x pointer";
+    i.title = "Remove filter";
+
+    // remove the badge when clicked
+    i.addEventListener("click", function(event) {
+      let p = event.target.parentElement;
+      if (is_include) {
+        window.include = window.include.filter(text => text != p.innerText);
+        GBI("include_container").removeChild(p) 
+      } else {
+        window.exclude = window.exclude.filter(text => text != p.innerText);
+        GBI("exclude_container").removeChild(p) 
+      }
+      update_requests();
+    });
+    elm.appendChild(i);
+
+    // attach badge to the correct container
+    if (is_include) {
+      window.include.push(text);
+    } else {
+      window.exclude.push(text);
+    }
+
+    let c = (is_include) ? GBI("include_container") : GBI("exclude_container");
+    c.appendChild(elm);
+  }
+
+
+  function include_click() {
+    clearInterval(window.UPDATE_INTERVAL);
+    console.log("include");
+    make_filter(GBI("include_filter").value, true);
+    GBI("include_filter").value = "";
+
+    update_requests();
+    window.UPDATE_INTERVAL = window.setInterval(update_requests, 60000);
+  }
+
+  function exclude_click() {
+    clearInterval(window.UPDATE_INTERVAL);
+    console.log("exclude");
+    make_filter(GBI("exclude_filter").value, false);
+    GBI("exclude_filter").value = "";
+
+    update_requests();
+    window.UPDATE_INTERVAL = window.setInterval(update_requests, 60000);
+  }
+
+
+  function flash_it() {
+    let d = document.createElement("div");
+    d.id="bf_flash";
+    document.body.appendChild(d);
+    window.setTimeout(function() {
+      document.body.removeChild(d);
+    }, 250);
+    return;
+  }
+
+
+  function next_click() {
+    let max_page = Math.floor(GBI("total_num").innerText / GBI("per_page").value);
+    console.log("next", window.PAGE_NUM, max_page);
+
+    if (window.PAGE_NUM >= max_page) {
+      console.log("flash", window.PAGE_NUM, max_page, window.TRAFFIC.length);
+      return flash_it();
+    }
+    clearInterval(window.UPDATE_INTERVAL);
+    window.PAGE_NUM++;
+    console.log("up req");
+    update_requests();
+    window.UPDATE_INTERVAL = window.setInterval(update_requests, 60000);
+  }
+
+  function prev_click() {
+    console.log("prev");
+    if (window.PAGE_NUM <= 0) {
+      return flash_it();
+    }
+    clearInterval(window.UPDATE_INTERVAL);
+    window.PAGE_NUM--;
+    update_requests();
+    window.UPDATE_INTERVAL = window.setInterval(update_requests, 60000);
+  }
+
+  function update_request3() {
+    window.PAGE_NUM = 0;
+
+    update_request2();
+  }
+
+
+  function add_filter(id) {
+    let base = id.split("-")[0];  
+    //GBI(base + "-filter").classList.remove("text-dark");
+    //GBI(base + "-filter").classList.add("text-success");
+    make_filter(GBI("primary-" + base).innerText, true);
+    window.PAGE_NUM = 0;
+    update_requests();
+  }
+
+  function add_filter_event(x1) {
+    let x2 = x1.target;
+    if (x2.getAttribute("for")) {
+      let x3 = x2.getAttribute("for");
+      add_filter(x3);
+    }
+  }
+
+  function dont_block() {
+    console.log("dont block");
+
+    let code = GBI("primary-code").innerText;
+    let param = GBI("primary-param").innerText;
+    let url = GBI("primary-url").innerText;
+
+    BitFire_api("add_api_exception", {"code": code, "path": url, "param": param})
+      .then(response => response.json())
+      .then(data => {
+        if (!data || !data.success) {
+          alert("unable to add exception " + data.note); 
+        } else {
+          alert("exception added.")
+          /*
+          let list = document.getElementsByClassName("ex-"+ex.getAttribute("data-ex-code"));
+          console.log(ex);
+          console.log(list);
+          for (i=0; i<list.length; i++) {
+            list[i].src="https://bitfire.co/assets/bandage.svg";
+            list[i].classList.remove("secondary");
+            list[i].classList.add("warning");
+          }
+          alert(data.note);
+          */
+        }
+      });
+  }
+
+
+  GBI("include_btn").addEventListener("click", include_click);
+  GBI("exclude_btn").addEventListener("click", exclude_click);
+  GBI("exclude_filter").addEventListener("keypress", function(e) { if (e.keyCode == 13) { exclude_click(); }});
+  GBI("include_filter").addEventListener("keypress", function(e) { if (e.keyCode == 13) { include_click(); }});
+  GBI("next_button").addEventListener("click", next_click);
+  GBI("prev_button").addEventListener("click", prev_click);
+  GBI("start_time").addEventListener("change", update_request3);
+  GBI("end_time").addEventListener("change", update_request3);
+
+  GBI("url-filter").addEventListener("click", add_filter_event);
+  GBI("agent-filter").addEventListener("click", add_filter_event);
+  GBI("ip-filter").addEventListener("click", add_filter_event);
+  GBI("validated-filter").addEventListener("click", add_filter_event);
+  GBI("code-filter").addEventListener("click", add_filter_event);
+  GBI("fingerprint-filter").addEventListener("click", add_filter_event);
+
+
+
+
+  /*
+  GBI("include_btn").addEventListener("click", function(event) {
+    let el = event.target;
+
+    if (el.classList.contains("include_btn")) {
+      el.classList.remove("include_btn");
+      el.classList.add("exclude_btn");
+      // p.shouldRender = false;
+      console.log("Include!");
+    } else {
+      el.classList.remove("exclude_btn");
+      el.classList.add("include_btn");
+      // p.shouldRender = true;
+      console.log("Exclude!");
+    }
+    */
+
+   bf_each_class_event("bf_expand", "click", function(event) {
+    GBI("bf_expand").classList.toggle("bf_expand");
+   });
+
+   bf_each_class_event("fe-pause", "click", function(event) {
+    let el = event.target;
+    if (el.classList.contains("fe-pause")) {
+      el.classList.remove("fe-pause");
+      el.classList.add("fe-play");
+      // p.shouldRender = false;
+			phi_rot = 0.0;
+      console.log("Pause!");
+    } else {
+      el.classList.remove("fe-play");
+      el.classList.add("fe-pause");
+      // p.shouldRender = true;
+			phi_rot = 0.005;
+      console.log("Play!");
+    }
+   });
+
+
+  make_filter('{{exclude_ip}}', false);
+  if ('{{-include_filter}}'.length > 2) {
+    make_filter('{{-include_filter}}', true);
+  }
+
+  update_requests();
+  window.UPDATE_INTERVAL = window.setInterval(update_requests, 60000);
+
+  // reload the data on space-bar press
+  document.body.onkeyup = function(e) {
+  if (e.key == " " ||
+      e.code == "Space" ||      
+      e.keyCode == 32      
+  ) {
+    update_requests();
+  }
+}
+
+  if (!document.body.classList.contains("wp-admin")) { document.body.style="font-size:16px;"; }
+</script>
+

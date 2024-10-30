@@ -1,0 +1,337 @@
+<style>
+  {{custom_css}}
+  .form-check-input::before { content: "" !important; }
+  th { color: #6e84a3; }
+</style>
+
+<script type="text/javascript">
+                
+    const VERSION = {{version}};
+    const VERSION_STR = "{{sym_version}}";
+    
+
+    function update_value(config, value) {
+      GBI("spin").classList.remove("hidden");
+      BitFire_api("toggle_config_value", {"param":config,"value":value})
+        .then(r => r.json())
+        .then(data => {
+          window.CTR++;
+          if (window.CTR >= 5) {1
+            window.setTimeout(function(){ 
+              GBI("spin").classList.add("hidden");
+              GBI("save_changes").innerHTML = "<a href='{{self}}?page=bitfire#tooltips' class='white' style='color:#FFF'>Tour Dashboard <span class='fe fe-chevron-right'></span></a>"; },
+              100);
+          }
+        });
+    }
+    // config name, block|on|true / report|alert / off|false
+    function toggle(elm, type) {
+      var e = GBI(elm);
+      console.log(e);
+      let value = 0;
+      if (e.checked) {
+        value = Math.floor((Date.now() / 1000) + (86400*3));
+      }
+      BitFire_api("toggle_config_value", {"param":elm,"value":value})
+        .then(r => r.json())
+        .then(data => { console.log("toggle", data); });
+    }
+
+
+
+    function update_str(config) {
+      console.log("up", config);
+      let e = GBI(config+"_text");
+      if (e) {
+        let value = e.value;
+        console.log("update str", config, value);
+        return update_value(config, value);
+      } else {
+        alert("error, unable to update " + config + " please create support ticket");
+      }
+    }
+</script>
+
+    <!-- NAVIGATION
+    ================================================== -->
+    
+
+    <div class="main-content">
+      
+      {{header}}
+      
+      <script type="text/template" id="exception_template">
+        <tr class="mt-4 mb-4">
+          <td><%=host%></td>
+          <td><%=url%></td>
+          <td><%=parameter%></td>
+          <td><%=message%></td>
+          <td><%=code%></td>
+          <td><span class="fe fe-trash-2 pointer" title="remove this exception" onclick="rem_exception('<%=uuid%>')"></span></td>
+        </tr>
+      </script>
+    
+      <script type="text/template" id="agent_template">
+        <tr class="mt-4 mb-4">
+          <td class="text-primary"><%-key%></td>
+          <td style="padding-right:2rem;">
+            <div class="col-auto tog" id="<%-key%>_con" data-enabled="<%-value%>" data-title="" data-toggle="true">
+              <div class="form-switch right">
+                <input class="form-check-input <%=clazz%>" checked="checked" autocomplete="off" id="<%-key%>_in" type="checkbox" onclick="return toggle_report(this, '<%-key%>')" data-bs-toggle="tooltip" data-bs-placement="top" title="" data-bs-original-title="Block or allow this IP/User-Agent" aria-label="Block or allow this IP/User-Agent">
+            </div></div>
+          </td>
+          <td><span class="fe fe-trash-2 pointer text-secondary" style="margin-left:2rem;" title="remove this exception" onclick="rem_agent('<%=key%>')"></span></td>
+        </tr>
+        <tr>
+          <td colspan="3"><hr /></td>
+        </tr>
+      </script>
+
+
+      <!-- CARDS -->
+      <div class="container-fluid">
+        <div class="row justify-content-center">
+
+
+          <div class="col-12 col-lg-10 col-xl-8">
+
+            <div class="card" style="padding:1rem;">
+              <div class="">
+                <h3 class="card-header-title text-primary">
+                  BitFire Blocking Exceptions
+                </h3>
+                <br>
+                <span class="text-muted">Exceptions are rules unique to your site which allow 
+                functionality which may otherwise be blocked. This can happen when plugin developers
+                use features in odd ways that the firewall mistakenly blocks. You can add an exception
+                from the dashboard by clicking the action icon (three vertical dots) and selecting
+                &quot;unblock request&quot;.</span>
+                <hr>
+
+                <label class="form-label left pl-3" style="margin-right:70px;"> Auto-Learn Exceptions </label>
+                <div class="form-switch left ml-2">
+                    <input class="form-check-input success" autocomplete="off" id="dynamic_exceptions" type="checkbox" {{checked}} onclick="toggle('dynamic_exceptions')" data-bs-toggle="tooltip" data-bs-placement="top" title="Enable dynamic exception learning to prevent false positives.  Learns for 3 days.">
+                </div>
+                <div class="text-muted right pr-3" id="dynamic_exceptions_text">{{learn_complete}}</div>
+                <br>
+
+
+                <hr>
+              </div>
+
+
+              <br>
+              <h3 class="text-primary pt-2">Firewall Exceptions</h3>
+
+              <div class="card-body mb-4">
+                <table style="width:100%">
+                  <thead>
+                    <tr>
+                      <th>Host</th>
+                      <th>URL</th>
+                      <th>Parameter</th>
+                      <th>Rule Type</th>
+                      <th>Rule Number</th>
+                      <th>Action</th>
+                    </tr>
+                  </thead>
+                  <tbody id="exception_list">
+                    
+                  </tbody>
+                </table>
+              </div>
+
+              <hr>
+
+              <br>
+              <h3 class="text-primary pt-4">Manual Exceptions for bots and browsers</h3>
+
+              <div class="w-100">
+              <label class="pr4" style="margin-right:2rem;">Add IP Address or User-Agent to exclude list: </label><input id="agentelm" type="text" class="w-50 ml2" style="margin-right:2rem;">
+              <button class="btn btn-primary" id="exclude">Exclude</button>
+              </div>
+
+              <div class="card-body mb-4">
+                <table style="width:100%">
+                  <thead>
+                    <tr>
+                      <th>IP / Agent</th>
+                      <th class="right" style="margin-right:2rem"><span class="text-success">Allow </span>/ <span class="text-danger">Block</span></th>
+                      <th>Remove</th>
+                    </tr>
+                  </thead>
+                  <tbody id="browser_list">
+                    
+                  </tbody>
+                </table>
+              </div>
+
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    
+  <script type="text/javascript">
+
+    window.BITFIRE_NONCE = '{{api_code}}';
+    const EXCEPTIONS = {{exception_json}};
+    const IPS = {{ip_json}};
+    const AGENTS = {{agent_json}};
+
+    const ex_content = GBI("exception_template");
+    const exception_renderer = _.template(ex_content.innerText);
+
+    const agent_content = GBI("agent_template");
+    const agent_renderer = _.template(agent_content.innerText);
+
+    const exclude_elm = GBI("exclude");
+    exclude_elm.addEventListener("click", function() {
+      const agent_str = GBI("agentelm").value;
+
+      const ip_regex = /^([0-9a-fA-F]+[\.:]){3,12}[0-9a-fA-F]+/;
+
+      let ua = agent_str;
+      let ip = '';
+      let action_name = 'pass_ua';
+      if (ip_regex.test(agent_str)) {
+        ip = agent_str;
+        ua = '';
+        action_name = 'pass_ip';
+      }
+
+      BitFire_api_call('bot_action', {'action': action_name, 'ua': ua, 'ip':ip}, function(x) {
+          window.location.reload();
+      });
+    });
+
+    var html = "";
+    var list_elms = _.map(EXCEPTIONS, function (x) {
+      console.log(x);
+      html += exception_renderer(x);
+    });
+
+    var html2 = "";
+    //var list_elms = _.map(IPS, function (x) {
+    for (const key in IPS) {
+      const data = {"key": key, "value": IPS[key], "clazz": (IPS[key] == 1) ? "success" : "danger"};
+      console.log("ips", key, IPS[key], data);
+
+      html2 += agent_renderer(data);
+    };
+
+    var list_elms = _.map(AGENTS, function (allow, agent) {
+      if (agent != "none") {
+        //console.log(x, y);
+        html2 += agent_renderer({"key": agent, "value": allow, "clazz": (allow == 1) ? "success" : "danger"});
+      }
+    });
+
+
+  // MAIN
+  document.addEventListener("DOMContentLoaded", function () {
+    GBI("exception_list").innerHTML = html;
+    GBI("browser_list").innerHTML = html2;
+  });
+
+
+  function rem_agent(agent) {
+      BitFire_api("rem_api_exception", {"agent": agent})
+        .then(response => response.json())
+        .then(data => {
+          console.log(data);
+          if (!data || !data.success) {
+            alert("unable to remove exception " + data.note); 
+          } else {
+            //alert(data.note);
+            window.location.reload();
+          }
+        });
+  }
+
+
+  function toggle_report(e1, e2) {
+    //console.log(e1, e2);
+    
+    window.setTimeout(function(e1) {
+      //console.log(e1);
+      e1.checked = !e1.checked;
+      let allow = 0;
+      let action = "pass_ua";
+      if (e1.classList.contains("danger")) {
+        e1.classList.remove("danger");
+        e1.classList.add("success");
+        allow = 1;
+        action = "pass_ua";
+      } else {
+        e1.classList.remove("success");
+        e1.classList.add("danger");
+        allow = 0;
+        action = "block_ua";
+      }
+
+      /*
+      BitFire_api("rem_api_exception", {"agent": e2})
+        .then(response => response.json())
+        .then(data => {
+          // console.log(data);
+          if (!data || !data.success) {
+            alert("unable to remove exception " + data.note); 
+          } else {
+            //alert(data.note);
+            window.location.reload();
+          }
+      });
+      */
+
+
+      BitFire_api("bot_action", {"ua": e2, "action": action, "allow": allow})
+        .then(response => response.json())
+        .then(data => {
+          // console.log(data);
+          if (!data || !data.success) {
+            alert("unable to remove exception " + data.note); 
+          } else {
+            //alert(data.note);
+            window.location.reload();
+          }
+      });
+
+
+
+      window.setTimeout(function(e1) {
+        console.log(e1);
+        e1.checked = !e1.checked;
+        if (!e1.checked) {
+          window.setTimeout(function(e1) {
+            console.log(e1);
+            e1.checked = !e1.checked;
+          }, 300, e1);
+        }
+      }, 150, e1);
+    }, 150, e1);
+
+    return false;
+  }
+
+    function rem_exception(uuid, ) {
+
+      BitFire_api("rem_api_exception", {"uuid": uuid})
+        .then(response => response.json())
+        .then(data => {
+          console.log(data);
+          if (!data || !data.success) {
+            alert("unable to remove exception " + data.note); 
+          } else {
+            //alert(data.note);
+            window.location.reload();
+          }
+        });
+
+    }
+
+  </script>
+
+  {{gtag}}

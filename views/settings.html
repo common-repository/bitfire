@@ -1,0 +1,1960 @@
+    <style>
+      {{custom_css}}
+
+
+      #csp_container, #anonymous_container {
+        transition: height 0.2s ease;
+        height: 0;
+        overflow: hidden;
+      }
+      #csp_container.open {
+        height: 5rem;
+      }
+
+      #anonymous_container.open {
+        height: 39rem;
+      }
+
+
+
+      .list-group-item { display: flex; }
+
+      .pointer { cursor: pointer; }
+      /* IMPORTED STYLES */
+      .pr-0 { padding-right: 0; }
+      .pl-4 { padding-left: 4rem; }
+      .card { max-width: 100%; }
+      .right { float: right; }
+      /*
+      .form-switch { width: 80px; margin-left: -80px; }
+      .form-switch .right { right: 0; }
+      .form-check-input { margin-left: 85px; }
+      */
+      small.text-muted { flex-grow: 1; padding-right: 2rem;}
+      .form-check .form-switch { width: 80px; margin-left: -80px; }
+      .spinner-border { margin-left: -110px; }
+      /*
+      .lnum { float: right; }
+      */
+      .pointer { cursor: pointer; }
+      .card-body { padding: 0.5rem !important; }
+      .center { text-align: center; }
+      .left { float: left; }
+      .text-muted { font-size: 1rem; }
+
+
+      /*
+      .col { flex: 1 0 0%; }
+      .col-auto { flex: 0 0 auto; width: auto; }
+
+      .row { display: flex; }
+      .row>* {
+    flex-shrink: 0;
+    width: 100%;
+    max-width: 100%;
+    padding-right: calc(var(--bs-gutter-x)/2);
+    padding-left: calc(var(--bs-gutter-x)/2);
+    margin-top: var(--bs-gutter-y);
+}
+*/
+
+      .row { width: 100%; }
+
+      .zn1 { z-index: -1;}
+      image.type { fill: #e63757; }
+      a.nav-link { color: #2c7be5 !important;}
+      a.nav-link:hover { text-decoration: underline; }
+
+      svg { fill: #977; }
+      .blue { fill: #30b7e5; color: #30b7e5; }
+      svg.green { fill: #21d97e; }
+      svg.yellow { fill: #f6c343; }
+      svg.red { fill: #e63757; }
+      img.red { filter: invert(27%) sepia(51%) saturate(2878%) hue-rotate(346deg) brightness(104%) contrast(97%); }
+      img.grey_blue { filter: invert(82%) sepia(15%) saturate(597%) hue-rotate(184deg) brightness(89%) contrast(86%); }
+      img.orange { filter: invert(83%) sepia(34%) saturate(523%) hue-rotate(336deg) brightness(98%) contrast(92%); }
+      img.white { filter: invert(99%) sepia(7%) saturate(889%) hue-rotate(165deg) brightness(114%) contrast(100%); }
+
+      h6 { text-transform: uppercase; line-height: 1.5;color: rgb(149, 170, 201); font-family: "Cerebri Sans", sans-serif; font-weight: 400; }
+      .header-body { padding: 24px 0; }
+      .oh { overflow: auto; }
+      .wrap { white-space: break-spaces; line-break: anywhere; }
+      .nowrap { white-space: nowrap; }
+      
+      .hidden { display: none; }
+      
+      .country { float: right; display: block; }
+
+      .btn-sm {
+        padding: 0.1rem .5rem !important;
+        font-size: .4rem !important;
+        font-weight: bold;
+      }
+      .btn-group-tiny>.btn {
+        padding: .075rem .25rem;
+        font-size: .4rem;
+        line-height: 1.0;
+        border-radius: .25rem;
+      }
+      .dropdown-toggle {
+        width: 65px;
+      }
+      
+      .nav-sm .nav-link {
+        font-size: .6125rem;
+      }
+
+      .navbar-vertical.navbar-expand-md .navbar-nav .nav .nav-link {
+        padding-left: .5rem;
+        padding-right: 0rem;
+      }
+      .grow { flex-grow: 1; }
+
+      .success:checked { background-color: #00d97e; }
+      .warning:checked { background-color: #f6c343; }
+      .success, .success:checked { background-color: #00d97e; }
+      .form-switch { min-height: 1.5rem; padding-left: 1.5rem; }
+      .form-switch .form-check-input:checked { background-position: 100%; }
+      .form-check-input { cursor: pointer; }
+      input { overflow: visible; }
+      input[type=checkbox] { box-sizing: border-box; padding: 0; }
+
+
+      .form-check-input { position: absolute; vertical-align: top; background-color: #e3ebf6; background-repeat: no-repeat; background-size: contain; border: transparent; appearance: none;}
+
+
+      .form-check-input:checked[type=checkbox] {
+        background-image:url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3E%3Cpath fill='none' stroke='%23fff' stroke-linecap='round' stroke-linejoin='round' stroke-width='3' d='M6 10l3 3 6-6'/%3E%3C/svg%3E");
+        background-position: 100%;
+      }
+
+      .form-check-input[type=checkbox] {
+        background-image:url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='-4 -4 8 8'%3E%3Ccircle r='3' fill='%23fff'/%3E%3C/svg%3E");
+        background-position: 0%;
+    background-repeat: no-repeat; 
+    width: 3rem;
+    margin: 0;
+    margin-left: -3.5rem;
+    border-radius: 3rem;
+    transition: background-position .15s ease-in-out;
+    height: 1.5rem;
+}
+
+input[type=checkbox]:checked::before { content: ''; }
+
+input[type=checkbox], input[type=radio] {
+    box-sizing: border-box;
+    padding: 0;
+}
+.form-check-input { cursor: pointer; vertical-align: top; background-size: contain; border: transparent; appearance: none; position: absolute; }
+
+.cover.system { background-image: url('{{public}}img/system-low.jpg'); }
+.cover.shield { background-image: url('{{public}}img/shield1.jpg'); }
+.cover.robot { background-image: url('{{public}}img/robot-low.jpg'); }
+.cover.server { background-image: url('{{public}}img/server-low.jpg'); }
+.cover.server2 { background-image: url('{{public}}img/server2-low.jpg'); }
+.cover.server-red { background-image: url('{{public}}img/server-red.jpg'); }
+.cover.advanced { background-image: url('{{public}}img/advanced.jpg'); }
+.cover { 
+  width: 100%;
+  height: 100px; 
+  border-top-left-radius: 0.5rem;
+  border-top-right-radius: 0.5rem;
+  background-size: 100%;
+  background-repeat: no-repeat;
+  background-position: center;
+  opacity: 0.9;
+  position: absolute;
+  top:0;
+  left:0;
+  right:0;
+  overflow: hidden;
+}
+
+
+.header-icon { position: absolute; left:16px; top:12px; font-size: 48px; }
+.card-title { margin-top: -1rem; border-bottom: 1px solid #DDD; padding-bottom: 1rem; }
+.alt1,h2,h4 { color: #3b506c; }
+
+  
+    </style>
+    
+    <script type="text/javascript">
+        window.CONFIG_LIST = {};
+
+
+        function rand_string(config_name, length = 32) {
+            let result           = '';
+            let characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+            for ( var i = 0; i < length; i++ ) {
+              result += characters.charAt(Math.floor(Math.random() * characters.length));
+          }
+          GBI(config_name+"_text").value = result;
+          update_str(config_name);
+        }
+
+        function show_list(config_name) {
+          let html = "";
+          for (let i=0; i < domain_list.length; i++) {
+            let id = config_name + "-" + i;
+            html += '<div style="margin-bottom:5px;" id="item_'+id+'">';
+            html += '<input type="text" autocomplete="off" disabled id="list_'+id+'" class="form-control txtin" style="width:80%;float:left;margin-right:10px" value="'+domain_list[i]+'">';
+            html += '<div class="btn btn-danger" style="cursor:pointer;padding-top:10px;padding-left:10px;" title="remove list element" onclick="remove_list(\''+config_name+'\', \''+domain_list[i]+'\', '+i+')"><span class="fe fe-trash"></span></div>'; 
+          }
+          return html;
+        }
+
+        function remove_list(config_name, value, idx) {
+          console.log("config name delete", config_name, value, idx);
+          BitFire_api("remove_list_elm", {"config_name":config_name, "config_value":value, "index":idx})
+            .then(r => r.json())
+            .then(function(res) {
+            if (res.success) {
+              window.location.reload();
+            } else {
+              alert(res.note);
+              window.location.reload();
+            }
+          });
+        }
+
+        function add_list(config_name) {
+          let elm = GBI("new_"+config_name);
+          BitFire_api("add_list_elm", {"config_name":config_name, "config_value":elm.value})
+            .then(r => r.json())
+            .then(function(res) {
+            if (res.success) {
+                window.location.reload();
+            } else {
+              alert(res.note);
+              window.location.reload();
+            }
+          });
+        }
+
+                
+        const VERSION = {{version}};
+        window.BITFIRE_NONCE = '{{api_code}}';
+        const VERSION_STR = "{{sym_version}}";
+        function set_config(id, value) {
+          console.log("set config", id, value);
+        }
+
+        function soption(config, value) {
+          GBI("drop_"+config).innerText = value;
+          return update_value(config, value);
+        }
+
+        function update_value(config, value) {
+          console.log("update_value", config, value);
+
+          let spinner = GBI(config+"_spin");
+          if (spinner) { spinner.classList.remove("hidden"); }
+
+          BitFire_api("toggle_config_value", {"param":config,"value":value})
+            .then(r => r.json())
+            .then(data => {
+              console.log("saved", config, data); 
+              window.setTimeout(function(){ 
+                let spinner = GBI(config+"_spin");
+                if (spinner) { spinner.classList.add("hidden"); }
+              }, 100);
+            });
+        }
+
+        function update_script(config, value) {
+          let spinner = GBI(config+"_spin");
+          if (spinner) { spinner.classList.remove("hidden"); }
+
+          BitFire_api("toggle_config_value", {"param":config,"value":value})
+            .then(r => r.json())
+            .then(data => {
+              console.log("saved", config, data); 
+              window.setTimeout(function(){ 
+                let spinner = GBI(config+"_spin");
+                if (spinner) { spinner.classList.add("hidden"); }
+              }, 100);
+            });
+        }
+
+
+        function update_str(config) {
+          console.log("up", config);
+          let e = GBI(config+"_text");
+          if (e) {
+            let value = e.value;
+            console.log("update str", config, value);
+            return update_value(config, value);
+          } else {
+            alert("error, unable to update " + config + " please create support ticket");
+          }
+        }
+
+        function toggle_report(config, report) {
+          if (config == "enforce_ssl_1year" && window.location.protocol != "https:") {
+            alert("Please switch to SSL to enable this feature");
+            return false;
+          }
+
+
+
+          if (config == "block_scrapers") {
+            if (window.CONFIG_LIST[config] == false || window.CONFIG_LIST[config] == "off") {
+              console.log("req full browser");
+              let e = GBI("require_full_browser_block");
+              if (!e.checked) { e.click(); }
+            }
+            //console.log("req full browser");
+            console.log("SCRAPER!", window.CONFIG_LIST[config]);
+          }
+          //console.log("report", config, report);
+
+          let spinner = GBI(config+"_spin");
+          if (spinner) { spinner.classList.remove("hidden"); }
+          if (report && window.CONFIG_LIST[config] == "on") {
+            let g = GBI(config+"_block");
+            if (g) { g.checked = false; }
+          }
+          if (!report && window.CONFIG_LIST[config] == "report") {
+            let g = GBI(config+"_report");
+            if (g) { g.checked = false; }
+          }
+          let value = "false";
+          let r = GBI(config+"_report");
+          if (r && r.checked) { value = "report"; }
+          if (GBI(config+"_block").checked) { value = "on"; }
+
+
+          // CSP CONFIRMATION
+          if (config == "csp_policy_enabled" && value == "on") {
+            let msg = 'This will block loading JavaScript and CSS from external servers and may break some plugins. Please read the documentation before enabling.';
+            if (!confirm(msg)) {
+              return false;
+            }
+          }
+
+
+
+          window.CONFIG_LIST[config] = value;
+
+          if (config == "auto_start") {
+            let action=(value == "on") ? "install" : "uninstall";
+            BitFire_api(action, {})
+              .then(r => r.json())
+              .then(response => {
+                console.log(response); 
+                alert(response.note);
+                window.setTimeout(function(){
+                  let spinner = GBI(config+"_spin");
+                  if (spinner) { spinner.classList.add("hidden"); }
+                }, 100);
+            });
+
+          }
+          else {
+            BitFire_api("toggle_config_value", {"param":config,"value":value})
+              .then(r => r.json())
+              .then(data => {
+              console.log("response...", data);
+              if (!data.success) { alert("error updating " + config + " : " + data.note + " : " + data.errors.join()); }
+              window.setTimeout(function(){
+                let spinner = GBI(config+"_spin");
+                if (spinner) { spinner.classList.add("hidden"); }
+              }, 100);
+            });
+          }
+        }
+
+        // config name, block|on|true / report|alert / off|false
+        function toggle(elm, type) {
+          var e = GBI(elm);
+          console.log(e);
+          e.innerText = cap(type);
+          BitFire_api("toggle_config_value", {"param":elm,"value":type})
+            .then(r => r.json())
+            .then(data => { console.log("toggle", data); });
+          if (type == "block" || type == "on" || type == "true") {
+            e.classList.remove("btn-warning");
+            e.classList.remove("btn-secondary");
+            e.classList.add("btn-success");
+          } else if (type == "report" || type == "alert") {
+            e.classList.remove("btn-success");
+            e.classList.remove("btn-secondary");
+            e.classList.add("btn-warning");
+          } else {
+            e.classList.remove("btn-success");
+            e.classList.remove("btn-warning");
+            e.classList.add("btn-secondary");
+          }
+        }
+              
+    </script>
+
+    
+    <!-- NAVIGATION
+    ================================================== -->
+    
+
+    <div class="main-content">
+      
+    {{header}} 
+
+  <!-- CARDS -->
+  <div class="container-fluid" id="full_container">
+    <div class="row justify-content-center">
+      <div class="col-12 col-lg-10 col-xl-8">
+
+        <div class="card">
+
+          <div class="cover server"></div>
+          <div class="card-body" style="margin-top:1.5rem;">
+            <div class="avatar avatar-xl card-avatar card-avatar-top" style="margin-top:1rem;">
+              <img id="" src="{{public}}img/search.jpg" style="background-color:#FFF;" class="avatar-img rounded-circle border-card">
+              <span class="fe alt1 header-icon fe-settings"></span>
+            </div>
+            <h2 style="margin-top:-1rem;" class="card-title">
+              <strong>
+                <span class="tdc alt1">
+                  BitFire Server Settings
+                </span>
+              </strong>
+              <span class="card-header-title text-secondary right">Enable</span>
+              <small class="text-muted"><i>(
+
+        <a class="text-info" href="https://bitfire.co/support-core-settings" target="_blank">Settings Documentation <span class="fe fe-external-link"></span></a>
+              )</i></small>
+            </h2>
+            <p class="text-secondary pb-4" style="font-size:1.25rem;">
+              Recommended settings for most sites are labeled <span class="text-success fe fe-award"></span>.<br>
+              Please read notes before enabling settings marked <span class="text-warning fe fe-alert-triangle"></span>.
+            </p>
+          </div>
+
+
+
+          <!--
+          <div class="card-header">
+
+            <h4 class="card-header-title">
+              System Features
+            <small class="text-muted ml-4">
+              <a href="https://bitfire.co/web-blocking" target="_blank">Learn about web blocking <span class="fe fe-external-link"></span></a>
+            </small>
+            </h4>
+            <h4 class="card-header-title text-secondary">Enable</h4>
+
+          </div>
+        -->
+          <div class="card-body">
+
+            <div class="list-group list-group-flush my-n3">
+              <div class="list-group-item">
+                <div class="row align-items-center">
+                  <div class="col">
+
+                    <h4 class="font-weight-base mb-1">
+                      <span class="text-success fe fe-award"></span>
+                      BitFire Enable
+                    </h4>
+                    <small class="text-muted">
+                      Enable / Disable all functionality
+                    </small>
+
+                  </div>
+                  <div class="col-auto tog" id="bitfire_enabled_con" data-enabled="{{bitfire_enabled}}" data-title="Turn off to prevent all blocking" data-toggle="true">
+                  </div>
+                </div>
+              </div>
+
+              <div class="list-group-item">
+                <div class="row align-items-center">
+                  <div class="col">
+
+                    <h4 class="font-weight-base mb-1">
+                      <span class="text-muted fe fe-alert-triangle"></span>
+                      Always On Protection
+                    </h4>
+                    <small class="text-muted">
+                      Run BitFire before WordPress with auto_prepend_file. Prevent Firewall bypass and save server resources by blocking bad traffic before WordPress loads.
+                      Enable this last - after you are sure that all other settings are compatible with your website.
+                    </small>
+                  </div>
+
+                  <div class="col-auto tog" id="auto_start_con" data-enabled="{{auto_start}}" data-title="Enable BitFire to run before ALL requests" data-toggle="true">
+                  </div>
+                </div>
+              </div>
+
+              <div class="list-group-item">
+                <div class="row align-items-center">
+                  <div class="col">
+
+                    <h4 class="font-weight-base mb-1">
+                      <span class="text-success fe fe-award"></span>
+                      Log Everything
+                    </h4>
+                    <small class="text-muted">
+                      Log all traffic, default is to just log blocked traffic (<i>add ~1-3ms time after each request</i>) 
+                    </small>
+
+                  </div>
+                  <div class="col-auto tog" id="log_everything_con" data-enabled="{{log_everything}}" data-title="Prevent browsers from connecting without SSL" data-toggle="true">
+                  </div>
+                </div>
+              </div>
+
+              <!--
+             <div class="list-group-item">
+                <div class="row align-items-center">
+                  <div class="col">
+
+                    <h4 class="font-weight-base mb-1">
+                      <span class="text-muted fe fe-alert-triangle"></span>
+                      Disable XMLRPC
+                    </h4>
+                    <small class="text-muted">
+                      Disable WordPress XMLRPC functions. This will disable remote API for WordPress mobile app, JetPack integrations, remote scraping. Disable xmlrpc unless you require it.
+                    </small>
+
+                  </div>
+                  <div class="col-auto tog" id="block_xmlrpc_con" data-enabled="{{block_xmlrpc}}" data-title="Disable XML RPC functions" data-toggle="true">
+                  </div>
+                </div>
+              </div>
+            -->
+
+            </div>
+          </div>
+        </div>
+
+
+        <hr class="my-5">
+
+
+        <div class="card">
+
+          <div class="cover server2"></div>
+          <div class="card-body" style="margin-top:1.5rem;">
+            <div class="avatar avatar-xl card-avatar card-avatar-top" style="margin-top:1rem;">
+              <img id="" src="{{public}}img/search.jpg" style="background-color:#FFF;" class="avatar-img rounded-circle border-card">
+              <span class="fe alt1 header-icon fe-list"></span>
+            </div>
+            <h2 style="margin-top:-1rem;" class="card-title">
+              <strong>
+                <span class="tdc alt1">
+                  BitFire Security Headers
+                </span>
+              </strong>
+              <span class="card-header-title text-secondary right">Enable</span>
+              <small class="text-muted"><i>(HTTP server configuration)</i></small>
+
+
+            </h2>
+
+            <p class="text-secondary pb-4" style="font-size:1.3rem;">
+            HTTP security headers are like safety instructions for your WordPress site. They're small pieces of code that your site sends to browsers, telling them how to behave securely. Enabling these headers adds an extra layer of protection, helping prevent attacks and ensuring a safer experience for your visitors.
+            </p>
+          </div>
+
+
+
+          <div class="card-body">
+            <div class="list-group list-group-flush my-n3">
+             <div class="list-group-item">
+                <div class="row align-items-center">
+                  <div class="col">
+
+                    <h4 class="font-weight-base mb-1">
+                      <span class="text-success fe fe-award"></span>
+                      Send HTTP Security Headers
+                    </h4>
+                    <small class="text-muted">
+                      Deny iframes, disable content sniffing, and remove detailed referer data
+                    </small>
+
+                  </div>
+                  <div class="col-auto tog" id="security_headers_enabled_con" data-enabled="{{security_headers_enabled}}" data-title="Send HTTP security headers" data-toggle="true">
+                  </div>
+                </div> <!-- / .row -->
+              </div>
+
+
+
+              <div class="list-group-item">
+                <div class="row align-items-center">
+                  <div class="col">
+
+                    <h4 class="font-weight-base mb-1">
+                      <span class="text-warning fe fe-alert-triangle"></span>
+                      Require SSL
+                    </h4>
+                    <small class="text-muted">
+                      Force SSL and <i>disable</i> browsers connecting without SSL. This will break your site if your SSL certificate expires.
+                    </small>
+
+                  </div>
+                  <div class="col-auto tog" id="enforce_ssl_1year_con" data-enabled="{{enforce_ssl_1year}}" data-title="Prevent browsers from connecting without SSL" data-toggle="true">
+                  </div>
+                </div>
+              </div>
+
+
+              <div class="list-group-item">
+                <div class="row align-items-center">
+                  <div class="col">
+
+                    <h4 class="font-weight-base mb-1">
+                      <span class="text-success fe fe-award"></span>
+                      Send Permission Policy (Feature Policy)
+                    </h4>
+                    <small class="text-muted">
+                      Send a simple CSP header to disable any JavaScript from accessing
+                      the microphone, camera, geolocation, browser payment APIs.
+                      <br>This will stop plugins, themes AND malware using these mobile specific features.
+                    </small>
+
+                  </div>
+                  <div class="col-auto tog" id="permission_policy" data-enabled="{{permission_policy}}" data-title="Enable a simple Permission Policy to block cam,mic,geo,payments" data-toggle="true">
+                  </div>
+                </div>
+              </div>
+
+              <div class="list-group-item">
+                <div class="row align-items-center">
+                  <div class="col">
+
+                    <h4 class="font-weight-base mb-1">
+                      <span class="text-success fe fe-award"></span>
+                      Deny Cross Origin Resource
+                    </h4>
+                    <small class="text-muted">
+                      Set CORS header to prevent cross origin requests. Prevents other sites making AJAX requests to your site.
+                    </small>
+
+                  </div>
+                  <div class="col-auto tog" id="cor_policy" data-enabled="{{cor_policy}}" data-title="Deny ajax requests from external web sites" data-toggle="true">
+                  </div>
+                </div>
+              </div>
+
+              <div class="list-group-item">
+                <div class="row align-items-center">
+                  <div class="col">
+
+                    <h4 class="font-weight-base mb-1">
+                      <span class="text-danger fe fe-alert-triangle"></span>
+                      Send Content Security Policy (CSP)
+                    </h4>
+                    <small class="text-muted">
+                      CSP Policy defines which domains your site can connect to and load JavaScript, fonts, etc from.  <a class="text-info" target="_blank" href="https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP">CSP Documentation <span class="fe fe-external-link"></span></a>
+                      <br>
+                      <div  id="csp_edit" class="text-primary pointer">Edit <span id="csp_arrow" class="fe fe-chevron-right"></span></div>
+                    </small>
+                    <div id="csp_container">
+                      <textarea onchange="update_csp()" class="form-control text-secondary" style="float: left;height:4rem;width:90%;margin-top:1rem;" id="csp_policy_text">{{csp_policy}}</textarea>
+                      <button id="csp_save" class="btn btn-primary" style="margin-top:1rem;margin-left:1rem;">Save</button>
+                    </div>
+
+                  </div>
+                  <div class="col-auto tog" id="csp_policy_enabled" data-enabled="{{csp_policy_enabled}}" data-title="Enable a simple CSP policy" data-toggle="true">
+                  </div>
+                </div>
+              </div>
+
+
+              <!--
+              <div class="list-group-item">
+                <div class="row align-items-center">
+                  <div class="col">
+
+                    <h4 class="font-weight-base mb-1 {{free_mute}}">
+                      Auto Learn Content Security Policy
+                    </h4>
+                    <small class="text-muted">
+                      BitFire will learn all of the domains your site connects to and automatically add them to your CSP policy for you.
+                    </small>
+
+                  </div>
+                  <div class="col-auto {{free_tog}}" id="permission_policy" data-enabled="{{permission_policy}}" data-title="Enable a simple Permission Policy to block cam,mic,geo,payments" data-toggle="true">
+                  </div>
+                </div>
+              </div>
+              -->
+
+            </div>
+          </div>
+        </div>
+
+
+        <hr class="my-5">
+
+
+
+        <div class="card">
+          <div class="cover robot"></div>
+          <div class="card-body" style="margin-top:1.5rem;">
+            <div class="avatar avatar-xl card-avatar card-avatar-top" style="margin-top:1rem;">
+              <img id="" src="{{public}}img/robot.png" style="background-color:#FFF;" class="avatar-img rounded-circle border-card">
+            </div>
+            <h2 style="margin-top:-1rem;" class="card-title">
+              <strong>
+                <span class="tdc alt1">
+                  BitFire Bot Blocking
+                </span>
+              </strong>
+              <span class="card-header-title text-secondary right">Enable</span>
+              <small class="text-muted"><i>(<a class="text-info" href="https://bitfire.co/en/support-bot-control" target="_blank" >BitFire Fire Bot Blocking Documentation <span class="fe fe-external-link"></span></a>)</i></small>
+            </h2>
+            <p class="text-secondary pb-5" style="font-size:1.3rem;">
+              Bot blocking is like setting up a virtual bouncer for your WordPress site. Bots are automated programs that can do bad things like hacking, spamming, or stealing data. By blocking them, you protect your site from attacks like brute force login attempts, content scraping, and DDoS attacks, making your site safer and more reliable for your visitors.
+            </p>
+          </div>
+
+
+          <div class="card-body">
+
+            <div class="list-group list-group-flush my-n3">
+              <div class="list-group-item">
+                <div class="row align-items-center">
+                  <div class="col">
+
+                    <h4 class="font-weight-base mb-1">
+                      <span class="text-success fe fe-award"></span>
+                      Require Full Browser
+                    </h4>
+                    <small class="text-muted">
+                      Verify browsers are not actually bots by only allowing them only restricted, anonymous website access until they pass a hidden 
+                      JavaScript challenge embedded in your site. <!--<a class="text-info" href="https://bitfire.co/en/support-browser-challenge" target="_blank">Browser Challenge Documentation <span class="fe fe-external-link"></span></a> -->
+                    </small>
+
+                  </div>
+                  <div class="col-auto tog" id="require_full_browser_con" data-enabled="{{require_full_browser}}" data-title="JavaScript Challenge">
+                  </div>
+                </div> <!-- / .row -->
+              </div>
+
+              
+
+
+              <div class="list-group-item">
+                <div class="row align-items-center">
+                  <div class="col">
+
+                    <h4 class="font-weight-base mb-1">
+                      <span class="text-success fe fe-award"></span>
+                       Restrict bot access
+                    </h4>
+                    <small class="text-muted">
+                      Restrict bots to only view web pages and access the scripts, actions and parameters listed under: Anonymous Restrictions below.
+                      You can grant any bot unrestricted access from the Bot Control page.
+                    </small>
+
+                  </div>
+                  <div class="col-auto tog" id="whitelist_enable_con" data-enabled="{{whitelist_enable}}" data-title="Enable the Bot Allowlist">
+                  </div>
+                </div> <!-- / .row -->
+              </div>
+              <div class="list-group-item">
+                <div class="row align-items-center">
+                  <div class="col">
+
+                    <h4 class="font-weight-base mb-1">
+                      <span class="text-success fe fe-award"></span>
+                      Block Hacking Tools
+                    </h4>
+                    <small class="text-muted">
+                      Block bots using default malware, scanning or hacking tools (nmap, wpscan, nikto, etc)
+                    </small>
+
+                  </div>
+                  <div class="col-auto tog" id="blacklist_enable_con" data-enabled="{{blacklist_enable}}" data-title="Enable the Bot Block list">
+                  </div>
+                </div> <!-- / .row -->
+              </div>
+              <div class="list-group-item">
+                <div class="row align-items-center">
+                  <div class="col">
+
+                    <h4 class="font-weight-base mb-1">
+                      <span class="text-success fe fe-award"></span>
+                      Block Plugin and Theme Scanners
+                    </h4>
+                    <small class="text-muted">
+                      Report fake data to prevent scanners from crawling your site to detect your plugins and themes. (WPScan, etc)
+                    </small>
+
+                  </div>
+                  <div class="col-auto tog" id="wp_block_scanners_con" data-enabled="{{wp_block_scanners}}" data-title="Enable the Bot Blocklist">
+                  </div>
+                </div> <!-- / .row -->
+              </div>
+
+
+              <div id="anonymous_edit" class="text-primary pointer pt-4" title="click to edit">Edit Allowed Anonymous Restrictions<span id="anonymous_arrow" class="fe fe-chevron-right"></span></div>
+              <small class="text-muted">
+                These additional settings are auto learned by BitFire and are automatically added to your site. Occasionally new or
+                updated plugins will add additional scripts or parameters that will need to be added to keep this list updated.
+                You can also update this list by "unblocking" requests on the Dashboard, OR re-enabling "learning mode" on the 
+                "Rule Exceptions" page
+              </small>
+              <div id="anonymous_container">
+              <div class="list-group-item">
+                <div class="row align-items-center">
+                  <div class="col">
+
+                    <h4 class="font-weight-base mb-1">
+                      <span class="text-warning fe fe-alert-triangle"></span>
+                      Anonymous GET Parameters
+                    </h4>
+                    <small class="text-muted">
+                      additional get parameters unverified users &amp; bots can access, comma separated. (<b>{{learning}}</b>)
+                    </small>
+
+                  </div>
+                  <div id="param_container" class="d-flex">
+                    <input type="text"  class="grow form-control text-secondary" style="float: left;width:auto;margin-top:1rem;" id="ok_params" value="{{-ok_params}}" />
+                    <button id="ok_params_save" class="btn btn-primary" style="margin-top:1rem;margin-left:1rem;width:100px">Save</button>
+                  </div>
+                </div> <!-- / .row -->
+              </div>
+
+
+              <div class="list-group-item">
+                <div class="row align-items-center">
+                  <div class="col">
+
+                    <h4 class="font-weight-base mb-1">
+                      <span class="text-warning fe fe-alert-triangle"></span>
+                      Anonymous PHP Scripts
+                    </h4>
+                    <small class="text-muted">
+                      additional direct access php scripts unverified users &amp; bots, comma separated. (<b>{{learning}}</b>)
+                    </small>
+
+                  </div>
+                  <div id="scripts_container" class="d-flex">
+                    <input type="text" class="grow form-control text-secondary" style="float: left;width:auto;margin-top:1rem;" id="ok_scripts" value="{{ok_scripts}}" />
+                    <button id="ok_scripts_save" class="btn btn-primary" style="margin-top:1rem;margin-left:1rem;width:100px">Save</button>
+                  </div>
+                </div> <!-- / .row -->
+              </div>
+
+
+              <div class="list-group-item">
+                <div class="row align-items-center">
+                  <div class="col">
+
+                    <h4 class="font-weight-base mb-1">
+                      <span class="text-warning fe fe-alert-triangle"></span>
+                      Anonymous Ajax Actions
+                    </h4>
+                    <small class="text-muted">
+                      additional admin-ajax.php &quot;actions&quot; unverified users &amp; bots may access, comma separated. (<b>{{learning}}</b>)
+                    </small>
+
+                  </div>
+                  <div id="actions_container" class="d-flex">
+                    <input type="text" class="grow form-control text-secondary" style="float: left;width:auto;margin-top:1rem;" id="ok_actions" value="{{ok_actions}}" />
+                    <button id="ok_actions_save" class="btn btn-primary" style="margin-top:1rem;margin-left:1rem;width:100px">Save</button>
+                  </div>
+                </div> <!-- / .row -->
+              </div>
+
+              <div class="list-group-item">
+                <div class="row align-items-center">
+                  <div class="col">
+
+                    <h4 class="font-weight-base mb-1">
+                      <span class="text-warning fe fe-alert-triangle"></span>
+                      Anonymous Rest API Endpoints
+                    </h4>
+                    <small class="text-muted">
+                      additional wp-json endpoints unverified users &amp; bots may access, comma separated. (<b>{{learning}}</b>)
+                    </small>
+
+                  </div>
+                  <div id="apis_container" class="d-flex">
+                    <input type="text" class="grow form-control text-secondary" style="float: left;width:auto;margin-top:1rem;" id="ok_apis" value="{{ok_apis}}" />
+                    <button id="ok_apis_save" class="btn btn-primary" style="margin-top:1rem;margin-left:1rem;width:100px">Save</button>
+                  </div>
+                </div> <!-- / .row -->
+              </div>
+
+
+
+              </div>
+
+
+
+
+              <!--
+              <div class="col-12 mb-2 list-group-item">
+                <div class="form-group">
+
+                  <div class="col">
+                    <h4 class="font-weight-base mb-1">
+                    Challenge Style
+                    </h4>
+                  <small class="form-text text-muted">The page to display for the browser challenge. This page will verify the browser and instantly redirect to the real page.</small>
+                  </div>
+
+<div class="btn-group right">
+  <button type="button" class="btn btn-primary" id="drop_verify_css">{{verify_css}}</button>
+  <button type="button" class="btn btn-primary dropdown-toggle dropdown-toggle-split" style="width:auto" data-bs-toggle="dropdown" aria-expanded="false">
+    <span class="visually-hidden">Toggle Dropdown</span>
+  </button>
+  <ul class="dropdown-menu">
+    <li><span class="dropdown-item pointer" onclick="soption('verify_css', 'blank')" href="#">Blank Page</span></li>
+    <li><span class="dropdown-item pointer" onclick="soption('verify_css', 'spinner')"  href="#">Simple Spinner</span></li>
+    <li><span class="dropdown-item pointer" onclick="soption('verify_css', 'bitfire')"  href="#">BitFire Security Page</span></li>
+    <li><span class="dropdown-item pointer" onclick="soption('verify_css', 'cloudflair_light')"  href="#">CloudFlair Light Emulated</span></li>
+    <li><span class="dropdown-item pointer" onclick="soption('verify_css', 'cloudflair_dark')"  href="#">CloudFlair Dark Emulated</span></li>
+  </ul>
+</div>
+<div id="cache_type_spin" class="spinner-border text-success spinner-border-sm mt-1 ml-2 hidden" role="status"></div>
+
+                </div>
+              </div>
+            -->
+
+
+
+
+              <!--
+              <div class="list-group-item">
+                <div class="row align-items-center">
+                  <div class="col">
+
+                    <h4 class="font-weight-base mb-1 {{free_mute}}">
+                      <span class="text-muted fe fe-alert-triangle"></span>
+                      Block Web Scrapers
+                    </h4>
+                    <small class="text-muted">
+                    Send JS challenge to any unknown browser fingerprint 
+                    even if just viewing. <strong><i>This does not improve security, only stops automated web scraping content.</i></strong>
+                    </small>
+
+                  </div>
+                  <div class="col-auto {{free_tog}}" id="block_scrapers_con" data-enabled="{{block_scrapers}}" data-title="Require passing challenge for view only pages">
+                  </div>
+                </div>
+              </div>
+
+              <div class="list-group-item">
+                <div class="row align-items-center">
+                  <div class="col">
+
+                    <h4 class="font-weight-base mb-1 {{free_mute}}">
+                      <span class="text-success fe fe-award"></span>
+                      High Sensitivity Block Mode
+                    </h4>
+                    <small class="text-muted">
+                      Block unknown bots by default. You can unblock any bot in Bot Control settings.
+                    </small>
+
+                  </div>
+                  <div class="col-auto {{free_tog}}" id="high_sensitivity_con" data-enabled="{{high_sensitivity}}" data-title="Block unknown bots by default. Enable this after all active bots are configured.">
+                  </div>
+                </div>
+              </div>
+              -->
+
+
+              
+
+
+          </div>
+        </div>
+        </div>
+
+
+        <hr class="my-5">
+
+        <div class="card">
+
+          <div class="cover shield"></div>
+          <div class="card-body" style="margin-top:1.5rem;">
+            <div class="avatar avatar-xl card-avatar card-avatar-top" style="margin-top:1rem;">
+              <img id="" src="{{public}}img/search.jpg" style="background-color:#FFF;" class="avatar-img rounded-circle border-card">
+              <span class="fe alt1 header-icon fe-shield"></span>
+            </div>
+            <h2 style="margin-top:-1rem;" class="card-title">
+              <strong>
+                <span class="tdc alt1">
+                  Web Application Firewall Features
+                </span>
+              </strong>
+              <span class="card-header-title text-secondary right">Enable</span>
+              <small class="text-muted"><i>(Traditional WAF configuration)</i></small>
+            </h2>
+            <p class="text-secondary pb-5" style="font-size:1.3rem;">
+              Block exploits common to all websites, XSS, SQLi, Malicious file uploads, etc. 
+              This runs after bot/browser verification and can block common web attacks and exploits
+              that run against logged in users.
+            </p>
+          </div>
+
+         <div class="card-body">
+            <div class="list-group list-group-flush my-n3">
+
+              <div class="list-group-item">
+                <div class="row align-items-center">
+                  <div class="col">
+
+                    <h4 class="font-weight-base mb-1 {{free_mute}}">
+                      <span class="text-success fe fe-award"></span>
+                      Generic Web Blocking
+                    </h4>
+                    <small class="text-muted">
+                      Block generic attacks, XXE, SSI, SSRF, CSRF, etc
+                    </small>
+
+                  </div>
+                  <div class="col-auto {{free_tog}}" id="web_filter_enabled_con" data-enabled="{{web_filter_enabled}}" data-title="Generic Web Attack Protection">
+                  </div>
+                </div> <!-- / .row -->
+              </div>
+
+              <div class="list-group-item">
+                <div class="row align-items-center">
+                  <div class="col">
+
+                    <h4 class="font-weight-base mb-1 {{free_mute}}">
+                      <span class="text-success fe fe-award"></span>
+                      Block XSS
+                    </h4>
+                    <small class="text-muted">
+                      Block Cross Site Scripting Attacks
+                    </small>
+
+                  </div>
+                  <div class="col-auto {{free_tog}}" id="xss_block_con" data-enabled="{{xss_block}}" data-title="Cross Site Scripting Protection">
+                  </div>
+                </div> <!-- / .row -->
+              </div>
+
+              <div class="list-group-item">
+                <div class="row align-items-center">
+                  <div class="col">
+
+                    <h4 class="font-weight-base mb-1 {{free_mute}}">
+                      <span class="text-success fe fe-award"></span>
+                      Block SQLi
+                    </h4>
+                    <small class="text-muted">
+                      Block SQL injection attacks
+                    </small>
+
+                  </div>
+
+                  <div class="col-auto {{free_tog}}" id="sql_block_con" data-enabled="{{sql_block}}" data-title="SQL Injection Protection">
+                  </div>
+                </div> <!-- / .row -->
+              </div>
+
+              <div class="list-group-item">
+                <div class="row align-items-center">
+                  <div class="col">
+
+                    <h4 class="font-weight-base mb-1 {{free_mute}}">
+                      <span class="text-success fe fe-award"></span>
+                      Block Malicious Files
+                    </h4>
+                    <small class="text-muted">
+                      Inspect all file uploads for malicious code
+                    </small>
+
+                  </div>
+                  <div class="col-auto {{free_tog}}" id="file_block_con" data-enabled="{{file_block}}" data-title="Uploaded File Protection">
+                  </div>
+
+                </div> <!-- / .row -->
+              </div>
+
+            </div>
+          </div>
+        </div>
+
+
+        <hr class="my-5">
+
+
+
+        <div class="card">
+          <div class="cover advanced"></div>
+          <div class="card-body" style="margin-top:1.5rem;">
+            <div class="avatar avatar-xl card-avatar card-avatar-top" style="margin-top:1rem;">
+              <img id="" src="{{public}}img/search.jpg" style="background-color:#FFF;" class="avatar-img rounded-circle border-card">
+              <span class="fe alt1 header-icon fe-cpu"></span>
+            </div>
+            <h2 style="margin-top:-1rem;" class="card-title">
+              <strong>
+                <span class="tdc alt1">
+                  BitFire PRO RASP Settings
+                </span>
+              </strong>
+              <span class="card-header-title text-secondary right">Enable</span>
+              <small class="text-muted"><i>(<a href="https://bitfire.co/en/support-rasp-overview" class="text-info" target="_blank">Runtime Application Self-Protection <i class="fe fe-external-link"></i></a>)</i></small>
+            </h2>
+            <p class="text-secondary pb-5" style="font-size:1.3rem;">Runtime Application Self Protection integrates directly with PHP and WordPress, intercepting all file writes,
+              network calls, and account creations. When any of these events happen, BitFire checks that the action is only
+              performed by an authorized user. If not, the action is blocked and logged. This prevents hackers from uploading
+              any PHP Script, or backdoor account.
+            </p>
+          </div>
+
+
+          <div class="card-body">
+
+            <div class="list-group list-group-flush my-n3">
+                <div class="list-group-item">
+                <div class="row align-items-center">
+                  <div class="col">
+
+                    <h4 class="font-weight-base mb-1">
+                      <span class="text-success fe fe-award"></span>
+                      RASP FileSystem Protection
+                    </h4>
+                    <small class="text-muted">
+                      Force RASP Access Control on all PHP files. Prevent PHP files from being modified or deleted unless logged in as Administrator.
+                    </small>
+                  </div>
+
+                  <div class="col-auto {{free_tog}}" id="rasp_filesystem_con" data-enabled="{{rasp_filesystem}}" data-title="lock changing any php files unless logged in as administrator" data-toggle="true">
+                  </div>
+                </div>
+              </div>
+
+              <div class="list-group-item">
+                <div class="row align-items-center">
+                  <div class="col">
+
+                    <h4 class="font-weight-base mb-1">
+                      <span class="text-success fe fe-award"></span>
+                      RASP Database Protection
+                    </h4>
+                    <small class="text-muted">
+                      Force RASP Checks on all database queries. Prevent altering sensitive DB tables unless logged in as Administrator.
+                    </small>
+                  </div>
+
+                  <div class="col-auto {{free_tog}}" id="rasp_db_con" data-enabled="{{rasp_db}}" data-title="Lock all user account changes unless logged in as administrator" data-toggle="true">
+                  </div>
+                </div>
+              </div>
+
+              <div class="list-group-item">
+                <div class="row align-items-center">
+                  <div class="col">
+
+                    <h4 class="font-weight-base mb-1">
+                      <span class="text-success fe fe-award"></span>
+                      RASP Network Protection
+                    </h4>
+                    <small class="text-muted">
+                      Prevent connecting to bot command and control networks, stop man in the middle attacks.
+                    </small>
+
+                  </div>
+                  <div class="col-auto {{free_tog}}" id="rasp_js_con" data-enabled="{{rasp_js}}" data-title="Inspect all HTTP requests made by the server and block connects to C&C networks" data-toggle="true">
+                  </div>
+                </div> <!-- / .row -->
+              </div>
+
+
+              <div class="list-group-item">
+                <div class="row align-items-center">
+                  <div class="col">
+
+                    <h4 class="font-weight-base mb-1">
+                      <span class="text-success fe fe-award"></span>
+                      RASP Authentication Protection
+                    </h4>
+                    <small class="text-muted">
+                      Verify users have correctly authenticated and prevent privilege escalation vulnerabilities. 
+                      This will stop plugins from bypassing wordpress authentication, but may break some plugins
+                      that provide authentication alternatives.
+                    </small>
+
+                  </div>
+                  <div class="col-auto {{free_tog}}" id="rasp_auth_con" data-enabled="{{rasp_auth}}" data-title="Verify users have correctly authenticated and prevent privilege escalation vulnerabilities." data-toggle="true">
+                  </div>
+
+
+                    <!--
+                    <small class="{{mfa_class}}">
+                      {{mfa}}
+                    </small>
+
+                  </div>
+                  <div class="col-auto {{free_tog}} {{show_mfa}}" id="pro_mfa_con" data-enabled="{{pro_mfa}}" data-title="Add SMS MFA to user editor" data-toggle="true">
+                  </div>
+                -->
+                </div> <!-- / .row -->
+              </div>
+
+              <!--
+              <div class="list-group-item">
+                <div class="row align-items-center">
+                  <div class="col">
+
+                    <h4 class="font-weight-base mb-1">
+                      Secure JavaScript
+                    </h4>
+                    <small class="text-muted">
+                      Only allow authorized JavaScript to run on browsers.
+                    </small>
+
+                  </div>
+                  <div class="col-auto tog" id="csp_policy_enabled_con" data-enabled="{{csp_policy_enabled}}" data-title="Send HTTP security headers" data-toggle="true">
+                  </div>
+                </div>
+              </div>
+              -->
+
+            </div>
+          </div>
+        </div>
+
+
+        <hr class="my-5">
+
+
+        <div class="card">
+          <div class="cover system"></div>
+          <div class="card-body" style="margin-top:1.5rem;">
+            <div class="avatar avatar-xl card-avatar card-avatar-top" style="margin-top:1rem;">
+              <img id="" src="{{public}}img/search.jpg" style="background-color:#FFF;" class="avatar-img rounded-circle border-card">
+              <span class="fe alt1 header-icon fe-database"></span>
+            </div>
+            <h2 style="margin-top:-1rem;" class="card-title">
+              <strong>
+                <span class="tdc alt1">
+                  Server Configuration
+                </span>
+              </strong>
+              <br>
+              <small class="text-muted">These settings are auto-configured for your server. Only change them if necessary.</small>
+            </h2>
+          </div>
+
+
+          <div class="card-body">
+            <div class="row">
+
+              <div class="col-12 col-md-6 mb-2">
+                <div class="form-group">
+                  <label class="form-label">
+                    Cache Type
+                  </label>
+                  <small class="form-text text-muted">Server Side Cache (must have cache or cookies enabled)</small>
+
+<div class="btn-group left">
+  <button type="button" class="btn btn-primary" id="drop_cache_type">{{cache_type}}</button>
+  <button type="button" class="btn btn-primary dropdown-toggle dropdown-toggle-split" style="width:auto" data-bs-toggle="dropdown" aria-expanded="false">
+    <span class="visually-hidden">Toggle Dropdown</span>
+  </button>
+  <ul class="dropdown-menu">
+    <li class="hide_shmop"><span class="dropdown-item pointer" onclick="soption('cache_type', 'shmop')" href="#">SHMOP</span></li>
+    <li class="hide_opcache"><span class="dropdown-item pointer" onclick="soption('cache_type', 'opcache')"  href="#">OPCACHE</span></li>
+    <li><span class="dropdown-item pointer" onclick="soption('cache_type', 'nop')"  href="#">none</span></li>
+  </ul>
+</div>
+<div id="cache_type_spin" class="spinner-border text-success spinner-border-sm mt-1 ml-2 hidden" role="status"></div>
+
+                </div>
+              </div>
+
+              <div class="col-12 col-md-6 mb-2">
+                <div class="form-group">
+                  <label class="form-label">
+                    DNS Services
+                  </label>
+                  <small class="form-text text-muted w-100">CloudFlair (1.1.1.1) or localhost</small>
+
+<div class="btn-group left">
+  <button type="button" class="btn btn-primary" id="drop_dns_service">{{dns_service}}</button>
+  <button type="button" class="btn btn-primary dropdown-toggle dropdown-toggle-split" style="width:auto" data-bs-toggle="dropdown" aria-expanded="false">
+    <span class="visually-hidden">Toggle Dropdown</span>
+  </button>
+  <ul class="dropdown-menu">
+    <li><span class="dropdown-item pointer" onclick="soption('dns_service', '1.1.1.1')" href="#">1.1.1.1</span></li>
+    <li><span class="dropdown-item pointer" onclick="soption('dns_service', 'localhost')"  href="#">localhost</span></li>
+  </ul>
+</div>
+<div id="dns_service_spin" class="spinner-border text-success spinner-border-sm mt-1 ml-2 hidden" role="status"></div>
+
+                </div>
+              </div>
+
+
+              <div class="col-12 col-md-6 mb-2">
+                <div class="form-group">
+                  <label class="form-label">
+                    Block HTTP Response Code
+                  </label>
+                  <small class="form-text text-muted">HTTP response code for block page (recommend 401 or 403)</small>
+
+<div class="btn-group left">
+  <button type="button" class="btn btn-primary" id="drop_response_code">{{response_code}}</button>
+  <button type="button" class="btn btn-primary dropdown-toggle dropdown-toggle-split" style="width:auto" data-bs-toggle="dropdown" aria-expanded="false">
+    <span class="visually-hidden">Toggle Dropdown</span>
+  </button>
+  <ul class="dropdown-menu">
+    <li><span class="dropdown-item pointer" onclick="soption('response_code', '200')" href="#">200 OK</span></li>
+    <li><span class="dropdown-item pointer" onclick="soption('response_code', '203')" href="#">203 NON AUTHORITATIVE</span></li>
+    <li><span class="dropdown-item pointer" onclick="soption('response_code', '204')" href="#">204 NO CONTENT</span></li>
+    <li><span class="dropdown-item pointer" onclick="soption('response_code', '400')" href="#">400 BAD REQUEST</span></li>
+    <li><span class="dropdown-item pointer" onclick="soption('response_code', '401')" href="#">401 NOT AUTHORIZED</span></li>
+    <li><span class="dropdown-item pointer" onclick="soption('response_code', '403')" href="#">403 FORBIDDEN</span></li>
+    <li><span class="dropdown-item pointer" onclick="soption('response_code', '406')" href="#">406 NOT ACCEPTABLE</span></li>
+    <li><span class="dropdown-item pointer" onclick="soption('response_code', '500')" href="#">500 SERVER ERROR</span></li>
+    <li><span class="dropdown-item pointer" onclick="soption('response_code', '503')" href="#">503 UNAVAILABLE</span></li>
+  </ul>
+</div>
+<div id="response_code_spin" class="spinner-border text-success spinner-border-sm mt-1 ml-2 hidden" role="status"></div>
+
+                </div>
+              </div>
+
+
+
+              <div class="col-12 col-md-6 mb-2">
+                <div class="form-group">
+                  <label class="form-label">
+                    Remote IP Source
+                  </label>
+                  <small class="form-text text-muted w-100">IP Address, X-Forwarded, Forward</small>
+
+<div class="btn-group left">
+  <button type="button" class="btn btn-primary" id="drop_ip_header">{{ip_header}}</button>
+  <button type="button" class="btn btn-primary dropdown-toggle dropdown-toggle-split" style="width:auto" data-bs-toggle="dropdown" aria-expanded="false">
+    <span class="visually-hidden">Toggle Dropdown</span>
+  </button>
+  <ul class="dropdown-menu">
+    <li><span class="dropdown-item pointer" onclick="soption('ip_header', 'REMOTE_ADDR')" href="#">REMOTE_ADDR</span></li>
+    <li><span class="dropdown-item pointer" onclick="soption('ip_header', 'HTTP_X_FORWARDED_FOR')"  href="#">X-FORWARDED</span></li>
+    <li><span class="dropdown-item pointer" onclick="soption('ip_header', 'HTTP_FORWARD')"  href="#">FORWARD</span></li>
+    <li><span class="dropdown-item pointer" onclick="soption('ip_header', 'HTTP_CF_CONNECTING_IP')"  href="#">CloudFlair</span></li>
+  </ul>
+</div>
+<div id="ip_header_spin" class="spinner-border text-success spinner-border-sm mt-1 ml-2 hidden" role="status"></div>
+
+                </div>
+              </div>
+
+
+
+              </div>
+
+              <div class="row mt-3">
+<div class="col-12 col-md-6 ">
+                <div class="form-group">
+                  <label class="form-label">
+                    Browser Check HTTP Response Code
+                  </label>
+                  <small class="form-text text-muted">HTTP code for the JS verification page (recommend, 303 or 428)</small>
+
+<div class="btn-group left">
+  <button type="button" class="btn btn-primary" id="drop_response_code">{{verify_http_code}}</button>
+  <button type="button" class="btn btn-primary dropdown-toggle dropdown-toggle-split" style="width:auto" data-bs-toggle="dropdown" aria-expanded="false">
+    <span class="visually-hidden">Toggle Dropdown</span>
+  </button>
+  <ul class="dropdown-menu">
+    <li><span class="dropdown-item pointer" onclick="soption('verify_http_code', '300')" href="#">300 Multiple Choices</span></li>
+    <li><span class="dropdown-item pointer" onclick="soption('verify_http_code', '303')" href="#">303 See Other</span></li>
+    <li><span class="dropdown-item pointer" onclick="soption('verify_http_code', '404')" href="#">404 Not Found</span></li>
+    <li><span class="dropdown-item pointer" onclick="soption('verify_http_code', '406')" href="#">406 Not Acceptable</span></li>
+    <li><span class="dropdown-item pointer" onclick="soption('verify_http_code', '407')" href="#">407 Proxy Auth Required</span></li>
+    <li><span class="dropdown-item pointer" onclick="soption('verify_http_code', '412')" href="#">412 Precondition Failed</span></li>
+    <li><span class="dropdown-item pointer" onclick="soption('verify_http_code', '428')" href="#">428 Precondition Required</span></li>
+    <li><span class="dropdown-item pointer" onclick="soption('verify_http_code', '500')" href="#">500 Server Error</span></li>
+    <li><span class="dropdown-item pointer" onclick="soption('verify_http_code', '503')" href="#">503 Unavailable</span></li>
+  </ul>
+</div>
+<div id="response_code_spin" class="spinner-border text-success spinner-border-sm mt-1 ml-2 hidden" role="status"></div>
+
+                </div>
+              </div>
+
+
+
+
+
+              <div class="col-12 col-md-6 ">
+                 <div class="form-group">
+                  <label class="form-label">
+                    Report Errors
+                  </label>
+                  <small class="form-text text-muted">Log BitFire PHP errors and send to developers </small>
+                  <div class="auto_col tog" id="send_errors_con" data-enabled="{{send_errors}}" data-title="Disable to keep developers un-informed on potential issues" data-toggle="true">
+                  </div>
+                </div>
+              </div>
+              </div>
+
+
+
+              <div class="col-12 col-md-6 ">
+                 <div class="form-group">
+                  <label class="form-label">
+                    Cookie Support
+                  </label>
+                  <small class="form-text text-muted">Disable if server does not support cookies</small>
+                  <div class="auto_col tog" id="cookies_enabled_con" data-enabled="{{cookies_enabled}}" data-title="Enable if your server supports cookies" data-toggle="true">
+                  </div>
+                </div>
+              </div>
+
+              <!--
+              <div class="col-12 col-md-6 ">
+                 <div class="form-group">
+                  <label class="form-label">
+                    Display Errors
+                  </label>
+                  <small class="form-text text-muted w-100">Set the display error level. Off for Production</small>
+
+<div class="btn-group left">
+  <button type="button" class="btn btn-primary" id="display_errors">{{display_errors}}</button>
+  <button type="button" class="btn btn-primary dropdown-toggle dropdown-toggle-split" style="width:auto" data-bs-toggle="dropdown" aria-expanded="false">
+    <span class="visually-hidden">Toggle Dropdown</span>
+  </button>
+  <ul class="dropdown-menu">
+    <li><span class="dropdown-item pointer" onclick="soption('display_errors', 'E_ERROR')" href="#">Fatal Errors</span></li>
+    <li><span class="dropdown-item pointer" onclick="soption('display_errors', 'E_WARNING')" href="#">Warnings &amp; Errors</span></li>
+    <li><span class="dropdown-item pointer" onclick="soption('display_errors', 'E_ALL')" href="#">All Errors &amp; Notices</span></li>
+    <li><span class="dropdown-item pointer" onclick="soption('display_errors', '0')" href="#">None</span></li>
+  </ul>
+</div>
+<div id="display_errors_spin" class="spinner-border text-success spinner-border-sm mt-1 ml-2 hidden" role="status"></div>
+
+                </div>
+              </div>
+            -->
+
+              
+              <div class="col-12 col-md-6 ">
+                 <div class="form-group">
+                  <label class="form-label">
+                    Enable BitFire Support
+                  </label>
+                  <small class="form-text text-muted">Allow BitFire support team to review and fix bot configuration errors</small>
+                  <div class="auto_col tog" id="remote_tech_allow" data-enabled="{{remote_tech_allow}}" data-title="This allows BitFire Support to fix BitFire configuration errors. No WordPress access." data-toggle="true">
+                  </div>
+                </div>
+              </div>
+
+
+
+              
+            </div>
+          </div>
+
+        <hr class="my-5">
+
+        <!--
+        <div class="card">
+          <div class="card-header">
+
+            <h4 class="card-header-title">
+              Optional Settings
+              <small class="text-muted ml-4">
+                <a href="https://bitfire.co/system_settings" target="_blank">Learn about BitFire System Settings<span class="fe fe-external-link"></span></a>
+              </small>
+            </h4>
+
+          </div>
+          <div class="card-body">
+            <div class="row">
+
+                <div class="form-group">
+                  <label class="form-label">
+                    BitFire Cookie Name
+                  </label>
+                  <small class="form-text text-muted">Cookie name for browser meta-data, unique random name</small>
+
+    <div id="browser_cookie_spin" class="spinner-border text-success spinner-border-sm left mt-1 mr-2 hidden" role="status">
+      <span class="xvisually-hidden">Saving...</span>
+    </div>
+    <input type="text" class="form-control txtin" id="browser_cookie_text" autocomplete="off" onchange="update_str('browser_cookie')" value="{{browser_cookie}}">
+
+                </div>
+
+
+                <div class="{{show_wp_class}}">
+                <div class="form-group">
+                  <label class="form-label">
+                    Dashboard Path
+                  </label>
+                  <small class="form-text text-muted">Path to serve BitFire dashboard from</small>
+
+    <div id="dashboard_path_spin" class="spinner-border text-success spinner-border-sm left mt-1 mr-2 hidden" role="status">
+      <span class="xvisually-hidden">Saving...</span>
+    </div>
+    <input type="text" class="form-control txtin" id="dashboard_path_text" autocomplete="off" onchange="update_str('dashboard_path')" value="{{dashboard_path}}">
+                </div>
+
+                 <div class="form-group">
+                  <label class="form-label">
+                    WordPress Path
+                  </label>
+                  <small class="form-text text-muted">Leave blank if not WordPress</small>
+
+    <div id="cms_root_spin" class="spinner-border text-success spinner-border-sm left mt-1 mr-2 hidden" role="status">
+      <span class="xvisually-hidden">Saving...</span>
+    </div>
+    <input type="text" class="form-control txtin" id="dashboard_path_text" autocomplete="off" onchange="update_str('cms_root')" value="{{cms_root}}">
+                </div>
+              </div>
+
+            </div>
+
+            <div class="row">
+                <div class="form-group">
+                  <label class="form-label">
+                    BitFire Encryption Key
+                  </label>
+                  <small class="form-text text-muted">BitFire cookie encryption key, > 32bytes random</small>
+
+    <div id="encryption_key_spin" class="spinner-border text-success spinner-border-sm left mt-1 mr-2 hidden" role="status">
+      <span class="xvisually-hidden">Saving...</span>
+    </div>
+    <input type="text" class="form-control txtin" id="encryption_key_text" autocomplete="off" onchange="update_str('encryption_key')" value="{{encryption_key}}" style="width:88%;float:left;margin-right:10px;">
+                  <div class="fe fe-refresh-cw pointer text-success" style="margin-top:15px;" onclick="rand_string('encryption_key')"></div>
+                </div>
+
+                <div class="form-group">
+                  <label class="form-label">
+                    BitFire Secret Key
+                  </label>
+                  <small class="form-text text-muted">BitFire secret key, > 32bytes random</small>
+
+    <div id="secret_spin" class="spinner-border text-success spinner-border-sm left mt-1 mr-2 hidden" role="status">
+      <span class="xvisually-hidden">Saving...</span>
+    </div>
+    <input type="text" class="form-control txtin" id="secret_text" autocomplete="off" onchange="update_str('secret')" value="{{secret}}" style="width:88%;float:left;margin-right:10px;">
+                  <div class="fe fe-refresh-cw pointer text-success" style="margin-top:15px;" onclick="rand_string('secret')"></div>
+                </div>
+
+            </div>
+          </div>
+        </div>
+        -->
+
+
+        <div class="card">
+
+          <div class="cover server-red"></div>
+          <div class="card-body" style="margin-top:1.5rem;">
+            <div class="avatar avatar-xl card-avatar card-avatar-top" style="margin-top:1rem;">
+              <img id="" src="{{public}}img/search.jpg" style="background-color:#FFF;" class="avatar-img rounded-circle border-card">
+              <span class="fe alt1 header-icon fe-cpu"></span>
+            </div>
+            <h2 style="margin-top:-1rem;" class="card-title">
+              <strong>
+                <span class="tdc alt1">
+                  BitFire PRO / PREMIUM Licensing
+                </span>
+              </strong>
+            </h2>
+          </div>
+
+          <div class="card-body">
+            <div class="row">
+
+              <div class="col-12 col-md-6">
+
+                <div class="form-group">
+                  <label class="form-label">
+                    BitFire PRO License
+                  </label>
+                  <small class="form-text text-muted">Check your email for license code after purchase</small>
+
+    <div id="pro_key_spin" class="spinner-border text-success spinner-border-sm left mt-1 mr-2 hidden" role="status">
+      <span class="visually-hidden">Saving...</span>
+    </div>
+    <input type="text" class="form-control txtin" id="pro_key_text" autocomplete="off"  value="{{license}}">
+                </div>
+
+                </div>
+              <div class="col-12 col-md-6">
+                <button style="margin-top:3.5rem" class="btn btn-primary" id="gopro">Go PRO!</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <hr class="my-5 mt-4 mb-4">
+
+        <!--
+        <div class="card">
+          <div class="card-header">
+
+            <h4 class="card-header-title">
+              Allow editing config.ini
+              <small class="text-muted ml-4">
+                 This will unlock config.ini for manual editing for a short while
+              </small>
+            </h4>
+
+          </div>
+          <div class="card-body">
+            <div class="row">
+
+              <div class="col-12">
+                <small class="text-secondary">Only unlock if you need to manually edit the config.ini file</small>
+                <button class="btn btn-secondary right" id="unlock_config">Unlock config.ini</button>
+
+                <div id="unlock_config_spin" class="spinner-border text-success spinner-border-sm right mt-1 mr-2 hidden" role="status">
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        -->
+
+        <div class="card {{hide_wordpress}}">
+          <div class="card-header">
+
+            <h4 class="card-header-title">
+              Uninstall BitFire
+              <small class="text-muted ml-4">
+                 This will uninstall BitFire from the startup script and remove all files. 
+              </small>
+            </h4>
+
+          </div>
+          <div class="card-body">
+            <div class="row">
+
+              <div class="col-12">
+                <small class="text-secondary">The script files can be removed after the php cache expires in 5 minutes</small>
+                <button class="btn btn-secondary right" id="uninstall">Uninstall</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+
+     </div>
+    </div>
+  </div>
+
+  <div class="hidden" id="uninstall_content">
+    <div class="row justify-content-center">
+      <div class="col-12 col-lg-10 col-xl-8">
+  <div class="card">
+    <div class="card-header">
+      <h4 class="card-header-title">
+        BitFire Uninstalled
+        <small class="text-muted ml-4">
+            BitFire has been removed from the startup script.
+        </small>
+      </h4>
+    </div>
+    <div class="card-body">
+      <div class="row">
+
+        <div class="col-12">
+          <p class="text-secondary mb-4">In 5 minutes the php ini cache will expire
+             and the new settings will take effect.  After that you can remove 
+             the script files from your server.
+          </p>
+
+          <h2 class="text-center text-secondary" data-time="300" id="countdown_timer">5:00</h2>
+          <button style="display:block;margin-left:auto;margin-right:auto;" id="remove_files" class="mb-4 btn btn-primary" disabled="disabled">Remove Files</button>
+        </div>
+      </div>
+    </div>
+  </div>
+      </div>
+    </div>
+  </div>
+
+
+
+    </div><!-- / .main-content -->
+
+    <script type="text/javascript">
+      
+function save_pass() {
+  let p1 = GBI("pass1").value;
+  let p2 = GBI("pass2").value;
+  if (p1 != p2) { alert("password does not match"); return; }
+  if (p1.length < 8) { alert("password must be at least 8 characters"); return; }
+  console.log(p1);
+  BitFire_api("set_pass", {"pass1":encodeURIComponent(p1)})
+    .then(r => r.json())
+    .then(response => {
+      console.log(response);
+      if (response.success) {
+        alert("password updated successfully");
+        $("#password_set").modal("hide");
+      } else {
+        alert(response.note);
+      }
+    });
+}
+      
+
+/*
+// fetch("https://www."+"bitfire.co"+"/ver.php?ts="+Date.now()) // not used on WordPress
+  .then(response => response.json())
+  .then(response => {
+    console.log(response);
+    var behind = 0;
+    var latest_str = VERSION_STR;
+    var latest = VERSION;
+    for (const r in response) {
+      //console.log("version!", r);
+      if(response[r][0] > VERSION) { 
+        if (response[r][0] > latest) {
+          latest = response[r][0];
+          latest_str = r;
+          behind++;
+        }
+      }
+    }
+    window.LATEST = latest_str;
+    
+    /*
+    if (GBI("upgrade_link")) {
+      if (behind == 0) {
+        GBI("upgrade_link").innerText = "Software Up To Date";
+        GBI("upgrade_link").setAttribute("disabled", "disabled");
+        GBI("upgrade_link").classList.remove("lift");
+      } else {
+        GBI("upgrade_link").innerText = "Upgrade to " + latest_str;
+        GBI("upgrade_link").classList.remove("btn-secondary");
+        GBI("upgrade_link").classList.add("btn-warning");
+        GBI("upgrade_link").addEventListener("click", upgrade);
+      }
+    }
+  }
+);
+*/
+
+     
+function upgrade() {
+  console.log("upgrade!");
+  BitFire_api("upgrade", {"ver":window.LATEST})
+    .then(r => r.json())
+    .then(response => {
+      alert(response.note);
+    });
+}
+
+function toggle_features() {
+  var elms = document.getElementsByClassName("feature");
+  console.log("toggle features", elms);
+
+  Array.prototype.forEach.call(elms, function (element) {
+    console.log("element", element.innerText);
+    if (element.innerText.trim() == "report" || element.innerText.trim() == "alert") {
+      console.log("warn");
+      element.classList.remove("btn-success");
+      element.classList.remove("btn-secondary");
+      element.classList.add("btn-warning");
+    } else if (element.innerText.trim() == "block" || element.innerText.trim() == "true" || element.innerText.trim() == "on") {
+      console.log("success");
+      element.classList.remove("btn-warning");
+      element.classList.remove("btn-secondary");
+      element.classList.add("btn-success");
+    } else {
+      element.classList.remove("btn-success");
+      element.classList.remove("btn-warning");
+      element.classList.add("btn-secondary");
+      console.log("second");
+    }
+  });
+}
+
+   </script>
+
+    
+      <div class="modal fade" id="password_set" role="dialog" data-backdrop="static" data-keyboard="false" tabindex="-1">
+        <div class="modal-dialog" role="document" id="password_set2">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="pass_title">Set BitFire Initial Password</h5>
+              <!--
+              <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
+              -->
+            </div>
+            <div class="modal-body">
+              <p>BitFire password is required to access the dashboard.  If you forget the password, change the "password" configuration item in config.ini to "default" to relaunch this modal or set it to the SHA1 value of your password</p>
+              <label style="width:150px;">Password:</label>
+              <input id="pass1" type="password" name="pass1" /><br />
+              <label style="width:150px;">Repeat Password:</label>
+              <input id="pass2" type="password" name="pass1" />
+            </div>
+            <div class="modal-footer">
+              <button id="password_close" type="button" class="btn btn-secondary " data-dismiss="modal">Close</button>
+              <button type="button" class="btn btn-primary" id="save_pass">Save Password</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    <script type="text/javascript">
+
+      function on_or_off(config) {
+        console.log("on or off", config);
+        if (!config || config == 0) { return 'off'; }
+        return 'on';
+      }
+
+
+      if (GBI("password_btn")) {
+        GBI("password_btn").addEventListener("click", function() {
+          GBI('password_close').classList.remove("hidden");
+        });
+      }
+
+      let toggles = document.getElementsByClassName("tog");
+      for (let i = 0; i < toggles.length; i++) {
+        let id = toggles[i].getAttribute("id");
+        let name = id.replace("_con", "");
+        let title = toggles[i].getAttribute("data-title");
+        let tog = toggles[i].hasAttribute("data-toggle");
+
+        let de = toggles[i].getAttribute("data-enabled");
+        let alert = on_or_off(de);
+        console.log(name, alert);
+
+        let check1 = (alert == "report") ? "checked" : "";
+        let check2 = (alert == "on") ? "checked" : "";
+
+        let tail1 = (tog) ? "" : " in alert mode only";
+        let tail2 = (tog) ? "" : " in full blocking";
+
+        let tool1 = 'data-bs-toggle="tooltip" data-bs-placement="top" title="'+title+tail1+'"';
+        let tool2 = 'data-bs-toggle="tooltip" data-bs-placement="top" title="'+title+tail2+'"';
+
+
+        let html = '<div id="'+name+'_spin" class="spinner-border text-success spinner-border-sm left mt-1 mr-2 hidden" role="status"></div>';
+        if (!tog) {
+          html += '<div class="form-check form-switch left" style="margin-left:-60px"> <input class="form-check-input warning" id="'+name+'_report" autocomplete="off" type="checkbox" onclick="return toggle_report(\''+name+'\', true)" '+check1+' '+ tool1 +'> </div>';
+        }
+        html = '\
+    <div class="form-switch right">\
+        <input class="form-check-input success" autocomplete="off" id="'+name+'_block" type="checkbox" onclick="return toggle_report(\''+name+'\', false)" '+check2+' '+tool2+'>\
+    </div>';
+        window.CONFIG_LIST[name] = alert;
+
+        toggles[i].innerHTML = html;
+      }
+
+      function update_csp() {
+        let e = GBI('csp_policy_text');
+
+        BitFire_api("toggle_config_value", {"param":"csp_policy[default-src]","value":e.value})
+          .then(r => r.json())
+          .then(data => {
+            console.log("saved", data); 
+            window.setTimeout(function(){ 
+              //let spinner = GBI(config+"_spin");
+              //if (spinner) { spinner.classList.add("hidden"); }
+              GBI("csp_save").innerText = "Saved!";
+              window.setTimeout(function(){ 
+                GBI("csp_save").innerText = "Save";
+              }, 2000);
+
+            }, 100);
+          });
+      }
+
+
+      function gopro() {
+        update_str('pro_key');
+        window.setTimeout(function() {
+          alert("BitFire Pro license installed.  Click OK to edit advanced-settings.");
+          window.location = "{{self}}?page=bitfire_settings";
+        }, 1000);
+      }
+
+      function unlock_config() {
+        update_value("unlock_config", "true");
+      }
+
+      function uninstall() {
+        let doit = confirm("Are you sure you want to uninstall BitFire?  This will remove all configuration and logs and cannot be undone.");
+        if (!doit) { return; }
+
+        BitFire_api("uninstall", {})
+          .then(r => r.json())
+          .then(data => {
+            let e = GBI("uninstall_content");
+            GBI("full_container").innerHTML = e.innerHTML;
+            window.BITF_INT = window.setInterval(function() {
+              let e = GBI("countdown_timer");
+              let sec = parseInt(e.getAttribute("data-time")) - 1;
+              if (sec == 0) {
+                window.clearInterval(window.BITF_INT);
+                GBI("remove_files").removeAttribute("disabled");
+              } else {
+                let min = Math.floor(sec / 60);
+                let rem = sec - (min * 60);
+                e.setAttribute("data-time", sec);
+                e.innerText = min + ":" + rem;
+              }
+            }, 1000);
+          });
+
+      }
+
+  // MAIN
+  document.addEventListener("DOMContentLoaded", function () {
+      let e2 = GBI("gopro");
+      e2.addEventListener("click", gopro);
+      /*
+      e2 = GBI("unlock_config");
+      e2.addEventListener("click", unlock_config);
+      e2 = GBI("uninstall");
+      e2.addEventListener("click", uninstall);
+      */
+    bf_each_class("free_tog", function (elm) {
+      elm.innerHTML = elm.innerHTML +  " <a target='_blank' href='https://bitfire.co/pricing' class='text-info right'> - Go PRO to enable</a>";
+    });
+  });
+
+  GBI("csp_edit").addEventListener("click", function() {
+    console.log("toggle open");
+    let c = GBI("csp_container");
+    console.log(c);
+    c.classList.toggle("open");
+
+    let a = GBI("csp_arrow");
+    a.classList.toggle("fe-chevron-down");
+    a.classList.toggle("fe-chevron-right");
+  });
+
+  GBI("ok_params_save").addEventListener("click", function() {
+    update_value("ok_params", GBI("ok_params").value);
+  });
+
+  GBI("ok_scripts_save").addEventListener("click", function() {
+    update_value("ok_scripts", GBI("ok_scripts").value);
+  });
+
+  GBI("ok_actions_save").addEventListener("click", function() {
+    update_value("ok_actions", GBI("ok_actions").value);
+  });
+
+  GBI("ok_actions_save").addEventListener("click", function() {
+    update_value("ok_apis", GBI("ok_apis").value);
+  });
+
+  GBI("anonymous_edit").addEventListener("click", function() {
+    console.log("toggle open");
+    let c = GBI("anonymous_container");
+    console.log(c);
+    c.classList.toggle("open");
+
+    let a = GBI("anonymous_arrow");
+    a.classList.toggle("fe-chevron-down");
+    a.classList.toggle("fe-chevron-right");
+  });
+
+      
+    </script>
+    {{gtag}}

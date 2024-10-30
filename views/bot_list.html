@@ -1,0 +1,634 @@
+<style>
+      {{custom_css}}
+      .bold { font-weight: 900; }
+      .bg-primary-bold { background-color: #2c7be5 !important; color: #FFF !important;}
+      /*
+      .badge { font-weight: 500; }
+      .bg-success2 { background-color: #06583a !important; }
+      */
+      #close_overlay { width: 32px; }
+      #ip_card_body {
+        height: 30rem;
+        max-height:85%;
+        overflow-y: scroll;
+      }
+      .bs { padding: 0.1rem 0.3rem; }
+      #ip_overlay {
+        position: fixed; /* Overlay takes position relative to the viewport */
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(39, 39, 69, 0.6); /* Semi-transparent black background */
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+      .fe-layout { top: 2px; position: relative; }
+      .hidden { display: none !important; }
+
+
+      img.svg { fill: #444; }
+      .pl1 { padding-left: .5rem; }
+      .pdl3 { width:9rem; margin-right: 3rem; }
+      .large { font-size: 1rem; }
+      .f1 { margin-top: 1rem; display: inline-block; width: auto; }
+      .dropdown-ellipses { color: #3b506c; }
+      .hover-primary:hover { color: #2c7be5 !important; }
+      .limit { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+      .net-any { background-image: url('{{assets}}/net_any.png'); display: inline-block; width:1rem;height:1rem; background-size: contain; }
+      .net-auth { background-image: url('{{assets}}/net_auth.png'); display: inline-block; width:1rem;height:1rem; background-size: contain; }
+      .net-none { background-image: url('{{assets}}/net_none.png'); display: inline-block; width:1rem;height:1rem; background-size: contain; }
+      .anyip:hover { color: #fd7e14; }
+      .authip:hover { color: #00d97e; }
+      .noip:hover { color: #12263f; }
+      .black { color: #000; }
+      .text34 { font-size: .75rem; }
+      .limit1, .limit2, .limit3 {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+      }
+      .limit1 { -webkit-line-clamp: 1; }
+      .limit2 { -webkit-line-clamp: 2; }
+      .limit3 { -webkit-line-clamp: 3; }
+      .pointer { cursor: pointer; }
+
+      .form-check .form-switch { width: 80px; margin-left: -80px; }
+      .form-switch { min-height: 1.5rem; padding-left: 1.5rem; }
+      .form-switch .form-check-input:checked { background-position: 100%; }
+      .form-check-input { cursor: pointer; }
+      input { overflow: visible; }
+      input[type=checkbox] { box-sizing: border-box; padding: 0; }
+
+
+      .form-check-input { position: absolute; vertical-align: top; background-color: #e3ebf6; background-repeat: no-repeat; background-size: contain; border: transparent; appearance: none;}
+
+
+      .form-check-input:checked[type=checkbox] {
+        background-image:url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3E%3Cpath fill='none' stroke='%23fff' stroke-linecap='round' stroke-linejoin='round' stroke-width='3' d='M6 10l3 3 6-6'/%3E%3C/svg%3E");
+        background-position: 100%;
+      }
+
+      .form-check-input[type=checkbox] {
+        background-image:url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='-4 -4 8 8'%3E%3Ccircle r='3' fill='%23fff'/%3E%3C/svg%3E");
+        background-position: 0%;
+        background-repeat: no-repeat; 
+        width: 3rem;
+        margin: 0;
+        margin-left: -3.5rem;
+        border-radius: 3rem;
+        transition: background-position .15s ease-in-out;
+        height: 1.5rem;
+    }
+
+    input[type=checkbox]:checked::before { content: ''; }
+
+    input[type=checkbox], input[type=radio] {
+        box-sizing: border-box;
+        padding: 0;
+    }
+    .form-check-input { cursor: pointer; vertical-align: top; background-size: contain; border: transparent; appearance: none; position: absolute; }
+
+
+    a.dropdown-item { cursor: pointer; }
+    .hdr_container { padding: 1rem; display: flex; flex-direction: row; }
+    .hdr1, .hdr2 { width: 50%; }
+    .hdr1 { text-align: right; }
+    .hdr2 { text-align: left; }
+</style>
+    
+
+
+{{ template:bot_row "data" }}
+<li class="list-group-item" style="padding-bottom: 1rem; padding-top: 0.5rem;">
+  <div class="row align-items-center">
+    <div class="col-auto">
+      <a href="{{-data.home_page}}" target="_blank" class="avatar avatar-lg" style="padding:10px;">
+        <img src="{{-data.favicon}}" data-alt-img={{-data.icon}} alt="" style="border: 1px solid #edf2f9" class="avatar-img svg rounded">
+      </a>
+    </div>
+    <div class="col ms-n2" >
+
+      <!-- Title -->
+      <h4 class="mb-1 name">
+        <a href="{{-data.home_page}}" title="google search for {{-data.name}}" target="_blank">{{-data.name}} <i class="text-primary pointer fe fe-external-link" ></i></a>
+        <small class="text-muted">{{-data.vendor}}</small>
+        <a style="margin-left:4rem" class="hover-primary {{-data.log_class}}" title="View these requests in the log" href="{{-self}}?page=bitfire&start_time={{-data.machine_date}}T00:00&include_filter={{-data.name}}" target="_blank"> view <i class="text-primary pointer fe fe-search"></i> </a>
+      </h4>
+
+      <!-- Text -->
+      <p class="card-text small mb-1 limit3">
+        <span class="text-muted bfua agent" style="padding-right:2rem;"><i>{{-data.agent}}</i></span>
+
+      <p class="card-text large" style="margin-bottom:.5rem">
+        {{data.category}}
+      </p> 
+
+      <!-- Time 
+        <small class="text-muted" data-time="{{-data.machine_date2}}" style="margin-left:4rem;">{{%d data.last_time}}</small>
+      -->
+      <p class="card-text text-muted" style="margin-bottom:0">
+        <span class="tdc">Dates: </span><time class="text-info" data-offset="{{page_tz}}" data-mtime="{{+data.mtime}}" datetime="{{-data.machine_date}}">{{-data.machine_date}}</time>
+        to: <time class="text-info" data-offset="{{page_tz}}" data-mtime="{{+data.last_time}}" datetime="{{-data.machine_date2}}">{{-data.machine_date2}}</time>
+      </p>
+
+    </div>
+    <div class="col-auto" style="width:20rem;">
+      <p class="card-text small tdc mb-1 ipl" data-id="{{-data.id}}"><span class="text-secondary ">IP: (<span class="text-primary pointer" title="Gather IP Details in popup">{{-%c data.ips}} <i class="fe fe-layout"></i></span>) </span>
+        <span class="text-secondary "> Blocked: </span>
+        <span class="text-danger">{{+data.miss}} </span>
+        <span class="text-secondary "> Allowed: </span>
+        <span class="text-success">{{+data.hit}} </span>
+        <!--
+        <span class="hidden"> {{-data.ip_str}} <a title="copy to clipboard" style="display:block" class="fe pointer fe-clipboard"></a> </span>
+        -->
+      </p>
+      <p class="card-text small tdc mb-1"><span class="text-info limit3">{{-data.domain}}</span></p>
+        <span title="{{data.auth_title}}" class="badge large text34 bg-{{data.allowclass}}">{{data.allow}}</span>
+        <span class="text-secondary small" style="margin-left:1rem;">{{-data.country}}</span>
+        <!--
+      <p class="card-text small tdc mb-1">
+      </p>
+    -->
+
+      <!--
+      <p class="tdc mb-1"><span class="text-muted">Classification:</span>{{data.category}}</p>
+      -->
+    </div>
+
+    <div class="col-auto" style="margin-left: 0">
+      <div class="dropdown">
+        <a href="#" style="font-size:24px;" title="Control bot access menu" class="dropdown-ellipses dropdown-toggle" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+          <i type="button" class="text-info fe fe-more-vertical btn btn-outline-info"></i>
+        </a>
+        <div class="dropdown-menu dropdown-menu-end" style="position: absolute; inset: 0px 0px auto auto; margin: 0px; transform: translate3d(0px, 27.5px, 0px);" data-popper-placement="bottom-end">
+          <a data-id="{{-data.id}}" class="noip dropdown-item" title="Disallow this robot from anywhere">
+            <i class="net-none"></i> Block This Bot
+          </a>
+
+          <a data-id="{{-data.id}}" class="anyip dropdown-item" title="Allow this robot full access">
+            <i class="fe fe-shield-off text-warning"></i> Open Access
+          </a>
+          <a data-id="{{-data.id}}" class="restip dropdown-item" title="Allow this robot restricted access">
+            <i class="fe fe-shield text-success"></i> Restricted Access
+          </a>
+          <a data-id="{{-data.id}}" class="authip dropdown-item" title="Allow this robot full access from verified IPs">
+            <i class="fe fe-lock text-success"></i> Authenticated Access
+          </a>
+          <a data-id="{{-data.id}}" class="mvip dropdown-item" title="Move bot to {{-unknown}}">
+            <i class="fe fe-move black"></i> Move To {{-unknown}}
+          </a>
+          <a data-id="{{-data.id}}" class="junkip dropdown-item" title="Move bot to Junk">
+            <i class="fe fe-move black"></i> Move To Junk
+          </a>
+
+          <a data-id="{{-data.id}}" class="rmip dropdown-item" title="Remove this bot entry until seen again">
+            <i class="fe fe-trash-2 black"></i> Remove Entry
+          </a>
+          <a class="rmip dropdown-item" href="https://www.abuseipdb.com/check/{{-data.ip}}" target="_blank" title="Check this IP reputation">
+            <i class="fe fe-external-link text-info"></i> Check IP Reputation
+          </a>
+
+        </div>
+      </div>
+      
+    </div>
+
+
+  </div> 
+</li>
+{{ end template }}
+
+
+    <div class="main-content">
+      
+      {{header}}
+    
+
+      <!-- CARDS -->
+      <div class="container-fluid">
+        <div class="row justify-content-center">
+
+          <div class="col-12 col-lg-12" >
+
+            <!--
+            <small><a class="text-info" target="_blank" href="https://bitfire.co/support-bot-control">BitFire Bot Control Documentation <i class="fe fe-external-link"></i></a></small>
+            -->
+            <div class="card">
+              <div class="card-header">
+
+                <h3 class="card-header-title text-primary">
+                  Firewall Bot Controls <span class="text-secondary"> :: {{-known}}</span>
+                </h3>
+              </div>
+              <!--
+              <small class="text-muted" style="padding:1rem 2rem 0 2rem;">You can view what bots have been blocked by the firewall on the Dashboard page by selecting 
+                  &quot;Bot Network Auth&quot; from the &quot;Filter Blocks&quot; dropdown</small>
+
+              <small style="padding: 1rem 2rem 0 2rem;" class="text-secondary">These bots have been identified by the BitFire team as legitimate and generally helpful web robots.</small>
+              -->
+
+              <!--
+                <div class="row w-100">
+                  <div class="f1 text-secondary"><span title="User Agent can access entire site" class="badge text34 bg-warning text-dark">Level 1 <i class="fe fe-shield-off"></i></span>
+                   - bot can talk to any part of your website</div>
+                  <div class="f1 text-secondary"><span title="User Agent has only limited functionality" class="badge text34 bg-success text-dark">Level 2 <i class="fe fe-shield"></i></span>
+                   - bot can only view pages, no api / no login </div>
+                  <div class="f1 text-secondary"><span title="User Agent is verified and full access" class="badge text34 bg-success text-dark">Level 3 <i class="fe fe-lock"></i></span>
+                   - bot IP addresses is verified - full access</div>
+                </div>
+              -->
+
+              <div class="hdr_container">
+                <div class="hdr3" style="height:45px;width:100%">
+                  <span style="line-height:2rem">Filter: </span><a href="{{self}}?page=bitfire_botlist&known=to_review" style="margin-right:2rem;color:#FFF" class="button btn-primary bg-info lift shadow" title="View unknown bots that have visited">Need Review &nbsp;<i class="fe fe-alert-triangle"></i></a>
+                  <a href="{{self}}?page=bitfire_botlist&known=known" style="margin-right:2rem;color:#FFF" class="button btn-primary bg-primary lift shadow" title="View known bots that have visited">Known Bots &nbsp;<i class="fe fe-thumbs-up"></i></a>
+                  <a href="{{self}}?page=bitfire_botlist&known=unknown" style="margin-right:2rem;color:#FFF" class="button btn-primary bg-primary lift shadow" title="View unknown bots that have visited">Unknown Bots &nbsp;<i class="fe fe-help-circle"></i></a>
+                  <a href="{{self}}?page=bitfire_botlist&known=trash" style="margin-right:2rem;color:#FFF" class="button btn-primary bg-primary lift shadow" title="View bots that are most likely to be trash">Bad Bots &nbsp;<i class="fe fe-thumbs-down"></i></a>
+                  <span style="line-height:2rem">Action: </span><a href="#purge" style="margin-right:2rem;color:#FFF" id="purge" class="button btn-primary bg-warning-soft text-dark lift shadow" title="View bots that are most likely to be trash">Purge Old &amp; Insignificant Bots &nbsp;<i class="fe fe-trash"></i></a>
+
+                <!--
+                <span style="padding-top:10px;float:left;" class="hdr2 tdc text-info"><strong>Purge Insignificant Bots:</strong></span>
+                <div class="col-auto tog" style="margin-left: 0rem;margin-top:10px;" data-title="click to purge one off bots that are not likely to be seen again">
+                  <div class="form-switch">
+                    <input class="form-check-input success" autocomplete="off" id="bitfire_show_known" type="checkbox" onclick="return purge()" data-bs-toggle="tooltip" data-bs-placement="top" title="" data-bs-original-title="Toggle to show/hide known bots">
+                  </div>
+                </div>
+                <button onclick="return purge();" class="btn btn-info">Purge Insignificant Bots</button>
+                <small style="display:inline-block;margin-left:1rem;line-height:4rem;" class="text-secondary"><i>(safely remove old bots not likely to ever be seen again)</i></small>
+                -->
+
+
+
+
+                <!--
+                <div style="padding-top:10px;float:right;display:inline-block" class="hdr1 tdc text-secondary" title="Number of "><i><small> </small></i><strong>Free IP Checks Remaining: </strong> <span id="checks_remaining">{{-free_checks}}</span></div>
+                -->
+                </div>
+
+              </div>
+                <div class="row">
+                  <p class="text-info large">
+                    {{type_info}}
+                  </p>
+                  <p class="text-secondary large">
+                   Use the buttons above to view different types of bots accessing your site. Control the access of each bot by clicking on the <span class="text-info fe fe-more-vertical"></span> icon.
+                   Use the <i class="text-primary fe fe-external-link"></i> icon to google search the bot,
+                   and <i class="text-primary fe fe-search"></i> to view any available log data. The bubbles on the left show
+                   noteworthy bot activity. The number of blocked and allowed requests are shown in the top right corner of 
+                   each card in red and green along with origin networks, and countries.
+                  </p>
+                </div>
+
+              <!--
+              <span class="tdc"><strong>Block All Unknown Bots</strong></span>
+                <span style="padding-top:10px" class="tdc text-secondary"><strong>Unknown Bot Action:</strong></span>
+<div class="btn-group" style="margin-left:18rem;margin-top:-30px;width:18rem;margin-bottom:15px">
+  <button type="button" class="btn btn-primary" style="width:15rem" id="drop_unknown_bots">Allow Unknown Bots</button>
+  <button type="button" class="btn btn-primary dropdown-toggle dropdown-toggle-split" style="width:auto" data-bs-toggle="dropdown" aria-expanded="false">
+    <span class="visually-hidden">Toggle Dropdown</span>
+  </button>
+  <ul class="dropdown-menu">
+    <li><span class="dropdown-item pointer" onclick="soption('unknown_bots', 'allow', 'Allow Unknown Bots')" href="#">Allow Unknown Bots</span></li>
+    <li><span class="dropdown-item pointer" onclick="soption('unknown_bots', 'block', 'Block Unknown Bots')" href="#">Block Unknown Bots</span></li>
+    <li><span class="dropdown-item pointer" onclick="soption('unknown_bots', 'ip_check', 'Block Only Bad Reputation IPs')" href="#">Block Only Bad Reputation IPs</span></li>
+  </ul>
+</div>
+              -->
+              <br>
+
+                    <div class="row">
+                    <div class="text-primary " style="flex-grow:1;font-size:16px;padding:1rem 0 1rem 6rem;width:auto;"><b>User-Agent Info</b></div>
+                    <div class="text-primary" style="font-size:16px;padding:1rem 0 1rem 1rem; width:24rem;"><b>Network &amp; Access</b></div>
+                    </div>
+                    <!--
+              <div class="card-body mb-4" style="padding:1rem !important">
+
+                <div class="card">
+                  <div class="card-header">
+    
+                    <h4 class="card-header-title">
+                      Allowed Bots
+                    </h4>
+                        
+                  </div>
+                  -->
+                  <!--
+                  <div class="card-header">
+    
+                    <form>
+                      <div class="input-group input-group-flush input-group-merge input-group-reverse">
+    
+                        <input class="form-control list-search" type="search" placeholder="Search">
+    
+                        <div class="input-group-text">
+                          <span class="fe fe-search"></span>
+                        </div>
+    
+                      </div>
+                    </form>
+    
+                  </div>
+
+                  <div class="card-body">
+                  -->
+    
+                    <!-- List -->
+                    <ul class="list-group list-group-lg list-group-flush list my-n4" style="padding-top:1rem;border:0;">
+
+                      {{ render:bot_row "bot_list" }}
+                    </ul>
+    
+                  </div>
+                </div>
+
+
+
+            </div>
+          </div>
+        </div>
+
+      <!--
+      </div>
+    </div>
+  -->
+
+  <div id="ip_overlay" class="hidden">
+
+    <div class="card">
+      <button class="btn bs btn-dark" id="close_overlay"><i class="fe fe-x" title="close this window"></i></button>
+      <div class="card-body" id="ip_card_body">
+    <table id="ip_list" class="table table-sm table-hover card-table">
+      <thead>
+        <tr>
+            <th>IP Address</th>
+            <th>Geo Location</th>
+            <th>Domain</th>
+            <th>Categories</th>
+            <th>Action</th>
+        </tr>
+      </thead>
+      <tbody id="ip_body" class="list fs-base">
+      </tbody>
+    </table>
+      </div>
+    </div>
+
+  </div>
+
+
+  <script type="text/template" id="ip_display">
+    <tr>
+        <td><%- ip %></td>
+        <td><%- city %>, <%- country %></td>
+        <td><%- domain %></td>
+        <td><%= category %></td>
+        <td>
+          <button data-ip="<%- ip %>" data-bot="<%- id %>" onclick="handle_ip(this)" data-action="ignore_ip" title="ignore this ip" class="btn bs btn-danger"><i class="fe fe-slash"></i></button>
+          <button data-ip="<%- ip %>" data-bot="<%- id %>" onclick="handle_ip(this)" data-action="lock_ip" title="block this ip" class="btn bs btn-warning"><i class="fe fe-lock"></i></button>
+          <button data-ip="<%- ip %>" data-bot="<%- id %>" onclick="handle_ip(this)" data-action="unlock_ip" title="allow this ip" class="btn  bs btn-success"><i class="fe fe-unlock"></i></button>
+      </td>
+    </tr>
+  </script>
+
+    
+  <script type="text/javascript">
+      window.BITFIRE_NONCE = '{{api_code}}';
+      window.LLANG = "EN";
+      window.BOT_DATA = {{js_encoded_data}};
+      // update_times2 ;
+
+      function soption(config, value, text) {
+        GBI("drop_"+config).innerText = text;
+        return update_value(config, value);
+      }
+
+      function update_value(config, value) {
+        let spinner = GBI(config+"_spin");
+        if (spinner) { spinner.classList.remove("hidden"); }
+
+        console.log("update value: ", config);
+        BitFire_api("toggle_config_value", {"param":config,"value":value})
+          .then(r => r.json())
+          .then(data => {
+            console.log("saved", config, data); 
+            window.setTimeout(function(){ 
+              let spinner = GBI(config+"_spin");
+              if (spinner) { spinner.classList.add("hidden"); }
+            }, 100);
+          });
+      }
+
+      // close the IP overlay when closed
+      GBI("close_overlay").addEventListener("click", function() {
+        console.log("ip overlay");
+        GBI("ip_overlay").classList.add("hidden");
+      });
+
+
+      window.ip_renderer = _.template(GBI('ip_display').innerHTML);
+
+
+
+      function toggle_bot(e1, e2) {
+        console.log(e1, e2);
+      }
+
+      function swap_img(event, url) {
+        console.log("swap", event);
+        let alt_url = event.target.getAttribute("data-alt-img");
+        if (alt_url) {
+          event.target.removeAttribute("data-alt-img");
+          console.log(alt_url);
+          event.target.src=alt_url;
+        } else {
+          event.target.src="https://bitfire.co/assets/robot.svg"
+        }
+      }
+
+      function show_known() {
+        const urlSearchParams = new URLSearchParams(window.location.search);
+        const params = Object.fromEntries(urlSearchParams.entries());
+        let foo = String(window.location);
+        let basic_url = foo.replace(/\&?known=\w+/ig, "");
+        console.log(basic_url);
+        console.log(params);
+        if (params.known == "known") {
+          window.location = basic_url + "&known=unknown";
+        } else {
+          window.location = basic_url + "&known=known";
+        }
+      }
+
+      function purge() {
+        let ans = confirm("Remove old and insignificant bots from the list ?");
+        if (ans) { api("purge", "purge")(); }
+      }
+
+      function api(id, action) {
+        return function() {
+          BitFire_api_call("bot_action", {"bot":id, "action":action}, function() {
+            console.log("complete", id,action);
+            window.location.reload();
+          });
+          return false;
+        }
+      }
+
+
+      let mv_elms = document.getElementsByClassName("mvip");
+      for(let i=0; i< mv_elms.length; i++) {
+        let id = mv_elms[i].getAttribute("data-id");
+        mv_elms[i].addEventListener("click",api(id, "{{-unknown}}"));//BitFire_api("bot_action", {"bot": id, "action":"rm"}));
+      }
+      let junk_elms = document.getElementsByClassName("junkip");
+      for(let i=0; i< junk_elms.length; i++) {
+        let id = junk_elms[i].getAttribute("data-id");
+        junk_elms[i].addEventListener("click",api(id, "junk"));//BitFire_api("bot_action", {"bot": id, "action":"rm"}));
+      }
+
+      let rm_elms = document.getElementsByClassName("rmip");
+      for(let i=0; i< rm_elms.length; i++) {
+        let id = rm_elms[i].getAttribute("data-id");
+        rm_elms[i].addEventListener("click",api(id, "rm"));//BitFire_api("bot_action", {"bot": id, "action":"rm"}));
+      }
+      let no_elms = document.getElementsByClassName("noip");
+      for(let i=0; i< no_elms.length; i++) {
+        let id = no_elms[i].getAttribute("data-id");
+        no_elms[i].addEventListener("click",api(id, "no"));//BitFire_api("bot_action", {"bot": id, "action":"no"}));
+      }
+      let any_elms = document.getElementsByClassName("anyip");
+      for(let i=0; i< any_elms.length; i++) {
+        let id = any_elms[i].getAttribute("data-id");
+        any_elms[i].addEventListener("click",api(id, "any"));//BitFire_api("bot_action", {"bot": id, "action":"any"}));
+      }
+      let auth_elms = document.getElementsByClassName("authip");
+      for(let i=0; i< auth_elms.length; i++) {
+        let id = auth_elms[i].getAttribute("data-id");
+        if ({{is_free}}) {
+          auth_elms[i].addEventListener("click", function() {
+            window.open("https://bitfire.co/pricing", '_blank');
+          });
+        } else {
+          auth_elms[i].addEventListener("click",api(id, "auth"));
+        }
+      }
+      let rest_elms = document.getElementsByClassName("restip");
+      for(let i=0; i< rest_elms.length; i++) {
+        let id = rest_elms[i].getAttribute("data-id");
+        if ({{is_free}}) {
+          rest_elms[i].addEventListener("click", function() {
+            window.open("https://bitfire.co/pricing", '_blank');
+          });
+        } else {
+          rest_elms[i].addEventListener("click",api(id, "rest"));
+        }
+      }
+
+
+      let avatar_elms = document.getElementsByClassName("avatar-img");
+      for(let i=0; i< avatar_elms.length; i++) {
+        avatar_elms[i].addEventListener("error", swap_img);
+        /*
+        avatar_elms[i].setTimeout(swap_img /*function(e) {
+          console.log(e);
+        }, 1000)
+        */
+      }
+
+      bf_each_class_event("ipl", "click", function(event) {
+        let target = event.target;
+        for (let i=0; i<5; i++) {
+          if (target.classList.contains("ipl")) { break; }
+          target = target.parentElement;
+        }
+        let bot_id = target.getAttribute("data-id");
+        load_bot_ip_data(bot_id);
+      });
+
+
+      function load_bot_ip_data(bot_id) {
+        GBI("ip_overlay").classList.remove("hidden"); 
+        let ip_elm = GBI("ip_body");
+        ip_elm.innerHTML = "Please wait for DNS...";
+
+        BitFire_api_call("get_ip_info", {"bot_id":bot_id}, function(response) {
+          console.log("complete", response);
+          let ip_elm = GBI("ip_body");
+          ip_elm.innerHTML = "";
+          for (let i=0; i<response.data.length; i++) {
+            let info = response.data[i];
+            let ip_row = document.createElement("tr");
+            ip_row.innerHTML = ip_renderer(info);
+            ip_elm.appendChild(ip_row);
+          }
+
+        });
+
+      }
+
+      bf_each_class_event("fe-clipboard", "click", function(event) {
+          let parent = event.target.parentElement;
+          console.log(parent);
+          navigator.clipboard.writeText(parent.innerText);
+          console.log("copied", parent.innerText);
+
+        /*
+        //var copyText = document.getElementById("pwd_spn");
+        var textArea = document.createElement("textarea");
+        textArea.value = parent.innerText;
+        document.body.appendChild(textArea);
+        textArea.select();
+        document.execCommand("copy");
+        textArea.remove();
+        console.log(e, parent);
+
+        parent.select();
+        parent.setSelectionRange(0, 99999); // mobile
+        */
+      });
+
+      function handle_ip(target) {
+        console.log(target);
+        let action = target.getAttribute('data-action');
+        let ip = target.getAttribute('data-ip');
+        let bot_id = target.getAttribute('data-bot');
+
+        BitFire_api_call("bot_action", {"action":action, "bot": bot_id, "ip": ip}, function(response) {
+          load_bot_ip_data(response.data.id);
+          //alert(response.note);
+        });
+      }
+      
+      function inject_parameter(parameter, value) {
+        // Create a URL object based on the current location
+        let currentUrl = new URL(window.location.href);
+        // Append the new parameter
+        currentUrl.searchParams.set(parameter, value);
+
+        // Replace the current URL with the new one and reload the page
+        window.location.href = currentUrl.toString();
+      }
+
+
+       // close the IP overlay when closed
+      GBI("purge").addEventListener("click", function() {
+        console.log("purge group");
+        inject_parameter("purge", "true");
+      });
+
+       
+
+      // remove the overlay when the escape key is pressed
+      document.addEventListener('keydown', function(event) {
+        if (event.key === 'Escape') {
+          GBI("ip_overlay").classList.add("hidden");
+        }
+      });
+
+//onerror="swap_img(this, {{-data.icon}})"
+  </script>
+
+  {{gtag}}

@@ -1,0 +1,113 @@
+<style>
+  {{custom_css}}
+</style>
+    
+<script type="text/javascript">
+
+    function rand_string(length = 32) {
+        let result           = '';
+        let characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+        for ( var i = 0; i < length; i++ ) {
+          result += characters.charAt(Math.floor(Math.random() * characters.length));
+        }
+        return result;
+    }
+            
+    const VERSION = {{version}};
+    const VERSION_STR = "{{sym_version}}";
+    
+    function set_config(id, value) {
+      console.log("set config", id, value);
+    }
+
+    function soption(config, value) {
+      GBI("drop_"+config).innerText = value;
+      return update_value(config, value);
+    }
+
+    function update_value(config, value) {
+      BitFire_api("toggle_config_value", {"param":config,"value":value})
+        .then(r => r.json())
+        .then(data => {
+          window.setTimeout(function() {
+            window.location.reload();
+          }, 500);
+        });
+    }
+
+
+   </script>
+
+    <script type="text/template" id="alert_template">
+      <div class="alert alert-warning alert-dismissible fade show">
+        {{text}}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+      </div>
+    </script>
+
+    <!-- NAVIGATION
+    ================================================== -->
+    
+
+    <div class="main-content">
+      
+      {{header}}
+          
+
+      <!-- CARDS -->
+      <div class="container-fluid">
+        <div class="row justify-content-center">
+
+          <div class="col-12 col-lg-10 col-xl-8" id="alert_block">
+          </div>
+
+          <div class="col-12 col-lg-10 col-xl-8">
+
+            <div class="card">
+              <div class="card-header">
+                <h3 class="card-header-title text-primary">
+                  Set BitFire Password
+                </h3>
+              </div>
+              <div class="card-body mb-4" style="padding:1rem !important">
+
+                <div class="form-group">
+                  <label class="form-label">
+                    Dashboard Password
+                  </label>
+                  <small class="form-text text-muted">Username is not required, only the password.  </small>
+
+                  <div id="browser_cookie_spin" class="spinner-border text-success spinner-border-sm left mt-1 mr-2 hidden" role="status">
+                    <span class="xvisually-hidden">Saving...</span>
+                  </div>
+                  <input type="text" class="form-control txtin" id="password" autocomplete="off" value="">
+
+                </div>
+
+                <span class="left text-danger"><i>Be sure to save this password some place safe!</i></span>
+                <button type="button" class="btn btn-primary right" id="save">Save <span class="fe fe-chevron-right"></span></button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    
+  <script type="text/javascript">
+
+        window.BITFIRE_NONCE = '{{api_code}}';
+
+  function save_changes() {
+    console.log("save changes");
+    update_value("password", GBI("password").value);
+  }
+
+  document.getElementById("password").value = rand_string(12);
+  document.getElementById("save").addEventListener("click", save_changes);
+
+  </script>
+
+    
+  {{gtag}}

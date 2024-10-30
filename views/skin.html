@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="BitFire PHP server Firewall" />
+    
+    <!-- Favicon -->
+    <link rel="shortcut icon" href="{{public}}/favicon.ico" type="image/x-icon"/>
+    
+    <!-- Libs CSS -->
+    <link rel="stylesheet" href="{{public}}/vs2015.css" />
+    <link rel="stylesheet" href="{{public}}/prism.css" />
+    <!--
+    <link rel="stylesheet" href="{{public}}/theme.min.css" />
+    -->
+    <link rel="stylesheet" href="{{public}}/theme.bundle.css" />
+    <link rel="stylesheet" href="{{public}}/feather.css" />
+    
+    <!-- Title -->
+    <title>BitFire Dashboard</title>
+    <style>body { font-size: 20px; } .main-content { margin: 2rem; } </style>
+
+    <script src="{{public}}/underscore.min.js"></script>
+    <script src="{{public}}/internal.js?ver=2.0"></script>
+
+  </head>
+  <body>
+
+    <!-- MAIN CONTENT -->
+    <div class="main-content">
+      <style>
+        /*ul.header-tabs li a::after { content: ' | '; color: #CCC; padding-left:1rem; text-decoration: none !important;}
+        */
+        ul.header-tabs li a { transition: transform .2s ease, color .1s ease; }
+        ul.header-tabs li a:hover { transform: translate(0, -4px); color: #222; }
+        .header-tabs .nav-link { padding: .5rem .75rem; }
+      </style>
+
+        <div class="row align-items-center">
+          <div class="col left">
+
+            <!-- Nav -->
+            <ul class="nav nav-tabs header-tabs">
+              <li class="nav-item">
+                <a href="{{self}}?BITFIRE_PAGE=DASHBOARD" class="nav-link grow" title="view blocked traffic">
+                  Dashboard
+                </a>
+              </li>
+              <li class="nav-item {{has_scanner}}">
+                <a href="{{self}}?BITFIRE_PAGE=MALWARESCAN" class="nav-link grow" title="scan your website for malware">
+                  Malware Scan
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="{{self}}?BITFIRE_PAGE=BOTLIST" class="nav-link grow" title="Allow or Block automated bots">
+                  Bot Control 
+                </a>
+              </li>
+ 
+              <li class="nav-item">
+                <a href="{{self}}?BITFIRE_PAGE=SETTINGS" class="nav-link grow" title="adjust firewall settings">
+                  Settings
+                </a>
+              </li>
+              <li class="nav-item {{has_scanner}}">
+                <a href="{{self}}?BITFIRE_PAGE=DATABASE" class="nav-link grow" title="edit site blocking exceptions">
+                  Database Recovery
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="{{self}}?BITFIRE_PAGE=EXCEPTIONS" class="nav-link grow" title="edit site blocking exceptions">
+                  Exceptions
+                </a>
+              </li>
+
+              <li class="nav-item {{hidefree_class}}">
+                <a href="{{self}}?BITFIRE_PAGE=ADVANCED" class="nav-link grow" title="enable PRO features">
+                  RASP
+                </a>
+              </li>
+
+            </ul>
+          </div>
+        </div>
+
+
+      {{maincontent}}
+    </div>
+    
+    <!-- Vendor JS -->
+    <!--
+    <script src="{{public}}/vendor.bundle.min.js"></script>
+    -->
+    <script src="{{public}}/jquery-3.6.1.min.js"></script>
+    <script src="{{public}}/chart.min.js"></script>
+    <script src="{{public}}/difflib.js"></script>
+    <script src="{{public}}/pako.js"></script>
+    <script src="{{public}}/prism.js"></script>
+    
+    <script src="{{public}}/vendor.bundle.js"></script>
+    <script src="{{public}}/theme.bundle.js"></script>
+    <script src="{{public}}/dashkit.min.js"></script>
+
+
+  </body>
+</html>

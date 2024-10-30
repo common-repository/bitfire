@@ -1,0 +1,1280 @@
+<style>
+{{custom_css}}
+</style>
+<style>
+	.mr5 { margin-right: 4rem; }
+	.pt1 { padding-top: .5rem; }
+	.flex1 { 
+		display: flex;
+		flex-flow: row wrap;
+		justify-content: space-between;
+		align-items: center;
+		align-content: stretch; 
+		gap:1rem;
+	}
+	.flex2 {
+		flex: 1 0 content;
+		text-align: center;
+	}
+	.flexb {
+		flex-basis: 100%;
+		height: 2rem;
+	}
+	.flexl { width: 15rem; }
+	.flexi { width: 5rem; }
+	.file-name {
+		width: 40rem; text-overflow: ellipsis;
+		white-space: nowrap;
+		direction: rtl;
+		overflow: hidden;
+		text-align: end;
+		display: inline-block;
+	}
+
+
+	#footer-thankyou, #footer-upgrade { display: none; }
+	.evil {
+		background-color: rgba(255, 128, 128, 0.3) !important;
+		color: #111 !important;
+	}
+	.header-body {
+		padding: 24px 0;
+	}
+	.add {
+		background-color: rgba(0, 240, 0, 0.2);
+	}
+
+	/* diff line added */
+	.remove {
+		background-color: rgba(240, 0, 0, 0.2);
+	}
+	pre { padding: 0 !important; margin: 0 !important; }
+
+	/* diff line numbers */
+	.line_nums {
+		width: 50px;
+		float: left;
+		background-color: #ddd;
+		padding: 1 0 0 0;
+		font-size: 15px;
+		line-height: 22.5px;
+		margin-top:.5rem;
+	}
+
+	.alert-teal {
+		background-color: #02a8b5;
+	}
+
+.alert-secondary {
+  padding: 0.35em 0.65em 0.35em 0.55em;
+  top: 20px
+}
+
+.arrow {
+  transform: rotateY( 45deg );
+  top: 74px;
+  left: 50%;
+}
+.arrow:after {
+  background-color: rgba(0,0,0,0.8) !important;
+}
+
+/*
+.secondary { filter: invert(52%) sepia(31%) saturate(365%) hue-rotate(176deg) brightness(92%) contrast(92%); }
+.success { filter: invert(65%) sepia(41%) saturate(4358%) hue-rotate(112deg) brightness(101%) contrast(101%); }
+.warning { filter: invert(91%) sepia(98%) saturate(899%) hue-rotate(321deg) brightness(100%) contrast(93%); }
+*/
+
+#status_line {
+	display: flex;
+	flex-direction: row;
+	justify-content: flex-start;
+}
+#status_line > span {
+	flex-grow: 1;
+}
+.cover.malware { background-image: url('{{public}}img/malware.jpg'); }
+.cover { 
+  width: 100%;
+  height: 100px; 
+  border-top-left-radius: 0.5rem;
+  border-top-right-radius: 0.5rem;
+  background-size: 100%;
+  background-repeat: no-repeat;
+  background-position: center;
+  opacity: 0.9;
+  position: absolute;
+  top:0;
+  left:0;
+  right:0;
+  overflow: hidden;
+}
+
+#files_ul li { border-bottom: 1px solid #CCC; margin-bottom: 2px; }
+
+</style>
+
+<script type="text/javascript">
+	/* page data */
+	const page_tz = {{date_z}};
+	const VERSION = {{version}};
+	window.isf = {{is_free}};
+	const VERSION_STR = "{{version_str}}";
+	const LLANG = "{{llang}}";
+</script>
+
+
+<!-- MAIN CONTENT
+================================================== -->
+<div class="cover-over hidden" id="cover-over"> </div>
+
+<div class="main-content">
+
+	{{header}}
+
+	<div class="flex-fluid">
+		
+
+		<div class="card card-fill zup tooltipA sp1 hidden" id="malware_tooltip">
+            <a id="block_by_country_tip" style="scroll-margin-top:300px;"></a>
+            <div class="tooltip-text">
+                <span id="malware_message">
+					<p class="tdc">The Malware Scan tab verifies the integrity of all program files in use on your web server faster than any other scanner available.</p> <p>Click "Scan All Files" to start a new scan.</p>
+                </span>
+                <div class="right">
+					<button class="alert-secondary alert nxt" id="malware_next"><span class="tdc">Next</span>
+						<span class="fe fe-skip-forward" class="mt-4"></span>
+					</button>
+                </div>
+            </div>
+        </div>
+
+
+
+
+
+		<div class="row">
+			<div class="col-12">
+
+
+			<h2><small><a class="text-info" target="_blank" href="https://bitfire.co/support-malware-scanning">Malware Scanner Documentation <i class="fe fe-external-link"></i></a></small></h2>
+			<div class="card">
+			<div class="cover malware"></div>
+			<div class="card-body" style="margin-top:1.5rem;">
+				<div class="avatar avatar-xl card-avatar card-avatar-top" style="margin-top:1rem;">
+				<img id="" src="{{public}}img/virus.png" style="background-color:#FFF;" class="avatar-img rounded-circle border-card">
+				</div>
+				<h2 style="margin-top:-1rem;" class="card-title">
+				<strong>
+					<span class="tdc alt1">
+					BitFire Malware Scanner
+					</span>
+				</strong>
+				<small class="text-muted"><i>(click Scan Files Now to begin)</i>
+				</small>
+				</h2>
+
+				<div class="flex1 mb-4">
+				<div class="flex2">
+					<label class="mr5">Quick Scan</label>
+					<div class="form-check d-inline-block me-n3 pt1">
+						<input class="form-check-input cup" type="checkbox" id="quick_scan" checked="checked">
+					</div>
+				</div>
+
+				<div class="flex2">
+					<label class="mr5">Standard Scan</label>
+					<div class="form-check d-inline-block me-n3 pt1">
+						<input class="form-check-input cup" type="checkbox" id="standard_scan">
+					</div>
+				</div>
+
+				<!--
+				<div class="flex2">
+					<label class="mr5">PRO Scan</label>
+					<div class="form-check d-inline-block me-n3 pt1">
+						<input class="form-check-input" type="checkbox" id="pro_scan">
+					</div>
+				</div>
+				-->
+
+
+				<div class="flexb"><hr></div>
+
+
+				</div>
+
+
+				<div id="advanced_container" class="flex1 mb-4 collapse">
+
+				<div class="flex2">
+					<label class="mr5">Unknown Files In Core</label>
+					<div class="form-check d-inline-block me-n3 pt1">
+						<input class="form-check-input cup" type="checkbox" id="unknown_core" {{%hscan_config.unknown_core}}>
+					</div>
+				</div>
+
+				<div class="flex2">
+					<label class="mr5">Unknown Plugin Files</label>
+					<div class="form-check d-inline-block me-n3 pt1">
+						<input class="form-check-input cup" type="checkbox" id="unknown_plugin" {{%hscan_config.unknown_plugin}}>
+					</div>
+				</div>
+
+				<div class="flex2">
+					<label class="mr5">Include non php files</label>
+					<div class="form-check d-inline-block me-n3 pt1">
+						<input class="form-check-input cup" type="checkbox" id="non_php" {{%hscan_config.non_php}}>
+					</div>
+				</div>
+
+				<!--
+				<div class="flex2">
+					<label class="mr5">Dangerous WordPress Functions</label>
+					<div class="form-check d-inline-block me-n3 pt1">
+						<input class="form-check-input cup" type="checkbox" id="wp_func" {{%hscan_config.wp_func}}>
+					</div>
+				</div>
+				-->
+
+
+				<div class="flexb"><hr></div>
+
+				<div class="collapse">
+				<div class="flex2" style="width:50%">
+					<small style="display:block;width:25rem;height:2rem;" class="text-muted">Lines longer than this limit identified as malware. Nominal values are 128-256.</small>
+					<label class="mr5 flexl">Line Length Limit:</label>
+					<div class="form-check d-inline-block me-n3 pt1">
+						<input class="form-number-input flexi cup" type="number" {{free_disable}} id="line_limit" value="{{scan_config.line_limit}}">
+					</div>
+				</div>
+
+				<div class="flex2" style="width:50%">
+					<small style="display:block;width:25rem;height:2rem;" class="text-muted">Frequency calculates how similar code is to standard PHP files. Nominal values are 1-20.</small>
+					<label class="mr5 flexl">Frequency Limit:</label>
+					<div class="form-check d-inline-block me-n3 pt1">
+						<input class="form-number-input flexi cup" type="number" {{free_disable}} id="freq_limit" value="{{scan_config.freq_limit}}">
+					</div>
+				</div>
+
+				<div class="flexb"><hr></div>
+
+				<div class="flex2" style="width:50%">
+					<small style="display:block;width:25rem;height:2rem;" class="text-muted">Malware uses random variable names. Min percentage of unknown variable names flag malware. Nominal 25-45</small>
+					<label class="mr5 flexl">Percent Unknown Variable Names:</label>
+					<div class="form-check d-inline-block me-n3 pt1">
+						<input class="form-number-input flexi cup" min="1" max="100" type="number" {{free_disable}} id="random_name_per" value="{{scan_config.random_name_per}}">
+					</div>
+				</div>
+
+				<div class="flex2" style="width:50%">
+					<small style="display:block;width:25rem;height:2rem;" class="text-muted">Advanced users can use their own regular expressions to detect malware. be sure to include leading and trailing &quot;/&quot;</small>
+					<label class="mr5 flexl">Custom Regular Expression:</label>
+					<div class="form-check d-inline-block me-n3 pt1">
+						<input class="form-input cup" type="text" {{free_disable}} id="extra_regex" value="{{scan_config.extra_regex}}">
+					</div>
+				</div>
+
+
+				<div class="flexb"><hr></div>
+
+				<small class="text-muted">Malware often hides in dynamic function calls. 
+					Dynamic function calls are legitimate programming techniques that are impossible for malware static analysis to find.
+					BitFire flags unknown files with dynamic function calls only when found with random variable names, encryption or 
+					other obfuscation techniques present. Configure the thresholds for identification here.
+				</small>
+
+				<div class="flex2" style="width:50%">
+					<small style="display:block;width:25rem;height:2rem;" class="text-muted"></small>
+					<label class="mr5 flexl">Percent Unknown Variable Names:</label>
+					<div class="form-check d-inline-block me-n3 pt1">
+						<input class="form-number-input flexi cup" min="1" max="100" type="number" {{free_disable}} id="fn_random_name_per" value="{{scan_config.fn_random_name_per}}">
+					</div>
+				</div>
+
+				<div class="flex2" style="width:50%">
+					<small style="display:block;width:25rem;height:2rem;" class="text-muted"></small>
+					<label class="mr5 flexl">Line Limit:</label>
+					<div class="form-check d-inline-block me-n3 pt1">
+						<input class="form-number-input flexi cup" min="1" max="100" type="number" {{free_disable}} id="fn_line_limit" value="{{scan_config.fn_line_limit}}">
+					</div>
+				</div>
+
+				<div class="flex2" style="width:50%">
+					<small style="display:block;width:25rem;height:2rem;" class="text-muted"></small>
+					<label class="mr5 flexl">Character Frequency Limit:</label>
+					<div class="form-check d-inline-block me-n3 pt1">
+						<input class="form-number-input flexi cup" min="1" max="100" type="number" {{free_disable}} id="fn_freq_limit" value="{{scan_config.fn_freq_limit}}">
+					</div>
+				</div>
+				</div>
+
+
+				</div>
+				<p class="text-secondary">
+					Details on malware cleaning: <a href="https://youtu.be/mlxp6H0wZrc">Malware Cleaning How-To Video</a>
+				</p>
+
+				<p class="text-secondary">BitFire Malware scanner will identify <i>Potential</i> Malware. It compares your files against the official WordPress
+					core, plugin and theme files, then checks any unknown files and differences against machine learning metrics for malware.
+				</p>
+				<p class="text-secondary">
+					Malware is typically easy to spot in the diff. If you have no reason to believe you have any malware on your site, be sure
+					to run a scan, review and allow any mis-identified files here.
+				</p>
+
+				<button class="mt-2 mb-2 ml-2 btn btn-primary d-md-inline-block" id="scan_button" title="Click to begin scanning for malware">
+					<span class="tdc"> Scan Files Now</span><span class='fe fe-chevron-right'></span>
+				</button>
+
+				<button class="mt-2 mb-2 ml-2 btn btn-outline-secondary d-md-inline-block" id="advanced_toggle" title="View advanced scan options">
+					<span class="tdc"> Advanced Options </span><span id="advanced_icon" class='fe fe-chevron-down'></span>
+				</button>
+			</div>
+			</div>
+
+			<div class="card">
+			<div class="card-body">
+				<h4 class="card-header-title mt-4 mb-4" id="status_line">
+					WordPress version {{wp_ver}} :
+					<span id="count_files" class="text-muted" data-mod="0" data-total="{{total_files}}"
+						data-count="0">(0)
+						Scanned Files </span>
+					<span id="mal_files" class="text-muted ml4" data-num="0">(.) Possible Malware Files </span>
+					<div id="files_spin" class="spinner-border text-secondary spinner-border-sm mt-1 ml-4 hidden mb-2" role="status">
+					</div>
+					<span id="status_amt" class="ml-4 text-secondary"></span> <span class="text-muted tdc"> scanned </span><span id="status_time"></span>
+				</h4>
+
+				<div class="" attr="hidden" id="results">
+
+					<span id="status-wrapper">
+					<div class="alert alert-teal" style="margin-bottom: 2rem;" role="alert" id="status_alert"><span id="status">WordPress integrity check: </span></div>
+					</span>
+
+					<!-- List -->
+					<ul class="list-group list-group-lg list-group-flush list my-n4" id="files_ul">
+					</ul>
+
+				</div>
+			</div>
+			</div>
+		</div> <!-- / .row -->
+	</div>
+</div><!-- / .main-content -->
+
+
+
+<!-- file changed template -->
+<script type="text/template" id="hash_template">
+	<div class="row align-items-center" id="info<%=unique%>">
+		<div class="row">
+			<h4 class="mb-1 name">
+				<a href="#!" class="file-name"><%-path%></a>
+				<small class="text-muted" style="padding-left:2rem;"><span class="tdc pl-4">Character Frequency:</span> <%=frequency%></small>
+				<small class="text-muted" style="padding-left:2rem;"><span class="tdc pl-4">Not Found:</span> <%=per_unknown%>%</small>
+				<small class="text-muted" style="padding-left:2rem;"><span class="tdc pl-4">Max Line:</span> <%=max_length%> chars</small>
+			</h4>
+		</div>
+		<div class="col-auto">
+			<img id="icon<%=unique%>" src="{{assets}}<%=img%>" width="32" height="32" />
+		</div>
+		<div class="col ms-n2">
+
+			<p class="card-text small text-muted mb-1">
+				<span style="margin-right:50px;">
+					<span class='badge <%=bgclass%>'>
+						<i class="fe fe-x"></i>
+						<%=known_text%>
+					</span> 
+				</span>
+				<span class="text-info"><%-note%></span>
+			</p>
+
+			<p class="card-text small text-muted">
+				Modified on: 
+				<time class="text-primary" data-offset="<%=page_tz%>" data-mtime="<%=ctime%>">
+				</time>
+				<small class="text-muted"> local time </small>
+			</p>
+			
+		</div>
+		<div class="col-auto" id="action_list<%=unique%>">
+
+				<% if (window.isf) { %>
+				<button style="font-size:.75rem;" id="repair<%=unique%>" onclick="alert('Upgrade to PRO to access 10,000,000 WordPress file data-points and auto repair this file.');"
+				class="lift btn btn-outline-success d-md-inline-block {{showfree_class}}" title="replace this file with the master copy from wordpress.org">
+				<% } else { %>
+				<button style="font-size:.75rem;" id="repair<%=unique%>" onclick="repair_file('<%=path%>', '<%=unique%>', <%=known%>);"
+				class="lift btn btn-outline-success  d-md-inline-block" title="replace this file with the master copy from wordpress.org">
+				<% } %>
+					<img src="{{assets}}check-square.svg" class="success"> <span class="text-secondary">Repair</span>
+				</button>
+
+				<% if (window.isf) { %>
+				<button style="font-size:.75rem;" id="repair<%=unique%>" onclick="alert('Upgrade to PRO to access 10,000,000 WordPress file data-points and auto repair this file.');"
+				class="lift btn btn-outline-danger d-md-inline-block {{showfree_class}}" title="replace this file with the master copy from wordpress.org">
+				<% } else { %>
+				<button style="font-size:.75rem;" id="repair<%=unique%>" onclick="del('<%=path%>', '<%=unique%>', <%=known%>);"
+				class="lift btn btn-outline-danger  d-md-inline-block" title="Delete this file from the website">
+				<% } %>
+					<img src="{{assets}}check-square.svg" class="success"> <span class="text-secondary">Delete</span>
+				</button>
+
+
+				<button style="font-size:.75rem;" onclick="BitFire_api_call('allow', {'path':'<%=path%>', 'unique': '<%=unique%>'}, allowed);"
+				class="lift btn btn-white  d-md-inline-block" title="Mark this exact file as fine and remove this version from future scans">
+					<img src="{{assets}}check-square.svg" class="warning"> Allow
+				</button>
+
+				<a style="font-size:.75rem;" href="<%=self_url%>?filename=<%=path%>&BITFIRE_API=download&BITFIRE_NONCE={{api_code}}"
+				class="lift btn btn-white d-md-inline-block" target="_blank" title="download this file">
+					<img src="{{assets}}download.svg" class="secondary"> Download
+				</a>
+				
+				<button style="font-size:.75rem;" role="button" title="show diff for this file" 
+				onclick="show_diff2('<%=unique%>')" class="lift btn btn-white d-md-inline-block">
+					<img src="{{assets}}copy.svg" class="secondary"> Diff
+				</button>
+
+				<!--
+				<a href="#diff<%=unique%>" style="font-size:.75rem;" role="button" title="delete this file"
+				onclick="del('<%=path%>', '<%=unique%>', <%=known%>)" class="btn btn-white d-md-inline-block">
+					<img src="{{assets}}trash.svg" class="secondary"> Delete
+				</a>
+				-->
+
+		</div>
+	</div>
+	<div class="row diffrow collapse" id="diff_cont<%=unique%>" style="padding:0">
+		<pre id="line_data<%=unique%>" class="mb-0 line_nums"></pre>
+		<!-- HERE WE NEED TO INJECT malware[1] - highlight malware[3]-->
+		<div id="diff_data<%=unique%>" style="width:93%;font-size:12px;overflow-wrap:anywhere;float:left;" class="mb-0 language-php"><%=markup%></div>
+		<svg style="float:right;cursor:pointer;" title="collapse this diff view" onclick="show_diff2('<%=unique%>')" class=""
+		width="24" height="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" title="collapse code diff view">
+		<g fill="none" fill-rule="evenodd"><path d="M0 0h24v24H0z"/><rect fill="#335EEA" opacity=".3" x="11" y="7" width="2" height="14" rx="1"/><path d="M6.707 14.707a1 1 0 11-1.414-1.414l6-6a1 1 0 011.383-.03l6 5.5a1 1 0 11-1.352 1.474L12.03 9.384l-5.323 5.323z" fill="#335EEA"/><rect fill="#335EEA" opacity=".3" x="3" y="3" width="18" height="2" rx="1"/></g>
+		</svg>
+	</div>
+</script>
+
+
+<script type="text/template" id="good_template">
+	<div class="row align-items-center bg-success-soft" style="padding:0.5rem;border-left:4px solid #00d97e;" >
+		<div class="col-auto">
+			<span class="dashicons dashicons-plugins-checked"></span>
+		</div>
+		<div class="col ms-n2">
+
+			<h4 class="mb-1 name">
+				<%=table%>: <a href="#!"><%=name%></a>
+			</h4>
+
+			<p class="card-text small text-muted mb-1">
+				<span style="margin-right:50px;">
+					<span class='badge bg-success'>
+						Malware Scan Clean
+					</span> Number Scanned Files:
+				</span>
+				<span class="text-primary"><%=num_files%></span> 
+			</p>
+
+		</div>
+	</div>
+</script>
+
+
+
+
+<script type="text/javascript">
+    window.BITFIRE_NONCE = '{{api_code}}';
+
+	/** called after repair pro api call */
+	function repaired(response) {
+		console.log("repaired", response);
+		if (response.success) {
+			let e = document.getElementById("action_list" + response.id);
+			e.innerHTML = "<h3 class='text-primary btn'>File Repaired</h3>"
+			e = document.getElementById("diff_cont" + response.id).classList.add("collapse");
+			document.getElementById("icon" + response.id).src = "https://bitfire.co/assets/php-file.png";
+		} else {
+			alert("unable to repair file: " + response.error);
+		}
+	};
+
+	function allowed(response) {
+		console.log("allowed", response);
+		if (response.success) {
+			let e = document.getElementById("action_list" + response.data.unique);
+			e.innerHTML = "<h3 class='text-primary btn'>File Allowed</h3>";
+			e = document.getElementById("diff_cont" + response.data.unique).classList.add("collapse");
+			document.getElementById("icon" + response.data.unique).src = "https://bitfire.co/assets/php-file.png";
+		} else {
+			alert("unable to allow file: " + response.note);
+		}
+	};
+
+
+
+	// Example POST method implementation:
+	async function postData(url = '', data = {}, fn = null) {
+		// Default options are marked with *
+		fetch(url, {
+			method: 'POST',
+			mode: 'cors',
+			cache: 'no-cache',
+			credentials: 'same-origin',
+			headers: { 'Content-Type': 'application/json' },
+			redirect: 'follow',
+			referrerPolicy: 'same-origin',
+			body: JSON.stringify(data)
+		})
+			.then(r => { return r.json() })
+			.then(result => {
+				if (fn != null) { fn(result, data); }
+			});
+	}
+
+
+	function render_malware(c) {
+		let result = "";
+		result += "<pre><code class='language-php'>" + htmlEscape(c.pre_text) + "</code></pre>";
+		result += "<pre class='evil'><code class='language-php'>🦠 6" + htmlEscape(c.content) + "</code></pre>";
+		result += "<pre><code class='language-php'>" + htmlEscape(c.post_text) + "</code></pre><br><hr><br>";
+		return result;
+	}
+
+
+	// render the list of files generated on the page
+	var diffed = {};
+	var surl = '{{self}}';
+	var num_files = 0;
+	var G_CHANGED = { "offset": 0, "total": 0, "malware": 0, "total_files": 0, "file_names": new Set() };
+
+	var hash_content = GBI("hash_template");
+	var hash_renderer = _.template(hash_content.innerText);
+	var good_content = GBI("good_template");
+	var good_renderer = _.template(good_content.innerText);
+	//console.log("list: ", file_list);
+
+	function toggle_advanced() {
+		GBI("advanced_container").classList.toggle("collapse");
+		let btn = GBI("advanced_icon");
+		if (btn.classList.contains("fe-chevron-down")) {
+			btn.classList.remove("fe-chevron-down");
+			btn.classList.add("fe-chevron-up");
+		} else {
+			btn.classList.remove("fe-chevron-up");
+			btn.classList.add("fe-chevron-down");
+		}
+	}
+
+	function enable_quick_scan() {
+		GBI("standard_scan").checked = false;
+		GBI("unknown_core").checked = false;
+		GBI("unknown_plugin").checked = false;
+		//GBI("access_time").checked = true;
+		GBI("non_php").checked = false;
+
+		GBI("freq_limit").value = 768;
+		GBI("line_limit").value = 12000;
+		GBI("random_name_per").value = 75;
+
+		GBI("fn_freq_limit").value = 512;
+		GBI("fn_line_limit").value = 2048;
+		GBI("fn_random_name_per").value = 60;
+	}
+	function enable_standard_scan() {
+		GBI("quick_scan").checked = false;
+		GBI("unknown_core").checked = true;
+		GBI("unknown_plugin").checked = false;
+		GBI("non_php").checked = true;
+		//GBI("access_time").checked = true;
+
+		GBI("freq_limit").value = 256;
+		GBI("line_limit").value = 8192;
+		GBI("random_name_per").value = 50;
+
+		GBI("fn_freq_limit").value = 128;
+		GBI("fn_line_limit").value = 2048;
+		GBI("fn_random_name_per").value = 40;
+
+	}
+	
+	function pro_scan() {
+		let r = prompt("What e-mail address should we contact you at to repair this WordPress install for you?", "{{email}}");
+		if (!r) {
+			GBI("pro_scan").checked = false;
+		} else {
+			alert("We will be contacting you shortly to recover your WordPress install");
+			fetch("https://bitfire.co/contact.php?server={{server}}&email="+r);
+		}
+	}
+
+	GBI("quick_scan").addEventListener("click", enable_quick_scan);
+	GBI("standard_scan").addEventListener("click", enable_standard_scan);
+	// GBI("pro_scan").addEventListener("click", pro_scan);
+
+	GBI("advanced_toggle").addEventListener("click", toggle_advanced);
+
+	// map the list of root files to a list of li elements
+	document.addEventListener("DOMContentLoaded", function() {
+		/*
+	var list_elms = _.map(file_list, function (x) {
+		if (x.malware.length < 1) { return null; }
+		console.log("malware", x);
+		x.self_url = surl;
+		console.log("init file", x.malware.length);
+		G_CHANGED.malware++;
+		x.markup = "";
+		for (let i = 0; i < x.malware.length; i++) {
+			x.markup += render_malware(x.malware[i]);
+		}
+		html = hash_renderer(x);
+		let li = document.createElement("li")
+		li.id = "file" + x.unique;
+		li.name = "an" + x.crc_trim;
+		li.classList.add("list-group-item");
+		li.innerHTML = html;
+		return li;
+	});
+	// append the elements to the ul.  TODO: clean up with more functional pattern
+	if (list_elms) {
+		console.log("list_elms", list_elms);
+		let frag = new DocumentFragment();
+		for (let i=0; i<list_elms.length; i++) {
+			let elm=list_elms[i];
+			if (elm != null) {
+				frag.appendChild(elm);
+			}
+		}
+		if (frag.childElementCount == 0 && file_list.length > 0) {
+			console.log("0 child elements");
+			let li = document.createElement("li")
+			li.innerHTML = good_renderer(file_list[0]);
+			console.log("rendered li", file_list, li);
+			frag.appendChild(li);
+		}
+		GBI("files_ul").appendChild(frag);
+	}
+	*/
+
+
+
+	});
+	var dir_idx = 0;
+
+	var hash_dir_handler = function (response) {
+
+
+		var request_more = false;
+		if (!response.success) {
+			//console.log("no success 1", response);
+			//console.log("no success 2", response.success);
+		} else {
+			let new_files = [];
+			if (response.data.data.length > 4) {
+				new_files = JSON.parse(atob(response.data.data));
+				console.log("hash handler", new_files);
+			}
+			//console.log("data", response.data);
+			G_CHANGED.offset += response.data.file_count;
+			if (response.data.complete == 0) {
+				request_more = true;
+			}
+
+			//console.log(new_files);
+			//return;
+
+			let checked_files = parseInt(response.data.file_count);
+			if (checked_files > 0) { G_CHANGED.total += checked_files; }
+			//G_CHANGED.malware += new_files.length;
+			
+			let content = GBI("hash_template");
+			let hash_renderer = _.template(content.innerText);
+			let frag = new DocumentFragment();
+
+			if (response.data.hit_count == 0) { 
+				type = "core";
+				if (response.data.dir.indexOf("/plugins/") > 1) { type = "plugin"; }
+				else if (response.data.dir.indexOf("/themes/") > 1) { type = "theme"; }
+				//alert("unknown "+ type + " file found: " + response. data.basename);
+			}
+			console.log("malware map: ", new_files.length);
+			if (new_files && new_files.length > 0) {
+
+				var list_elms = _.map(new_files, function (x) {
+					//if (x.malware.length < 1) { return ""; }
+					console.log("malware map", x);
+
+					x.self_url = surl;
+					if (x.known) {
+						x.bgclass = "bg-success-soft"
+						x.known_text = "WordPress File";
+						x.icon = ""
+					} else {
+						x.bgclass = "bg-danger-soft text-secondary"
+						x.known_text = "Unknown File";
+					}
+
+					x.markup = "";
+					let p = Prism.highlight(x.pre_text, Prism.languages.php).replaceAll("\n", "<br>");
+					let e = Prism.highlight(x.content, Prism.languages.php).replaceAll("\n", "<br>");
+					let r = Prism.highlight(x.post_text, Prism.languages.php).replaceAll("\n", "<br>");
+
+					x.markup += "<div><small class='text-secondary'>"+x.note+"</small></div><span>" + p + "</span><span class='evil'>🦠"+e+"</span><span>"+r+"</span><br><hr>\n";
+
+					//console.log("render 1", x);
+					if (!x) { console.log("NO X!"); }
+					if (x.note.includes("unknown") || !x.path.endsWith("php")) {
+						x.img = "file.svg";
+						x.bgclass = "bg-warning-soft text-secondary";
+					} else {
+						x.img = "malware.png";
+
+						G_CHANGED.file_names.add(x.path);
+						G_CHANGED.malware++;
+					}
+					let html = hash_renderer(x);
+					//console.log("RENDERED 2");
+					let li = document.createElement("li")
+					li.id = "file" + x.unique;
+					li.name = "an" + x.crc_trim;
+					li.classList.add("list-group-item");
+					li.innerHTML = html;
+					return li;
+
+				});
+
+				//console.log(list_elms);
+				//console.log(frag);
+				for (let i=0; i<list_elms.length; i++) {
+					let elm=list_elms[i];
+
+					//console.log(elm);
+					frag.appendChild(elm);
+				}
+			} else {
+				//console.log("dump hash dir good hashes");
+
+				/*
+				var good_content = GBI("good_template");
+				var good_renderer = _.template(good_content.innerText);
+				var good_plugin = {"table":"plugin", "name":response.data.basename, "num_files": response.data.file_count};
+
+				let li = document.createElement("li")
+				li.innerHTML = good_renderer(good_plugin);
+				frag.appendChild(li);
+				*/
+			}
+			//console.log(frag);
+
+			GBI("files_ul").appendChild(frag);
+			update_times();
+		}
+
+
+		/*
+		_.each(new_files, (elm) => {
+			// console.log("New item line ELM", elm);
+			//show_diff(elm.file_path, elm.url, elm.crc_trim);
+			let html = malware_to_html(elm.malware);
+			
+		*/
+
+		if (request_more) {
+			//console.log("request more", G_CHANGED);
+
+			BitFire_api_call("general_scan", 
+				{"offset": 0+G_CHANGED.offset},
+				hash_dir_handler);
+		}
+		// all done!
+		else {
+			GBI("files_spin").classList.add("hidden"); 
+			GBI("status_amt").innerText = "100 %";
+
+			if (G_CHANGED.malware == 0) {
+				GBI("status").innerHTML = "Wordpress integrity check: <strong>File Integrity 100%</strong>";
+				GBI("status_alert").classList.remove("alert-teal");
+				GBI("status_alert").classList.add("alert-success");
+			} else {
+				GBI("status-wrapper").innerHTML = 
+				'<a class="alert-warning" href="https://bitfire.co/purchase-malware-removal?domain={{server}}" target="_blank"><div class="alert alert-warning" style="margin-bottom: 2rem;" role="alert" id="status_alert"><span id="status">Request Malware Cleanup Ticket <span class="ml-4 fe fe-alert-triangle"></span></div></a>';
+				/*
+				GBI("status").innerHTML = "<a href='https://bitfire.co/purchase-malware-removal' target='_blank'><strong>Request Malware Cleanup Ticket <span class='fe fe-phone-call'><span></strong>";
+				GBI("status_alert").classList.remove("alert-teal");
+				GBI("status_alert").classList.add("alert-warning");
+				*/
+			}
+
+			//let un = parseInt(GBI("un_files").getAttribute("data-num"));
+			//GBI("count_files").innerText = G_CHANGED.total + " / " + G_CHANGED.total_files + " Scanned Files";
+			GBI("count_files").innerText = G_CHANGED.total + " Scanned Files";
+			GBI("mal_files").innerText = G_CHANGED.file_names.size + " Possible Malware Files";
+			BitFire_api_call("malware_files", {"total":G_CHANGED.total, "malware":G_CHANGED.malware});
+			window.clearInterval(window.SCAN_TIMER);
+			console.log("stats", G_CHANGED);
+		}
+	};
+
+	/**
+	 * convert a malware array to some usable HTML
+	 */
+	function malware_to_html(response) {
+		html = "";
+		if (response[1] <= 0.01) {
+			return "";
+		}
+		else {
+			console.log("mal_2_html: unknown file frequency: ", response[1]);
+			for (let i=0; i<response[0].length && i<10; i++) {
+				malware = response[0][i];
+				let malware_check = malware[3].substr(2, 24);
+				let malware_text = malware[3].substr(0, 80);
+				html += "// Local File Contains Possible Malware Code: <strong>" + malware_text+ "</strong><br>\n";
+				html2 = "";
+				//console.log("render", malware);
+				let lines = malware[1].split("\n");
+				for (let k=0; k<lines.length; k++) {
+					let line = lines[k];
+					let evil_line = line.indexOf(malware_check) >= 0;
+					let markup = Prism.highlight(line, Prism.languages.php, 'php') + "<br />\n";
+					html2 += (evil_line) ? "<div class='evil'>🦠 " + markup + "</div>" : markup;
+				}
+				is_evil = true;
+				html += "<div class='add'>" + html2 + "\n</div>\n";
+			}
+		}
+		return html;
+	}
+
+	/**
+	 * called when the "scan all files" button is clicked
+	 */
+	function begin_scanning() {
+		console.log("begin scanning");
+		let cup = document.getElementsByClassName("cup");
+
+		let value = "";
+		for (let i=0; i<cup.length; i++) {
+			let elm = cup.item(i);
+			if (elm.type == "checkbox") {
+				let v = 0;
+				if (elm.checked) {
+					v = 1;
+				}
+				value += elm.id + ":" + v + ",";
+			}
+			else {
+				value += elm.id + ":" + elm.value + ",";
+			}
+		}
+
+		// build json encoded config value
+		// make a new API endpoint
+		console.log("value", value);
+		BitFire_api("replace_array_value", {"param":"malware_config","value":value})
+			.then(r => r.json())
+			.then(data => {
+				if (data.success) {
+					do_scanning();
+				} else { alert("saving scan configuration failed.  Please check plugin file permissions or contact support: info@bitslip6.com"); }
+		});
+	}
+
+
+	function do_scanning() {
+
+		window.START_TIME = Math.floor(Date.now() / 1000);
+		window.SCAN_TIMER = window.setInterval(function() {
+			let t = Math.floor(Date.now() / 1000);
+			let diff = t - window.START_TIME;
+			GBI("status_time").innerText = " in " + diff + " seconds";
+			//console.log(G_CHANGED);
+
+			let len = G_CHANGED.file_names.size;
+			//for (key in G_CHANGED.file_names) { if (G_CHANGED.file_names.hasOwnProperty(key)) { len++; } }
+			//let len = Object.keys(G_CHANGED.file_names).length;
+			GBI("mal_files").innerText = len  + " Possible Malware Files";
+			GBI("count_files").innerText = G_CHANGED.total  + " Scanned Files";
+			let per = G_CHANGED.total / G_CHANGED.total_files;
+			//GBI("status_amt").innerText = " " + (per * 100).toPrecision(4) + "%";
+		}, 1000);
+		GBI("scan_button").setAttribute("disabled", "disabled");
+		GBI("files_spin").classList.remove("hidden"); 
+		GBI("results").classList.remove("hidden");
+		//console.log("dump hash dir ", dirs[dir_idx]);
+		//BitFire_api_call("dump_hash_dir", {"dir": dirs[dir_idx],"ver": dir_ver[dirs[dir_idx]]}, hash_dir_handler);
+		BitFire_api_call("general_scan", {"offset": 0}, hash_dir_handler);
+	}
+	GBI("scan_button").addEventListener("click", begin_scanning);
+
+	function update_diff(html, line_nums, id, is_evil) {
+		let e = document.getElementById("diff_data" + id);
+		let e2 = document.getElementById("line_data" + id);
+		num_files++;
+		e.innerHTML = html;
+		e2.innerHTML = line_nums.trim();
+
+		if (is_evil) {
+			document.getElementById("icon" + id).src = "https://bitfire.co/assets/malware.png";
+			/*
+			if (!do_toggle) {
+				console.log("DC1", id);
+				let e = document.getElementById("diff_cont" + id);
+				if (e) { e.classList.remove("collapse"); }
+				else { console.error("DC1 unable to load", "dis_cont" + id); }
+			}
+			*/
+			let e = document.getElementById("info" + id);
+			if (e) { e.classList.add("bg-danger-soft"); }
+			else { console.error("DC2 unable to load", "info" + id); }
+		}
+		else {
+			let cf = GBI("count_files");
+			if (cf) {
+				let mod = parseInt(cf.getAttribute("data-mod"));
+				mod++;
+				cf.setAttribute("data-mod", mod);
+			}
+		}
+	}
+
+
+	function show_diff2(id) {
+		document.getElementById("diff_cont" + id).classList.toggle("collapse");
+	}
+
+	function show_diff(path, url, id, do_toggle = false, malware = false) {
+
+		// console.log("show diff func", url, path, id);
+		if (do_toggle) { console.log("toggle"); document.getElementById("diff_cont" + id).classList.toggle("collapse"); }
+		if (diffed[id]) { console.log("diffed!"); return; }
+		diffed[id] = true;
+
+		
+
+		// todo: needs TLC
+		let ans = function (data) {
+			//if (!data.success) { console.error("ERROR DIFFING FILE", data); return; }
+			// console.log("diff ans", data);
+
+			let line_nums = "\n";
+			let html = "";
+			let has_diff = false;
+			let is_evil = false;
+			let e = document.getElementById("diff_data" + id);
+			let e2 = document.getElementById("line_data" + id);
+			// extract and decode the data...
+			if (data.data.compressed) {
+				var t1 = pako.inflateRaw(Uint8Array.from(atob(data.data.zlib_orig), c => c.charCodeAt(0)), {to:"string"});
+				var t2 = pako.inflateRaw(Uint8Array.from(atob(data.data.zlib_local), c => c.charCodeAt(0)), {to:"string"});
+				// console.log("inflated", t1.length, t2.length);
+			} else if (data.data.length > 0) {
+				var t1 = "";
+				if (data && data.data && data.data.orig) { t1 = atob(data.data.orig); }
+				var t1 = atob(data.data.orig);
+				var t2 = atob(data.data.local);
+				// console.log("static", t1.length, t2.length);
+			}
+			if (data.data.malware) {
+				// console.error("show_diff error follows:", id);
+				// console.log(data);
+				if (data.data.frequency <= -10.01) {
+					//console.log("SKIP!", data);
+				}
+				else {
+					for (let i=0; i<data.data.malware.length && i<10; i++) {
+						malware = data.data.malware[i];
+						let malware_check = malware[3].substr(2, 24);
+						let malware_text = malware[3].substr(0, 80);
+						html += "// Unknown Local File Contains Possible Malware Code: <strong>" + malware_text+ "</strong><br>\n";
+						html2 = "";
+						//console.log("render", malware);
+						let lines = malware[1].split("\n");
+						for (let k=0; k<lines.length; k++) {
+							let line = lines[k];
+							let evil_line = line.indexOf(malware_check) >= 0;
+							line_nums += "\n";
+							let markup = Prism.highlight(line, Prism.languages.php, 'php') + "<br />\n";
+							html2 += (evil_line) ? "<div class='evil'>🦠 " + markup + "</div>" : markup;
+						}
+						is_evil = true;
+						html += "<div class='add'>" + html2 + "\n</div>\n";
+					}
+					if (data.data.malware.length > 0) { has_diff = true; }
+				}
+			} else {
+
+			let l1 = difflib.stringAsLines(t1);
+			let l2 = difflib.stringAsLines(t2);
+			let sm = new difflib.SequenceMatcher(l1, l2);
+			let ops = sm.get_opcodes();
+			// console.log("diff ops", ops);
+			for (i = 0; i < ops.length; i++) {
+				if (ops[i][0] == "insert") {
+					num_replace = 0;
+					has_diff = true;
+					let last_line = ops[i][4] - 1;
+					html += "// Local File ADDS Lines: " + ops[i][3] + " - " + last_line + "<br />\n";
+					html2 = "";
+					for (j = ops[i][3]; j < ops[i][4]; j++) {
+						if(1==1) {
+							let evil_line = evil(l2[j]);
+							if (num_replace++ < 100 || evil_line) {
+								line_nums += j + "\n";
+								let markup = Prism.highlight(l2[j], Prism.languages.php, 'php') + "<br />\n";
+								html2 += (evil_line) ? "<div class='evil'>🦠 " + markup + "</div>" : markup;
+							}
+							is_evil |= evil_line;
+						}
+					}
+					if (num_replace >= 100) { html += " /* ... " + (100 - num_replace) + " lines truncated... */\n"; line_nums += "\n"; }
+					html += "<div class='add'>" + html2 + "\n</div>\n";
+					//line_nums += "\n";
+				}
+				else if (ops[i][0] == "replace") {
+					has_diff = true;
+					num_replace = 0;
+					let last_line = ops[i][4] - 1;
+					if (data.success) { html += "// ORIGINAL LINES: " + ops[i][3] + " - " + last_line + "<br />\n"; }
+					line_nums += "\n";
+					for (j = ops[i][1]; j < ops[i][2] && num_replace++ < 10; j++) {
+						html += Prism.highlight(l1[j], Prism.languages.php, 'php') + "<br />\n";
+						line_nums += j + "\n";
+					}
+					if (num_replace >= 10) { html += " /* ... " + (100 - num_replace) + " lines truncated... */\n"; line_nums += "\n"; }
+
+					num_replace = 0;
+					last_line = ops[i][2] - 1;
+					if (data.success) {
+						html += "// REPLACED LINES: " + ops[i][1] + " - " + ops[i][2] + "<br />\n";
+					} else {
+						html += "// UNKNOWN LINES: " + ops[i][3] + " - " + ops[i][4] + "<br />\n";
+					}
+					line_nums += "\n";
+					html2 = "";
+					for (j = ops[i][3]; j < ops[i][4]; j++) {
+						let evil_line = evil(l2[j]);
+
+						if (num_replace++ < 100 || evil_line) {
+							line_nums += j + "\n";
+							let markup = Prism.highlight(l2[j], Prism.languages.php, 'php') + "<br />\n";
+							html2 += (evil_line) ? "<div class='evil'>🦠 " + markup + "</div>" : markup;
+						}
+						is_evil |= evil_line;
+					}
+					if (num_replace >= 100) { html2 += " /* ... " + (100 - num_replace) + " lines truncated... */\n"; line_nums += "\n"; }
+
+					html += "<div class='add'>" + html2 + "\n</div>\n";
+					line_nums += "\n";
+				}
+				else if (ops[i][0] == "delete") {
+					// TODO: add check for current_user_can lines removed
+				}
+				else if (ops[i][0] == "equal") {
+					// ignore
+				}
+				else {
+					console.log("UNKNOWN DIFF");
+					console.log("diff ops", ops[i]);
+				}
+			}
+			}
+
+
+			// console.log(has_diff, html);
+			if (has_diff) {
+				update_diff(html, line_nums, id, is_evil);
+
+				if (do_toggle) {
+					let e = document.getElementById("diff_cont" + id);
+					if (e) { e.classList.toggle("collapse"); }
+					else { console.error("DC3 unable to load", "diff_cont" + id); }
+				}
+			} else {
+				let e = document.getElementById("file" + id);
+				if (e) { e.classList.add("collapse"); }
+				else { console.error("DC4 unable to load", "file" + id); }
+			}
+			GBI("num_files").innerText = " (" + num_files + ") Changed Files"
+			GBI("num_files").setAttribute("data-num", num_files);
+			return;
+		}
+
+		// console.log("bitapi diff", path);
+		if (path.length < 1) {
+			console.error("bitfire api diff path too short", path, url);
+			return;
+		}
+
+		/* TEMP
+		BitFire_api_call("diff",
+			{"url": url, "file_path": path},
+			ans);
+			*/
+		return;
+	}
+
+	function update_percent() {
+		let cf = GBI("count_files");
+		if (cf) {
+			let cnt = parseInt(cf.getAttribute("data-count"));
+			let total = parseInt(cf.getAttribute("data-total"));
+			let s2 = GBI("status_amt");
+			if (s2) {
+				if (cnt > 0 && total > 0) {
+					let pct = ((cnt / total) * 100);
+					let pct2 = Math.floor(pct);
+					if (pct2 >= 99) { pct2 = 100; }
+					s2.innerText = String(pct2) + " %";
+				}
+			}
+		}
+
+	}
+
+	// TODO: improve evil detection...
+	function evil(line) {
+		/*
+		if (line.length > 256) {
+			let nfunc = line.split(';').length;
+			if (nfunc > 6) { console.log("found long line >6"); return true; }
+		}
+		*/
+		let r = /\$[a-zA-Z_\x80-\xff][a-zA-Z0-9_\x80-\xff\]\[\'\"]*\s*\(/;
+		if (r.exec(line)) { console.log("php var fn"); return true; }
+		if (line.includes("location") && line.includes("header")) { console.log("found redirect"); return true; }
+		let content = ['document[_0x', 'String[_0x', 'TG9jYXRpb246IA=='];
+		let funcs = ['wp_create_user', 'base64_decode', 'uudecode', 'ord', 'hebrev', 'hex2bin', 'str_rot13', 'chr', 'eval', 'proc_open', 'pcntl_exec', 'exec', 'shell_exec', 'call_user_func', 'call_user_func_array', 'system', 'fromCharCode', 'passthru', 'shell_exec', 'copy', 'uploaded_file', 'stream_wrapper_'];
+		let result = funcs.reduce((val, e) => {
+			let regex = '[^a-zA-Z]' + e + '\\s*\\(';
+			let reg = new RegExp(regex, 'i');
+			if (reg.exec(line)) {
+				console.warn("found fn "); console.log(e, line, regex); val = true; }
+			return val;
+		}, false);
+		if (!result) {
+			result = content.reduce((val, e) => {
+				if (line.indexOf(e) > 0) { console.warn("found content ", e); val = true; } return val;
+			}, false);
+		}
+		if (result) {
+			console.log("evil detected", line);
+			let s = GBI("status");
+			let sa = GBI("status_alert");
+			if (sa) { 
+				sa.classList.remove("alert-success");
+				sa.classList.remove("alert-warning");
+				sa.classList.remove("alert-teal");
+				sa.classList.add("alert-danger");
+				if (window.isf) {
+					s.innerHTML = "Wordpress integrity check: <strong>Possible Malware Detected:</strong> <strong class='right text-decoration-underline'><a href='https://bitfire.co/purchase-malware-removal?domain={{server}}' class='text-light' target='_blank'>Request Malware Removal<span class='fe fe-external-link'></span></a></strong>";
+				} else {
+					s.innerHTML = "Wordpress integrity check: <strong>Possible Malware Detected</strong>";
+				}
+			} else {
+				console.error("evil unable to load", "status");
+			}
+
+		}
+		return result;
+	}
+
+	function del(path, unique, real) {
+		if (real) { alert("This is a wordpress file.  Please repair it instead."); return; }
+		let result = confirm("Are you sure you want to delete " + path + " ?");
+		if (result) {
+			console.log("delete: " + path);
+			document.getElementById("file" + unique).classList.add("collapse");
+			BitFire_api("delete", {"value": path, "name": name})
+			.then(r => r.json())
+			.then(function(e) {
+				console.log(e);
+				alert(e.note);
+			});
+		}
+	}
+
+	function classtoggle(classname, id) {
+		let elm_id = "diff_cont"+id;
+		document.getElementById(elm_id).classList.toggle(classname);
+		location.hash = "#an" + id;
+	}
+
+
+	function fp(info, ...parts) {
+		return parts.reduce((accumulator, value) => {
+			for (let x in info) {
+				if (value == info[x].type) {
+					return accumulator + info[x].value;
+				}
+			}
+			return accumulator + value;
+		}, "");
+	}
+
+
+	function repair_file(filename, url, id, found) {
+		if (!found) {
+			alert("BitFire can only auto-repair files from the official WordPress repository. This file must be  manually repaired.");
+			return;
+		}
+		BitFire_api_call('repair', {'filename':filename,'url':url, 'id':id}, repaired);
+	}
+	/*
+	file_list.forEach(elm => {
+	  show_diff(elm['path'], elm['url'], elm['actual']);
+	  document.getElementById("file"+elm['actual']).classList.remove("collapse");
+	});
+	*/
+
+
+	function update_times() {
+		var times = document.getElementsByTagName("time");
+		let formatter = new Intl.DateTimeFormat(LLANG, { weekday: 'short', year: 'numeric', month: 'short', day: 'numeric', hour: 'numeric', minute: 'numeric', second: 'numeric', hour12: true })
+		for (var i = 0; i < times.length; i++) {
+			if (times[i].hasAttribute("data-x")) { continue; }
+			let ts = parseInt(times[i].getAttribute("data-mtime"));
+			let d = formatter.formatToParts(new Date(ts * 1000));
+
+			let markup = "<span class='text-primary'>" + fp(d, 'weekday', ', ', 'month', ' ', 'day') + "</span> " +
+				"<span class='text-muted'>" + fp(d, 'year') + " @</span>" +
+				"<span class='text-info'>" + fp(d, 'hour', ':', 'minute', ':', 'second', ' ', 'dayPeriod') + "</span>";
+			times[i].innerHTML = markup;
+			times[i].setAttribute("data-x", "1");
+		}
+	}
+	update_times();
+
+	window.WIZ = 0;
+	GBI("malware_next").addEventListener("click", function() {
+		window.WIZ++;
+		if (window.WIZ == 1) {
+			GBI("malware_message").innerHTML = "<p>BitFire will show all changes to core files, plugins and themes.  If malware, or potential malware is detected, it will be marked with a virus icon. </p><img class='danger' width='58px' src='https://bitfire.co/assets/malware.png'>";
+		} else if (window.WIZ == 2) {
+			let h = "<p>You can view file changes by clicking on the &quot;<img src='{{assets}}copy.svg' class='secondary'> Diff&quot; button. ";
+			h += "You can replace the file with the original contents by clicking &quot;<img src='{{assets}}check-square.svg' class='success'> Repair&quot;. ";
+			h += "If the change is safe and you wish to keep the change, you can also click &quot;<img src='{{assets}}check-square.svg' class='warning'> Allow&quot; to remove from the change list. </p>";
+			GBI("malware_message").innerHTML = h;
+			
+		} else {
+			alert("BitFire tour is complete and firewall is active. Begin file scan by clicking 'Scan All Files'")
+			GBI("cover-over").classList.remove("cover-over");
+			GBI("cover-over").classList.add("hidden");
+			GBI("malware_tooltip").classList.add("hidden");
+		}
+	});
+	if (window.location.search.indexOf("tooltip") > 1) {
+		console.log("en tooltip");
+		GBI("malware_tooltip").classList.remove("hidden");
+		GBI("cover-over").classList.remove("hidden");
+	} else {
+		console.log("no tooltip");
+		GBI("cover-over").classList.remove("cover-over");
+		GBI("cover-over").classList.add("hidden");
+	}
+
+</script>
+
+{{gtag}}

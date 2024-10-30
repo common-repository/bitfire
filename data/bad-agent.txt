@@ -1,0 +1,44 @@
+hydra
+nasl
+extractor
+brutus
+commix
+masscan
+dotdotpwn
+evil
+dirbuster
+gobuster
+havij
+zmeu
+mysql
+nessus
+nikto
+nmap
+openvas
+paros
+sqlmap
+vega
+w3af
+webshag
+pwn
+backweb
+bender
+widow
+whisker
+webstripper
+sitesucker
+phantomjs
+slimerjs
+k2spider
+leakix
+zgrab
+hello, world
+hello world
+nvdorz
+gnu ( cow )
+gnu (cow)
+pdrlabs.net
+mozila
+whatweb
+ sf/
+sfish

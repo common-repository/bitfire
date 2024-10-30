@@ -1,0 +1,764 @@
+<style>
+  {{custom_css}}
+  ul.dropdown-menu li { padding: 0.25rem 1rem; }
+  ul.dropdown-menu li a { color: #6e84a3; }
+  ul.dropdown-menu li a:hover { color: #122637; }
+  [class^=col-] { margin: 0 !important; }
+  .secondary { filter: invert(52%) sepia(31%) saturate(365%) hue-rotate(176deg) brightness(92%) contrast(92%); }
+  .success { filter: invert(65%) sepia(41%) saturate(4358%) hue-rotate(112deg) brightness(101%) contrast(101%); }
+  .warning { filter: invert(91%) sepia(98%) saturate(899%) hue-rotate(321deg) brightness(100%) contrast(93%); }
+</style>
+<style>
+thead.details th, th { font-size: 12px; }
+.nowrap { overflow: hidden; }
+.left { float: left; }
+.limit { overflow: hidden; text-overflow: ellipsis; }
+
+td { border-spacing: 1rem;}
+.table-sm td { padding: .25rem; }
+.tbalt {
+  color: #333;
+  overflow: hidden;
+  background-color: #F0E0E0;
+}
+.tbalt td {
+  border-bottom: 1px solid #CCC;
+}
+.table-sm th { padding: .5rem .25rem; }
+span.method { padding: .45rem .75rem; font-weight: bold; color: #111; }
+/*
+tr.inforow td {
+  background-image: linear-gradient(to bottom, rgba(254,240,240,0),92%, rgba(240,240,240,1)100%);
+}
+*/
+
+.alert-secondary { padding: 0.35em 0.65em 0.35em 0.55em; top: 20px }
+
+.arrow { transform: rotateY( 45deg ); top: 74px; left: 50%; }
+.arrow:after { background-color: rgba(0,0,0,0.8) !important; }
+.cover { opacity: 0.5;  }
+
+@import url('https://fonts.googleapis.com/css2?family=Source+Code+Pro&display=swap');
+.tbalt, .mono { font-family: 'Source Code Pro', monospace; }
+</style>
+    
+    <script type="text/javascript">
+        const VERSION = {{version}};
+        const VERSION_STR = "{{sym_version}}";
+        const LLANG = "{{llang}}";
+    </script>
+
+    <!-- MAIN CONTENT
+    ================================================== -->
+    <div class="cover-over" id="cover-over"> </div>
+
+    <div class="main-content">
+      {{header}}
+      
+            
+      <!-- CARDS -->
+      <div class="container-fluid">
+        <small><a class="text-info" target="_blank" href="https://bitfire.co/support-dashboard-usage">BitFire Dashboard Documentation <i class="fe fe-external-link"></i></a></small>
+        <div class="row">
+          <div class="col-12 col-lg-4">
+
+            <div class="card p-0 card-fill tooltipA" id="block_by_type" style="justify-content: space-evenly;">
+              <a id="block_by_type_tip" style="scroll-margin-top:300px;"></a>
+              <span class="tooltip-text"><div class="left">This is the BitFire dashboard. {{access}} The last 24 hours of blocks by type can be viewed here.</div>
+                <div class="right">
+                <button class="alert-secondary alert nxt">Next 
+                  <span class="fe fe-skip-forward" class="mt-2"></span>
+                </button>
+                </div>
+                <span class="arrow"></span>
+              </span>
+
+
+              <img src="{{public}}img/category-low.jpg" alt="database card cover" class="card-img-top">
+              <div class="card-body text-center mb-0" style="margin-top:-4rem;">
+                <div class="avatar avatar-xl card-avatar card-avatar-top" style="margin-top:1rem;">
+                  <img id="map-icon" src="{{public}}inbox.png" style="background-color:#FFF;" class="avatar-img rounded-circle border-card">
+                </div>
+                <h2 style="margin-top:-1rem;" class="card-title" id="database-title">
+                  <span class="tdc">Last 24 hour blocks by Category</span>
+                </h2>
+              </div>
+
+             <div class="card-body mt-0">
+
+                <div class="chart chart-appended" style="padding: 0 2rem;">
+                  <canvas class="chart-canvas" id="classChart" data-toggle="legend" data-target="#classChartLegend"></canvas>
+                </div>
+
+              </div>
+            </div>
+          </div>
+
+          <!--
+                    -->
+          
+          <div class="col-12 col-md-6 col-xl-4">
+            <a id="block_by_country_tip" class="sp-delme"></a>
+            <div class="card p-0 card-fill tooltipA" id="block_by_country">
+              <a id="block_by_country_tip" style="scroll-margin-top:300px;"></a>
+              <span class="tooltip-text"><div class="left">See attack break down by country here. - are unknown origin, test block or local networks.</div>
+                <div class="right">
+                <button class="alert-secondary alert nxt">Next 
+                  <span class="fe fe-skip-forward" class="mt-2"></span>
+                </button>
+                </div>
+                <span class="arrow"></span>
+              </span>
+
+
+
+              <img src="{{public}}img/globe-low.jpg" alt="country card cover" class="card-img-top">
+              <div class="card-body mb=0 text-center" style="margin-top:-4rem;">
+                <div class="avatar avatar-xl card-avatar card-avatar-top" style="margin-top:1rem;">
+                  <img id="map-icon" src="{{public}}map-pin.png" style="background-color:#FFF;" class="avatar-img rounded-circle border-card">
+                </div>
+                <h2 style="margin-top:-1rem;" class="card-title" id="database-title">
+                  <span class="tdc">Last 24 hour blocks by country</span>
+                </h2>
+              </div>
+
+             <div class="card-body mt-0">
+
+                <div class="chart chart-appended" style="padding: 0 2rem;">
+                  <canvas class="chart-canvas" id="classChart2" data-toggle="legend" data-target="#classChart2Legend"></canvas>
+                </div>
+
+              </div>
+            </div>
+          </div>
+
+          <div class="col-12 col-lg-4">
+            <div class="card p-0 card-fill tooltipA" id="block_by_hour">
+              <a id="block_by_hour_tip" style="scroll-margin-top:300px"></a>
+              <span class="tooltip-text"><div class="left">View attack break down by hour in 24 hour time. Times are converted relative to browser not server time.</div>
+                <div class="right">
+                <button class="alert-secondary alert nxt">Next 
+                  <span class="fe fe-skip-forward" class="mt-2"></span>
+                </button>
+                </div>
+                <span class="arrow"></span>
+              </span>
+
+
+
+
+              <img src="{{public}}img/clock-low.jpg" alt="database card cover" class="card-img-top">
+              <div class="card-body text-center" style="margin-top:-4rem;">
+                <div class="avatar avatar-xl card-avatar card-avatar-top" style="margin-top:1rem;">
+                  <img id="map-icon" src="{{public}}clock.png" style="background-color:#FFF;" class="avatar-img rounded-circle border-card">
+                </div>
+                <h2 style="margin-top:-1rem;" class="card-title" id="database-title">
+                  <span class="tdc">Last 24 hour blocks by hour</span>
+                  <!--
+                  <span class="text-secondary" id="block_sum_total">({{block_count_24}})</span>
+                  <small class="text-muted">(local time)</small>
+                  -->
+                </h2>
+              </div>
+
+
+              <!--
+              <span class="tooltip-text"><div class="left">Number of blocks in last 24 hours by hour</div>
+                <div class="right">
+                <button class="alert-secondary alert nxt">Next
+                  <span class="fe fe-skip-forward" style="margin-top:4px"></span>
+                </button>
+                </div>
+                <span class="arrow"></span>
+              </span>
+              <div class="card-header">
+                <h4>Blocking By Hour
+                <span class="text-secondary" id="block_sum_total">({{block_count_24}})</span>
+                <small class="text-muted">(local time)</small>
+                </h4>
+              </div>
+            -->
+              <div class="card-body">
+                <div class="chart">
+                  <canvas class="chart-canvas" id="hrChart"></canvas>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <script type="text/template" id="paginator_template">
+        <li class="page-item"><a class="page-link" href="<%= link %>"></a><li>
+        </script>
+
+              
+
+      <div class="row">
+          <div class="col-12 col-lg-12">
+            <a id="block_table_tip"></a>
+            <div class="card card-fill tooltipA" id="block_table" style=""">
+              <span class="tooltip-text"><div class="left">Under the graphs you can see the attacks that have been blocked by the firewall.  
+                You can adjust which types of attacks are blocked in the Settings page. <i>If you see something that should not be blocked, 
+                click on the magic wand icon to add an exception for the offending block.</i></div>
+                <div class="right">
+                <button class="alert-secondary alert nxt">Next 
+                  <span class="fe fe-skip-forward" style="margin-top:4px"></span>
+                </button>
+                </div>
+                <span class="arrow"></span>
+              </span>
+
+              <div class="card-header" style="">
+
+                <span class="fe fe-chevron-down " style="flex-basis:50px;flex-grow:0;" type="button" id="block_toggle" onclick="collapseit('block')"></span>
+                <h4 class="mt-1" style="flex-basis:200px;">Blocks <small class="text-muted" id="block_range">{{block_range}}</small> of {{block_count}}</h4>
+                <button class="btn btn-info mr-6 mt-1" id="download_blocks" style="">Download as JSON</button>
+                <span style="flex-basis:100px;text-align:right;">Page: </span>
+                <nav arial-label="Block Pagination" class="mt-4 ml-2" style="flex-grow:4;flex-basis:300px;">
+                  <ul class="pagination" id="block_page_list">
+                  </ul>
+                </nav>
+
+                <div class="form-check" style="padding-right:80px">
+                  <label class="form-check-label tdc" for="flexCheckDefault" style="padding-right:70px">Invert Filter</label>
+                  <input class="form-check-input" type="checkbox" name="invert_check" {{invert_block_check}} id="invert_block_check" style="margin-top:3px;">
+                </div>
+
+                <div class="dropdown">
+                  <button title="Filter the display to just selected blocks" class="btn btn-secondary dropdown-toggle" style="width:auto;" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    Filter Blocks
+                  </button>
+                  <ul class="dropdown-menu" style="min-width:13rem;">
+                    <li><a href="{{filter_link}}&block_filter=10000">Cross Site Scripting</a></li>
+                    <li><a href="{{filter_link}}&block_filter=12000">Generic Web Filtering</a></li>
+                    <li><a href="{{filter_link}}&block_filter=14000">SQL Injection</a></li>
+                    <li><a href="{{filter_link}}&block_filter=30000:31000:32000">RASP</a></li>
+                    <li><a href="{{filter_link}}&block_filter=21000">File Upload</a></li>
+                    <li><a href="{{filter_link}}&block_filter=27000">JavaScript Challenge</a></li>
+                    <li><a href="{{filter_link}}&block_filter=24000">Bot Network Auth</a></li>
+                    <li><a href="{{filter_link}}&block_filter=26000">Request Rate</a></li>
+                    <li><a href="{{filter_link}}">Show Everything</a></li>
+                  </ul>
+                </div>
+              </div>
+              <div class="card-body ">
+                <div class="slide-up open" id="block_table_content">
+
+                <table class="table table-sm" style="">
+                  <thead class="details">
+                    <tr>
+                      <th scope="col" style="width:250px;">Browser / Time</th>
+                      <th scope="col">Request</th>
+                    </tr>
+                  </thead>
+                  <tbody style="" id="block_rows">
+                  </tbody>
+                </table>
+                </div>
+ 
+              </div>
+            </div>
+          </div>
+
+      </div>
+
+      <div class="row">
+          <div class="col-12 col-lg-12 sp1">
+          <a id="alert_table_tip" class="sp1"></a>
+            <div class="card card-fill tooltipA sp1" style="max-width:100%" id="alert_table">
+              <span class="tooltip-text"><div class="left">
+Just below the block table, you can see the attacks that are in alert mode.  You can test firewall rules in alert mode first and verify that they
+do not block good traffic before flipping the rule to block mode.
+                </div>
+                <div class="right">
+                <button class="alert-secondary alert nxt">Next 
+                  <span class="fe fe-skip-forward" style="margin-top:4px"> </span>
+                </button>
+                </div>
+                <span class="arrow"></span>
+              </span>
+
+              <div class="card-header" style="padding-left:0">
+
+                <span class="fe fe-chevron-down " style="flex:0;margin-right:4rem;" type="button" id="alert_toggle"></span>
+                <h4 style="margin-right: 4rem;">Alerts <small class="text-muted" id="block_range">{{report_range}}</small> of {{+report_count}}</h4>
+                <!--
+                <h4>Alerts <small class="text-muted" id="alert_range">{{report_range}}</small> of {{report_count}}</h4>
+              -->
+
+                <button class="btn btn-info mr-6" id="download_alerts">Download as JSON</button>
+                <span style="flex-basis:100px;text-align:right;">Page: </span>
+                <nav arial-label="Alert Pagination" class="mt-3 ml-2">
+                  <ul class="pagination" id="alert_page_list">
+                  </ul>
+                </nav>
+              </div>
+              <div class="card-body">
+
+<script type="text/template" id="line_template">
+<tr class="inforow" width="100%">
+      <td class="nowrap" scope="row">
+        <time data-mtime="<%= tv %>"></time>
+        <br>
+      <div class="avatar-group">
+        <div class="avatar-xs left">
+          <img src="{{assets}}<%= exception_img%>" alt="exception" width="24" title="<%= exception_title%>"
+          class="avatar-img rounded-circle <%= exception_class %> ex-<%=block.code%>" style="cursor:pointer;" onclick="add_exception(this)" data-ex-value="<%-block.value%>" data-ex-url="<%- request.path %>" data-ex-param="<%- block.parameter %>" data-ex-code="<%= block.code %>" />
+        </div>
+        <div class="avatar-xs left">
+          <img src="{{assets}}<%= type_img %>" alt="type" width="24" class="avatar-img type rounded-circle red" title="<%= type_title%>" />
+        </div>
+        <div class="avatar-xs left">
+          <img src="{{assets}}<%= agent_img %>" alt="agent" width="24" class="avatar-img rounded-circle" title="<%= agent_title%>" />
+        </div>
+        <div class="avatar-xs left">
+          <img src="https://bitfire.co/assets/flags/<%= country_img %>" alt="<%- country_alt %>" width="24" class="avatar-img rounded-circle" title="<%= flag_title%>"/>
+        </div>
+        <div class="avatar-xs left">
+          <img src="{{assets}}bell-ring.svg" alt="review icon" width="24" title="<%-block.review_name%>" class="<%-block.review_class%> success" />
+        </div>
+      </div>
+      </td>
+      <td class="nowrap mono">
+        <div>
+          <strong class="text-secondary"><%- request.ip %></strong> <i class="fe fe-chevron-right"></i>
+          <strong style="padding-right:40px;" class="text-info"><%- request.method %></strong><span class="text-dark"><%- request.scheme %>://<%- request.host %><%- request.path %><%-request.query%></span>
+        </div>
+        <span style="" class="text-muted mono ">&quot;<%= truncate(request.agent, 128) %>&quot;</span>
+      </td>
+        <!--
+      <td class="wrap">
+        <div style="float:left"><strong><%- request.method %>&nbsp;&nbsp;&nbsp;<%- request.scheme %>://<%- request.host %><%- request.path %></strong></div>
+      </td>
+      -->
+    </tr>
+    <tr class="tbalt inforow">
+      <td class="nowrap"><strong><%= block.code %> <%- block.message_class %></strong></td>
+      <!--
+      <td class="wrap">parameter: <%- block.parameter %></td>
+      -->
+      <td class="limit">info: <%= truncate(block.pattern,80)%>
+      <%- block.parameter %> match: &quot;<%- truncate(block.value, 80)%>&quot;</td>
+    </tr>
+</script>
+       
+                <div class="slide-up open" id="alert_table_content">
+                <table class="table table-sm" style="width:100%">
+                  <thead class="details">
+                    <tr>
+                      <th scope="col" style="width:250px;">Browser / Time</th>
+                      <th scope="col">Request</th>
+                    </tr>
+                  </thead>
+                  <tbody style="font-size:14px;width:100%" id="alert_rows">
+                  </tbody>
+                </table>
+                </div>
+              </div>
+            </div>
+          </div>
+      </div>
+    
+
+
+
+    </div><!-- / .main-content -->
+
+
+    <script>
+      window.BITFIRE_NONCE = '{{api_code}}';
+      function collapseit(elm_type) {
+        console.log(elm_type);
+        let e = GBI(elm_type + "_table_content");
+        let e2 = GBI(elm_type + "_toggle");
+        console.log(e);
+        if (e.classList.contains("open")) {
+          e2.classList.remove("fe-chevron-down");
+          e2.classList.add("fe-chevron-up");
+        } else {
+          e2.classList.remove("fe-chevron-up");
+          e2.classList.add("fe-chevron-down");
+        }
+        e.classList.toggle("open");
+      }
+      function show_bars(chart_id, hr_set) {
+        let total = 0;
+        console.log("chart id", chart_id, hr_set);
+        for (var i=0;i<hr_set.data.length;i++) {
+          total += hr_set.data[i];
+        }
+        let e = GBI("block_sum_total");
+        if (e) { e.innerText = "(" + total + ")"; }
+
+        new Chart(chart_id, {
+    type: 'bar',
+    options: {
+      scales: {
+        yAxes: [{
+          ticks: {
+            callback: function(value) {
+              return value;
+            }
+          }
+        }]
+      }
+    },
+    data: {
+      labels: [...Array(24).keys()],
+      datasets: [{
+        label: 'Block per Hour',
+        data: hr_set.data,
+        backgroundColor: [
+          '#56E2CF', '#56AEE2', '#5668E2', '#8A56E1', '#CF56E2', '#E256AE', '#E25668', '#E28956', '#E2CF56', '#AEE256', '#68E256', '#56E289',
+          '#56E2CF', '#56AEE2', '#5668E2', '#8A56E1', '#CF56E2', '#E256AE', '#E25668', '#E28956', '#E2CF56', '#AEE256', '#68E256', '#56E289'
+        ]
+      }]
+    }
+  });
+      }
+
+      
+      function show_pie(id, data, label_fn) {
+        let data_labels = [];
+        let data_per = [];
+        for (const [key, value] of Object.entries(data.data)) {
+          data_labels.push(label_fn(key, value));
+          data_per.push(value);
+        }
+        
+        var opts = {
+          type: 'doughnut',
+          options: {
+            legend: {
+              display: true,
+              position: 'bottom',
+              boxWidth: 10,
+              padding: 5,
+              usePointStyle: true,
+              labels: {
+                fontSize: 9,
+                padding: 5,
+                boxWidth: 15
+              }
+            },
+            tooltips: {
+              callbacks: {
+                afterLabel: function() {
+                  return ''
+                }
+              }
+            },
+            weight: true,
+            cutoutPercentage: 80, 
+            defaultFontSize: 15,
+            defaultLineHeight: .6
+          },
+          data: {
+            labels: data_labels,
+            datasets: [{
+              data: data_per,
+              backgroundColor: ['#56E2CF', '#56AEE2', '#5668E2', '#8A56E1', '#CF56E2', '#E256AE', '#E25668', '#E28956', '#E2CF56', '#AEE256', '#68E256', '#56E289']
+            }]
+          }
+        };
+       
+        // console.log(opts);
+
+        new Chart(id, opts);
+      }
+
+
+      var codex = {
+        0: "Unknown Bot",
+        10000: "XSS",
+        11000: "XXE",
+        12000: "RCE",
+        13000: "format",
+        14000: "SQLi",
+        15000: "LFI",
+        16000: "Web Shell",
+        17000: "Dot Dot",
+        18000: "Spam",
+        20000: "Wrong Domain",
+        21000: "File Upload",
+        22000: "General Web",
+        23000: "Wrong Domain",
+        24000: "Bot Whitelist",
+        25000: "Malicious Agent",
+        26000: "Request Rate",
+        27000: "Fake Browser",
+        29000: "File Locking",
+        30000: "XSS Account Takeover",
+        31000: "Unknown Bot",
+        32000: "Privilege Escalation",
+        70000: "Malware"
+      };
+
+      var zup_ids = ["block_by_type", "block_by_country", "block_by_hour", "block_table", "alert_table"];
+      var zup_idx = 0;
+
+
+      function label_type(key, value) { return codex[key]; }
+      function label_value(key, value) { return key; }
+
+      function check_upgrade() {
+        fetch("https://www.bitfire.co/ver.php?ts="+Date.now())
+          .then(response => response.json())
+          .then(response => {
+            console.log(response);
+            var behind = 0;
+            var latest_str = VERSION_STR;
+            var latest = VERSION;
+            for (const r in response) {
+              //console.log("version!", r);
+              if(response[r][0] > VERSION) { 
+                if (response[r][0] > latest) {
+                  latest = response[r][0];
+                  latest_str = r;
+                  behind++;
+                }
+              }
+            }
+            window.LATEST = latest_str;
+            
+            let ul = GBI("upgrade_link");
+            if (ul && behind == 0) {
+              ul.innerText = "BitFire Up To Date";
+              ul.setAttribute("disabled", "disabled");
+              ul.classList.remove("lift");
+            } else if (ul) {
+              ul.innerText = "Upgrade to " + latest_str;
+              ul.classList.remove("btn-secondary");
+              ul.classList.add("btn-warning");
+              ul.addEventListener("click", upgrade);
+            }
+          }
+        );
+      }
+
+
+      const request = async () => {
+        //if (document.readyState != "complete") { console.log("not complete!"); return; }
+        console.log(document.readyState);
+        const response4 = await BitFire_api("get_valid_data", {});
+        const data4 = await response4.json();
+        console.log(data4);
+
+        //console.log("data4", data4);
+
+        const data2 = {{hr_data_json}};
+        const data3 = {{country_data_json}};
+        const data5 = {{type_data_json}};
+
+        update_challenge(data4);
+
+        //console.log("data5", data5);
+        //console.log("data3", data3);
+        show_pie('classChart', data5, label_type);
+        show_pie('classChart2', data3, label_value);
+        // find browser offset, dates are in UTC
+        let tz_adjusted = [];
+        const tzoff_hr = -(new Date().getTimezoneOffset() / 60);
+
+        // adjust to local time
+        for (const [key, value] of Object.entries(data2.data)) {
+          let adjusted = (parseInt(key) + tzoff_hr) % 24;
+          if (adjusted < 0) { adjusted += 24; }
+          tz_adjusted[adjusted] = value;
+        }
+
+        data2.data = tz_adjusted;
+        show_bars('hrChart', data2);
+
+        //GBI("ip_total").innerText = "(" + data3.total + ")";
+      }
+
+      function render_alerts() {
+        let alerts = {{alerts_json}};
+        if (!alerts) { return; }
+
+        let line_e = GBI("line_template");
+        let compiled = _.template(line_e.innerText);
+        let markup = "";
+        for (const [key, value] of Object.entries(alerts)) {
+          markup += compiled(value);
+        }
+        GBI("alert_rows").innerHTML = markup;
+      }
+
+      function render_blocks() {
+        let alerts = {{blocks_json}};
+        //console.log(alerts);
+
+        let line_e = GBI("line_template");
+        let compiled = _.template(line_e.innerText);
+        let markup = "";
+        for (const [key, value] of Object.entries(alerts)) {
+          markup += compiled(value);
+        }
+        GBI("block_rows").innerHTML = markup;
+      }
+
+
+      function update_challenge(data) {
+        //console.log("update challenge", data);
+
+        if (GBI("check")) { 
+          GBI("check").innerText = data.challenge;
+          GBI("pass").innerText = data.valid;
+        }
+      }
+
+      // called on upgrade click
+      // TODO: test stand alone upgrade after WP launch
+      function upgrade() {
+        console.log("upgrade!");
+        BitFire_api("upgrade", {})
+          .then(response => response.json())
+          .then(r => { alert(r.note); });
+      }
+
+      function update_country() {
+        // update country flags
+        var elms = document.getElementsByClassName("country");
+        console.log("update country", elms);
+        for (let element of elms) {
+          let t = element.innerText;
+          element.innerHTML = "["+t+"]" + cc_to_flag(t);
+        }
+      }
+function update_times() {
+  var times = document.getElementsByTagName("time");
+  let formatter = new Intl.DateTimeFormat(LLANG, {weekday: 'short', year: 'numeric', month: 'short', day: 'numeric', hour: 'numeric', minute: 'numeric', second: 'numeric', hour12: true})
+  for (var i=0; i<times.length; i++) {
+    let ts = parseInt(times[i].getAttribute("data-mtime"));
+    let d = formatter.formatToParts(new Date(ts*1000));
+
+    let markup = "<span class='text-muted'>"+fp(d, 'weekday', ', ', 'month', ' ', 'day') + "</span> " +
+      "<span class='text-muted'>"+fp(d, 'year')+" </span>" +
+      "<span class='text-info'>"+fp(d, 'hour', ':', 'minute', ':', 'second', ' ', 'dayPeriod') + "</span>";
+      times[i].innerHTML = markup;
+  }
+}
+      function add_pages() {
+        let content = "";
+        for (i=0; i<{{block_pages}}; i++) {
+          let clazz = (i == {{block_page_num}}) ? "bg-secondary" : "";
+          content += "<li class='page-item'><a href='{{self}}?page=bitfire&block_page_num="+i+"&alert_page_num={{alert_page_num}}#block_table' class='page-link "+clazz+"' role='button'>" + i + "</a></li>";
+        }
+        GBI("block_page_list").innerHTML = content;
+
+        content = "";
+        for (i=0; i<{{report_pages}}; i++) {
+          let clazz = (i == {{alert_page_num}}) ? "bg-secondary" : "";
+          content += "<li class='page-item'><a href='{{self}}?page=bitfire&alert_page_num="+i+"&block_page_num={{block_page_num}}#alert_table' class='page-link "+clazz+"' role='button'>" + i + "</a></li>";
+        }
+        GBI("alert_page_list").innerHTML = content;
+      }
+
+      function position(elem) { 
+        let top = 0; 
+
+        do { 
+            top += elem.offsetTop-elem.scrollTop; 
+        } while (elem = elem.offsetParent); 
+
+        return top;
+      } 
+
+      function next_click() {
+        console.log("next_click");
+        let e = GBI(zup_ids[zup_idx]);
+        e.classList.remove("zup");
+
+        zup_idx++;
+        e = GBI(zup_ids[zup_idx]);
+        if (e) {
+          e.classList.add("zup");
+
+          let st2 = position(e);
+          window.scrollTo(0, st2-200);
+        }
+        else { 
+          GBI("cover-over").classList.remove("cover-over");
+
+          if ({{is_wordpress}}) {
+            alert("Dashboard tour complete. Now let's make sure your system files are secure...");
+            window.location = "{{self}}?page=bitfire_malware&tooltip=1";
+          } else {
+            alert("Dashboard tour complete. Malware scanning is not yet available for this platform.");
+          }
+        }
+      }
+
+
+      function run_tooltips() {
+        if (window.location.search.indexOf("tooltip") <= 0) { GBI("cover-over").classList.remove("cover-over"); return; }
+          let e = GBI(zup_ids[zup_idx]);
+          e.classList.add("zup");
+
+          const next_buttons = document.getElementsByClassName("nxt");
+          for (let i=0; i < next_buttons.length; i++) {
+            let btn = next_buttons[i]
+            // console.log(i, btn);
+            if (btn && btn.addEventListener) {
+              // console.log(btn);
+              btn.addEventListener("click", next_click);
+            }
+          }
+
+          console.log("complete");
+      }
+
+      function download_type(type) {
+        console.log("download ", type);
+        BitFire_api("download", {"filename": type})
+          .then(response => response.json())
+          .then(r => { 
+            let file_name = "bitfire_" + type + "_data.json";
+            saveBlob(new Blob([JSON.stringify(r, null, 2)], {type:"application/json"}), file_name); 
+          });
+      }
+
+      // https://stackoverflow.com/questions/22724070/prompt-file-download-with-xmlhttprequest
+      function saveBlob(blob, fileName) {
+          var a = document.createElement('a');
+          a.href = window.URL.createObjectURL(blob);
+          a.download = fileName;
+          a.dispatchEvent(new MouseEvent('click'));
+      }
+
+      document.addEventListener("DOMContentLoaded", request);
+      update_country();
+      render_alerts();
+      render_blocks();
+
+      update_times();
+      add_pages();
+
+      run_tooltips();
+
+      GBI("download_alerts").addEventListener("click", function() { download_type("alert")} );
+      GBI("download_blocks").addEventListener("click", function() { download_type("block")} );
+      GBI("invert_block_check").addEventListener("click", function(event) {
+        let e = event.target;
+        console.log(event);
+        console.log(e);
+        console.log(e.checked);
+        let loc = String(window.location);
+        if (loc.indexOf("block_filter") < 1) {
+          alert("Please select a filter first");
+          return false;
+        }
+        if (e.checked) {
+          loc += "&invert_block_check=1";
+        } else {
+          loc = loc.replace("&invert_block_check=1", "");
+        }
+        window.location = loc;
+      } );
+
+    </script>
+
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    {{gtag}}

@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>__TITLE__</title>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="robots" content="noindex, follow">
+    <style>
+        body { font-family: sans-serif; background-color: #343443; color: #DDD; }
+        .block {
+            position: relative;
+            width: 60%;
+            margin: 15% auto 0 auto;
+        }
+        .footer {
+            width: 60%;
+            bottom: 0;
+            margin: 0 auto 0 auto;
+            text-align: center;
+            position: fixed;
+            left: 20%;
+        }
+        p { font-size: 1.4rem; }
+        h2 { font-size: 4rem; margin: 0; }
+        h4 { font-size: 1.8rem; margin-bottom: 8rem; }
+        p.nor { font-size: 1rem; color: #999; }
+    </style>
+</head>
+<body>
+
+
+<div class="block">
+<h2>__DOMAIN__</h2>
+<h4>Checking if the site connection is secure</h4>
+<p>__DOMAIN__ needs to review the security of your connection before proceeding.</p>
+</div>
+
+
+<div class="footer">
+<hr>
+<p class="nor">Unique ID: __UUID__</p>
+<p class="nor">Security by <a href="https://bitfire.co/">BitFire</a></p>
+</div>
+<script>
+
+// detect infinite cache loop and break out...
+if (window.localStorage && window.location.href.indexOf("_cache_bust") == -1) {
+    let ctr = localStorage.getItem('bitfire_count');
+    if (ctr) {
+        let when = localStorage.getItem('bitfire_time');
+        if ((Date.now() - when) > 1000 * 60 * 5) {
+            ctr = 0;
+        } else {
+            ctr = parseInt(ctr);
+        }
+        ctr++;
+    } else {
+        ctr = 1;
+    }
+    localStorage.setItem('bitfire_count', ctr);
+    localStorage.setItem('bitfire_time', Date.now());
+    if (ctr > 1) {
+        let temp = new URL(window.location.href);
+        temp.searchParams.set('_cache_bust', (Math.random() + 1).toString(36).substring(5));
+        localStorage.removeItem('bitfire_count');
+        localStorage.removeItem('bitfire_time');
+        window.location = temp.href;
+        window.redirected = true;
+    }
+}
+
+/*
+if (navigator.sendBeacon) {
+    let data = new FormData();
+    data.append('fingerprint', __FINGERPRINT__);
+    data.append('signature', '__SIGNATURE__');
+    data.append('browser', '__BROWSER__');
+    data.append('type', 'verify');
+    data.append('style', 'cf_light');
+    data.append('ver', '__VER__');
+    navigator.sendBeacon("https://bitfire.co/ray.php", data);
+}
+*/
+
+
+window.BitFire = {};
+window.BitFire.xhr = function (params) {
+    const form = document.createElement('form'); form.method = "POST"; form.action = window.location.href;
+    for (const key in params) {
+        if (params.hasOwnProperty(key)) {
+            const field = document.createElement('input');
+            field.type = 'hidden'; field.name = key;
+            field.value = params[key]; form.appendChild(field);
+        }
+    }
+
+    document.body.appendChild(form);
+    form.submit(); 
+};
+ 
+//window.setTimeout(function(){ document.getElementById("action").innerText = "Loading your site..."; }, 2000);
+//window.setTimeout(function(){ document.getElementById("home").removeAttribute("disabled"); }, 3500);
+
+__JS__
+
+
+</script>
+</body>
+</html>
