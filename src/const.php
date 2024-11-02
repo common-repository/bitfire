@@ -23,8 +23,8 @@ const CODE_CLASS = array(0 => 'robot.svg', 10000 => 'xss.svg', 11000 => 'xxe.svg
 const BITFIRE_API_FN = array('\\BitFire\\dump_hashes', '\\BitFire\\review', '\\BitFire\\allow', '\\BitFire\\send_mfa', '\\BitFire\\delete', '\\BitFire\\repair', '\\BitFire\\diff','\\BitFire\\SETTINGS', '\\BitFire\\MALWARESCAN', '\\BitFire\\set_pass', '\\BitFire\\clear_cache', '\\BitFire\\upgrade', '\\BitFire\\hash_diffs', '\\BitFire\\DASHBOARD', '\\BitFire\\download', '\\BitFire\\rem_api_exception', '\\BitFire\\add_api_exception', '\\BitFire\\unlock_site', '\\BitFire\\lock_site', '\\BitFire\\backup_database', '\\BitFire\\add_list_elm','\\BitFire\\clean_post', '\\BitFire\\scan_malware', '\\BitFire\\remove_list_elm', '\\BitFire\\toggle_config_value', '\\BitFire\\get_ip_data', '\\BitFire\\bot_action', '\\BitFire\\get_hr_data', '\\BitFire\\dump_hash_dir','\\BitFire\\install', '\\BitFire\\uninstall', '\\BitFire\\download', '\\BitFire\\malware_files', '\\BitFire\\load_bot_data', '\\BitFire\\replace_array_value', '\\BitFire\\general_scan', '\\BitFire\\sys_info', '\\BitFire\get_ip_info');
 const BITFIRE_METRICS_INIT = array('challenge' => 0, 'broken' => 0, 'invalid' => 0, 'valid' => 0, 10000 => 0, 11000 => 0, 12000 => 0, 13000 => 0, 14000 => 0, 15000 => 0, 16000 => 0, 17000 => 0, 18000 => 0, 19000 => 0, 20000 => 0, 21000 => 0, 22000 => 0, 23000 => 0, 24000 => 0, 25000 => 0, 26000 => 0, 29000 => 0, 70000 => 0);
 const LOG_SZ = 512;
-const BITFIRE_VER = 4414;
-const BITFIRE_SYM_VER = "4.4.14";
+const BITFIRE_VER = 4415;
+const BITFIRE_SYM_VER = "4.4.15";
 const APP = "https://app.bitfire.co/";
 const INFO = "https://info.bitfire.co/";
 const BOTS = "https://bots.bitfire.co/";

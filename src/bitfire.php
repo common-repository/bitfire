@@ -432,7 +432,7 @@ function log_it($in_block_code = 0, string $in_pattern = '', string $in_value = 
 
     $country_map = array_flip(COUNTRY);
     $country_id = 256 + intval($country_map[$ip_data->iso]??0);
-    trace("LOC-{$ip_data->iso}");
+    // weird error on PHP 8.2.23 on this line:  trace("LOC-{$ip_data->iso}");
 
     // blocking key (function-ize this)
     $key = "";

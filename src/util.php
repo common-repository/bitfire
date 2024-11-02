@@ -1419,7 +1419,12 @@ function debugF(string $fmt, ...$args) : bool {
 // allow trace to be over ridden
 function trace(?string $msg = null, bool $clear = false) : string {
     static $r = "";
-    if ($msg == null) { if ($clear) { $r = ""; } return $r; }
+    if ($msg == null) {
+        if ($clear) {
+            $r = "";
+        }
+        return $r;
+    }
     $r .= "$msg, ";
     return "";
 }
@@ -1467,12 +1472,6 @@ function debug(?string $fmt, ...$args) : ?array {
     }
 
 
-    $f = get_hidden_file("/debug.log");
-    //$log = debug(null);
-    $mode = (file_exists($f) && filesize($f) > 1024*1024*4) ? LOCK_EX : FILE_APPEND;
-    file_put_contents($f, sprintf($fmt, ...$args) . "\n", FILE_APPEND);
-    return [];
-
     // first call, figure out if we are exiting early. this executes 1 time
     if ($early_exit === -1) {
         $early_exit = (!CFG::enabled("debug_file") && !CFG::enabled("debug_header")) ? 1 : 0;
@@ -1504,7 +1503,7 @@ function debug(?string $fmt, ...$args) : ?array {
             register_shutdown_function(function () {
                 $f = get_hidden_file("/debug.log");
                 $log = debug(null);
-                $mode = (file_exists($f) && filesize($f) > 1024*1024*4) ? LOCK_EX : LOCK_EX | FILE_APPEND;
+                $mode = (file_exists($f) && filesize($f) > 1024*1024*8) ? LOCK_EX : LOCK_EX | FILE_APPEND;
                 file_put_contents($f, join("\n", $log), $mode);
             });
         }
@@ -1731,6 +1730,8 @@ function parse_ini() : array {
         include $cache_config_file;
         if (isset($value) && count($value) > 20) {
             $config = $value;
+        } else if (isset($config) && count($config) > 20) {
+            // weird case where the config php cache is set to "config"
         } else {
             // does not exist.. don't delete if the config edit failed!
             unlink($cache_config_file);

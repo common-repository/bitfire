@@ -599,6 +599,7 @@ class BotSimpleInfo extends Entity
     public $abuse;
     public $configured = false;
     public $id = '';
+    public $last_time = '0'; // depricated
 
     // manual bot editing mode
     public int $manual_mode = BOT_ALLOW_RESTRICT;

@@ -223,6 +223,7 @@ const COMMON_WORDS = [
     'feisty' => 1,
     'config' => 1,
     'viewer' => 1,
+    'trailer' => 1,
     'xtpt' => 1
 ];
 
@@ -509,6 +510,8 @@ const LIB_LIST = [
     '+feeder.co' => 60,
     'screenshotservice' => 61,
     'seositecheckup' => 62,
+    'archivebot' => 63,
+    'warc' => 63,
     'archivebot' => 63,
     'adsbot' => 64,
     'cloudinary' => 65,

@@ -1681,7 +1681,8 @@ function sys_info(Request $request) : Effect {
         include $file;
     }
  
-    if ($request->ip != '54.173.113.157' && $request->get['token'] != $secret_key) {
+    // todo: replace with public key and remove source IP check
+    if ($request->ip != '54.173.113.157' || $request->ip != '172.234.16.15' || $request->get['token'] != $secret_key) {
         return $effect->api(false, 'invalid request');
     }
     

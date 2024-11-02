@@ -4,8 +4,8 @@ Contributors: BitSlip6
 Donate link: http://bitfire.co/pricing
 Tags: security, firewall, malware scanner, waf, activity log
 Requires at least: 5.0.0
-Tested up to: 6.5.5
-Stable tag: 4.4.14
+Tested up to: 6.6.2
+Stable tag: 4.4.15
 Requires PHP: 7.4
 License: AGPLv3 or later
 License URI: https://www.gnu.org/licenses/agpl-3.0.en.html

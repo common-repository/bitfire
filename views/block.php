@@ -1,11 +1,15 @@
 <?php
 
-use const BitFire\BITFIRE_VER;
+    use const BitFire\BITFIRE_VER;
+    // ensure start_time is set
+    if (!isset($GLOBALS['bf_s1'])) {
+        $GLOBALS['bf_s1'] = hrtime(true) - 1000000;
+    }
 
     $resp_code = intval(\BitFire\Config::int("response_code", 200));
     $error_css = \Threadfin\get_public("error.css");
     $error_css = isset($error_css) ? htmlentities($error_css) : "";
-    $st = (hrtime(true) - $GLOBALS['start_time']) / 1e+6;
+    $st = (hrtime(true) - $GLOBALS['bf_s1']) / 1e+6;
     \BitFire\BitFire::get_instance()->blocked($st, $resp_code, $custom_err);
     \ThreadFin\trace("BL CODE $resp_code");
     $agent = \BitFire\BitFire::get_instance()->agent; 
